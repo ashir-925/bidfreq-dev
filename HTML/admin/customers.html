@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customers · BidFreq™</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <!-- ============================================================
+       SIDEBAR
+       ============================================================ -->
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <img src="../img/logo.webp" class="img-fluid logo-img" alt="BidFreq" style="width: 170px;">
+      <div class="sidebar__brand-text" style="margin-top:6px">
+        <div class="sidebar__tag" style="color:#6EE7B7">Estimator Console</div>
+      </div>
+    </div>
+
+    <nav class="sidebar__nav">
+      <div class="sidebar__section">
+        <div class="sidebar__section-title">Operations</div>
+        <a href="dashboard.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="estimates.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
+          <span>Estimate Queue</span>
+          <span class="nav-item__badge is-danger">8</span>
+        </a>
+        <a href="estimates.html?view=all" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          <span>All Estimates</span>
+        </a>
+        <a href="projects.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>Projects</span>
+        </a>
+      </div>
+
+      <div class="sidebar__section">
+        <div class="sidebar__section-title">Management</div>
+        <a href="customers.html" class="nav-item is-active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg>
+          <span>Customers</span>
+        </a>
+        <a href="estimators.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span>Estimators</span>
+        </a>
+        <a href="reports.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <span>Reports</span>
+        </a>
+      </div>
+
+      <div class="sidebar__section">
+        <div class="sidebar__section-title">Workspace</div>
+        <a href="notifications.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span>Notifications</span>
+          <span class="nav-item__badge is-danger">5</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Profile</span>
+        </a>
+        <a href="../index.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span>Logout</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar__footer">
+      <div class="user-chip">
+        <div class="avatar avatar--sm">BH</div>
+        <div class="user-chip__meta">
+          <span class="user-chip__name">B. Hayes</span>
+          <span class="user-chip__role">Senior Estimator</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============================================================
+       MAIN
+       ============================================================ -->
+  <div class="app-main">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <button class="topbar__toggle" id="navToggle" aria-label="Toggle navigation">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+
+      <div class="topbar__search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="search" placeholder="Search customers, orgs, contacts…" aria-label="Search">
+        <kbd>⌘K</kbd>
+      </div>
+
+      <div class="topbar__spacer"></div>
+
+      <div class="topbar__actions">
+        <button class="icon-btn tooltip" data-tip="Help" aria-label="Help">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </button>
+        <button class="icon-btn tooltip" data-tip="Notifications" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="icon-btn__dot"></span>
+        </button>
+        <div class="divider--vertical"></div>
+        <div class="user-chip">
+          <div class="avatar avatar--sm">BH</div>
+          <div class="user-chip__meta">
+            <span class="user-chip__name">B. Hayes</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="app-content">
+
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="dashboard.html">Console</a>
+        <span class="breadcrumbs__sep">/</span>
+        <span class="breadcrumbs__current">Customers</span>
+      </nav>
+
+      <header class="page-header">
+        <div class="page-header__text">
+          <h1 class="page-header__title">Customers</h1>
+          <p class="page-header__subtitle">
+            Every organization submitting estimates to BidFreq. Filter by plan, health,
+            trade mix, or activity to manage accounts and identify expansion opportunities.
+          </p>
+        </div>
+        <div class="page-header__actions">
+          <button class="btn btn--secondary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export
+          </button>
+          <button class="btn btn--primary" id="inviteCustomerBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Invite customer
+          </button>
+        </div>
+      </header>
+
+      <!-- KPIs -->
+      <section class="cust-kpis" aria-label="Customer metrics">
+        <div class="cust-kpi">
+          <div class="cust-kpi__icon cust-kpi__icon--emerald">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/></svg>
+          </div>
+          <div>
+            <div class="cust-kpi__label">Active Customers</div>
+            <div class="cust-kpi__value">142</div>
+            <div class="cust-kpi__sub">+8 this month</div>
+          </div>
+        </div>
+        <div class="cust-kpi">
+          <div class="cust-kpi__icon cust-kpi__icon--blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div>
+            <div class="cust-kpi__label">Monthly GMV</div>
+            <div class="cust-kpi__value">$1.2M</div>
+            <div class="cust-kpi__sub">+14% MoM</div>
+          </div>
+        </div>
+        <div class="cust-kpi">
+          <div class="cust-kpi__icon cust-kpi__icon--violet">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div>
+            <div class="cust-kpi__label">Avg. Approval Rate</div>
+            <div class="cust-kpi__value">89%</div>
+            <div class="cust-kpi__sub">Across all orgs</div>
+          </div>
+        </div>
+        <div class="cust-kpi">
+          <div class="cust-kpi__icon cust-kpi__icon--warning">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div>
+            <div class="cust-kpi__label">At Risk</div>
+            <div class="cust-kpi__value">6</div>
+            <div class="cust-kpi__sub">No activity &gt; 30 days</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Filter bar -->
+      <div class="filter-bar">
+        <div class="filter-bar__search">
+          <div class="input-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="input" type="search" id="custSearch" placeholder="Search by org name, contact, or email…">
+          </div>
+        </div>
+        <div class="filter-bar__group">
+          <span class="filter-bar__label">Plan</span>
+          <select id="planFilter">
+            <option value="">All plans</option>
+            <option>Enterprise</option>
+            <option>Growth</option>
+            <option>Starter</option>
+            <option>Trial</option>
+          </select>
+        </div>
+        <div class="filter-bar__group">
+          <span class="filter-bar__label">Status</span>
+          <select id="statusFilter">
+            <option value="">Any status</option>
+            <option>Active</option>
+            <option>Trial</option>
+            <option>Suspended</option>
+          </select>
+        </div>
+        <div class="filter-bar__group">
+          <span class="filter-bar__label">Sort</span>
+          <select id="sortFilter">
+            <option value="gmv">GMV (high → low)</option>
+            <option value="newest">Newest first</option>
+            <option value="name">Name (A → Z)</option>
+            <option value="activity">Last activity</option>
+          </select>
+        </div>
+        <button class="btn btn--ghost btn--sm" id="clearFilters">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          Clear
+        </button>
+      </div>
+
+      <!-- Bulk bar -->
+      <div class="bulk-bar" id="bulkBar">
+        <div class="bulk-bar__left">
+          <span class="bulk-bar__count" id="bulkCount">0</span>
+          <span>selected</span>
+        </div>
+        <div class="bulk-bar__actions">
+          <button class="btn btn--secondary btn--sm">Email</button>
+          <button class="btn btn--secondary btn--sm">Export</button>
+          <button class="btn btn--ghost btn--sm" id="clearSelection">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table class="table" id="custTable">
+            <thead>
+              <tr>
+                <th class="table__checkbox">
+                  <label class="check" style="margin:0">
+                    <input type="checkbox" id="selectAll">
+                    <span class="check__box">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    </span>
+                  </label>
+                </th>
+                <th>Organization</th>
+                <th>Contact</th>
+                <th>Plan</th>
+                <th>Properties</th>
+                <th class="num">Est. / mo</th>
+                <th class="num">GMV</th>
+                <th>Health</th>
+                <th>Last activity</th>
+                <th class="actions">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="custBody"></tbody>
+          </table>
+        </div>
+
+        <div class="empty hidden" id="emptyState">
+          <div class="empty__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <div class="empty__title">No customers match</div>
+          <p class="empty__text">Try adjusting your filters or clear them to see all customers.</p>
+          <button class="btn btn--secondary" id="clearEmptyFilters">Clear filters</button>
+        </div>
+
+        <div class="pagination" id="pagination">
+          <span class="pagination__info" id="paginationInfo">Showing 1–10 of 142 customers</span>
+          <div class="pagination__controls">
+            <button class="pagination__btn" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <button class="pagination__btn is-active">1</button>
+            <button class="pagination__btn">2</button>
+            <button class="pagination__btn">3</button>
+            <button class="pagination__btn">4</button>
+            <button class="pagination__btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- CUSTOMER DETAIL DRAWER -->
+<div class="modal-overlay" id="custDrawer" onclick="if(event.target===this)this.classList.remove('is-open')">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="cdTitle" style="max-width:720px">
+    <div class="modal__header">
+      <div>
+        <div class="modal__title" id="cdTitle">Oak Ridge Property Mgmt</div>
+        <div class="modal__subtitle" id="cdSubtitle">Enterprise · Active since Mar 2024</div>
+      </div>
+      <button class="modal__close" aria-label="Close" onclick="document.getElementById('custDrawer').classList.remove('is-open')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal__body">
+      <div class="grid grid--3 mb-5" style="gap:var(--s-4)">
+        <div class="cust-kpi">
+          <div class="cust-kpi__icon cust-kpi__icon--blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <div><div class="cust-kpi__label">Estimates</div><div class="cust-kpi__value">124</div></div>
+        </div>
+        <div class="cust-kpi">
+          <div class="cust-kpi__icon cust-kpi__icon--emerald">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div><div class="cust-kpi__label">Projects</div><div class="cust-kpi__value">38</div></div>
+        </div>
+        <div class="cust-kpi">
+          <div class="cust-kpi__icon cust-kpi__icon--violet">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div><div class="cust-kpi__label">GMV</div><div class="cust-kpi__value">$184K</div></div>
+        </div>
+      </div>
+      <div class="sec mb-4">
+        <div class="sec__head">
+          <div class="sec__head-left">
+            <div class="sec__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div><div class="sec__title">Primary Contact</div></div>
+          </div>
+        </div>
+        <div class="sec__body">
+          <dl class="kv">
+            <dt>Name</dt><dd><strong>Jane Doe</strong></dd>
+            <dt>Title</dt><dd>Director of Operations</dd>
+            <dt>Email</dt><dd>jane@oakridge.com</dd>
+            <dt>Phone</dt><dd>+1 (512) 555-0142</dd>
+          </dl>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec__head">
+          <div class="sec__head-left">
+            <div class="sec__icon sec__icon--emerald"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+            <div><div class="sec__title">Account Health</div></div>
+          </div>
+        </div>
+        <div class="sec__body">
+          <div class="status-row"><span class="status-row__label">Approval rate</span><span class="status-row__value" style="color:var(--emerald-600)">94%</span></div>
+          <div class="status-row"><span class="status-row__label">Avg. turnaround</span><span class="status-row__value">1.6 days</span></div>
+          <div class="status-row"><span class="status-row__label">Revision rate</span><span class="status-row__value">8%</span></div>
+          <div class="status-row"><span class="status-row__label">Last estimate</span><span class="status-row__value">2 hours ago</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn--ghost" onclick="document.getElementById('custDrawer').classList.remove('is-open')">Close</button>
+      <button class="btn btn--secondary">View estimates</button>
+      <button class="btn btn--primary">Open workspace</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-region" id="toastRegion"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  var DATA = [
+    { id:'ORG-001', name:'Oak Ridge Property Mgmt', initials:'OR', contact:'Jane Doe', email:'jane@oakridge.com', plan:'Enterprise', status:'active', properties:24, estimates:124, gmv:184200, health:94, last:'2 hours ago' },
+    { id:'ORG-002', name:'Lone Star Realty', initials:'LS', contact:'Marcus Webb', email:'marcus@lonestar.com', plan:'Growth', status:'active', properties:18, estimates:76, gmv:98240, health:88, last:'1 day ago' },
+    { id:'ORG-003', name:'Bluebonnet Homes', initials:'BH', contact:'Alicia Reyes', email:'alicia@bluebonnet.com', plan:'Growth', status:'active', properties:31, estimates:112, gmv:142500, health:91, last:'4 hours ago' },
+    { id:'ORG-004', name:'Vista Realty Co.', initials:'VR', contact:'Daniel Park', email:'d.park@vistarealty.com', plan:'Starter', status:'trial', properties:6, estimates:14, gmv:14200, health:76, last:'3 days ago' },
+    { id:'ORG-005', name:'Capitol Holdings', initials:'CH', contact:'Reena Shah', email:'reena@capitol.com', plan:'Enterprise', status:'active', properties:42, estimates:198, gmv:312800, health:96, last:'30 min ago' },
+    { id:'ORG-006', name:'Northgate Partners', initials:'NP', contact:'Tom Nguyen', email:'tom@northgate.com', plan:'Growth', status:'active', properties:12, estimates:48, gmv:62400, health:82, last:'6 hours ago' },
+    { id:'ORG-007', name:'Gulf Coast Realty', initials:'GC', contact:'Priya Menon', email:'priya@gulfcoast.com', plan:'Starter', status:'active', properties:5, estimates:22, gmv:28600, health:79, last:'2 days ago' },
+    { id:'ORG-008', name:'Hill Country Homes', initials:'HC', contact:'Bryan Fox', email:'bryan@hillcountry.com', plan:'Growth', status:'active', properties:9, estimates:36, gmv:48100, health:87, last:'Yesterday' },
+    { id:'ORG-009', name:'Southside Property', initials:'SP', contact:'Naomi Cole', email:'naomi@southside.com', plan:'Starter', status:'suspended', properties:4, estimates:11, gmv:9600, health:42, last:'32 days ago' },
+    { id:'ORG-010', name:'Bayou Properties', initials:'BP', contact:'Carlos Diaz', email:'carlos@bayou.com', plan:'Growth', status:'active', properties:14, estimates:64, gmv:84600, health:85, last:'8 hours ago' },
+    { id:'ORG-011', name:'Downtown Lofts LLC', initials:'DL', contact:'Sarah Kim', email:'sarah@downtownlofts.com', plan:'Enterprise', status:'active', properties:27, estimates:143, gmv:224100, health:93, last:'1 hour ago' },
+    { id:'ORG-012', name:'Lone Oak Realty', initials:'LO', contact:'Peter Walsh', email:'peter@loneoak.com', plan:'Trial', status:'trial', properties:3, estimates:6, gmv:4200, health:68, last:'5 days ago' }
+  ];
+
+  var state = {
+    search: '', plan: '', status: '', sort: 'gmv',
+    selected: new Set(), page: 1, perPage: 10
+  };
+
+  function statusBadge(s) {
+    var map = { active:'Active', trial:'Trial', suspended:'Suspended' };
+    return '<span class="status-badge status-badge--' + s + '"><span class="status-badge__dot"></span>' + map[s] + '</span>';
+  }
+
+  function healthBar(h) {
+    var color = h >= 85 ? 'var(--emerald-600)' : h >= 70 ? 'var(--blue-600)' : h >= 50 ? 'var(--warning-600)' : 'var(--danger-600)';
+    return '<div style="display:flex;align-items:center;gap:8px">' +
+      '<div style="flex:1;height:5px;background:var(--n-200);border-radius:99px;overflow:hidden;min-width:60px"><div style="height:100%;width:' + h + '%;background:' + color + ';border-radius:99px"></div></div>' +
+      '<span style="font-size:var(--fs-xs);font-weight:600;font-variant-numeric:tabular-nums;color:var(--text-strong)">' + h + '</span>' +
+    '</div>';
+  }
+
+  function formatMoney(n) {
+    if (n >= 1000) return '$' + (n/1000).toFixed(1) + 'K';
+    return '$' + n.toLocaleString();
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+    });
+  }
+
+  function getFiltered() {
+    var rows = DATA.slice();
+    if (state.plan) rows = rows.filter(function(r){ return r.plan === state.plan; });
+    if (state.status) rows = rows.filter(function(r){ return r.status === state.status; });
+    if (state.search) {
+      var q = state.search.toLowerCase();
+      rows = rows.filter(function(r){
+        return (r.name + ' ' + r.contact + ' ' + r.email).toLowerCase().indexOf(q) !== -1;
+      });
+    }
+    if (state.sort === 'gmv') rows.sort(function(a,b){ return b.gmv - a.gmv; });
+    else if (state.sort === 'name') rows.sort(function(a,b){ return a.name.localeCompare(b.name); });
+    else if (state.sort === 'newest') rows.sort(function(a,b){ return b.id.localeCompare(a.id); });
+    return rows;
+  }
+
+  function render() {
+    var rows = getFiltered();
+    var body = document.getElementById('custBody');
+    var empty = document.getElementById('emptyState');
+    var wrap = document.querySelector('.table-scroll');
+    var pg = document.getElementById('pagination');
+
+    var start = (state.page - 1) * state.perPage;
+    var paged = rows.slice(start, start + state.perPage);
+
+    if (rows.length === 0) {
+      body.innerHTML = '';
+      wrap.classList.add('hidden');
+      pg.classList.add('hidden');
+      empty.classList.remove('hidden');
+    } else {
+      wrap.classList.remove('hidden');
+      pg.classList.remove('hidden');
+      empty.classList.add('hidden');
+
+      body.innerHTML = paged.map(function (r) {
+        var checked = state.selected.has(r.id) ? 'checked' : '';
+        return '<tr data-id="' + r.id + '" data-name="' + escapeHtml(r.name) + '">' +
+          '<td class="table__checkbox"><label class="check" style="margin:0">' +
+            '<input type="checkbox" class="rowCheck" data-id="' + r.id + '" ' + checked + '>' +
+            '<span class="check__box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>' +
+          '</label></td>' +
+          '<td><div class="org-cell">' +
+            '<div class="org-cell__logo">' + r.initials + '</div>' +
+            '<div><div class="org-cell__name">' + escapeHtml(r.name) + '</div><div class="org-cell__meta text-mono">' + r.id + '</div></div>' +
+          '</div></td>' +
+          '<td><div class="text-sm"><div style="font-weight:600;color:var(--text-strong)">' + escapeHtml(r.contact) + '</div><div class="text-xs text-muted">' + escapeHtml(r.email) + '</div></div></td>' +
+          '<td class="text-sm">' + r.plan + '</td>' +
+          '<td class="text-sm num" style="font-variant-numeric:tabular-nums">' + r.properties + '</td>' +
+          '<td class="text-sm num" style="font-variant-numeric:tabular-nums">' + r.estimates + '</td>' +
+          '<td class="num"><span class="amount-cell">' + formatMoney(r.gmv) + '</span></td>' +
+          '<td style="min-width:130px">' + healthBar(r.health) + '</td>' +
+          '<td class="text-xs text-muted">' + r.last + '</td>' +
+          '<td class="actions">' +
+            '<button class="icon-btn tooltip" data-tip="Open" aria-label="Open" onclick="event.stopPropagation();openDrawer(\'' + r.id + '\',\'' + escapeHtml(r.name) + '\',\'' + r.plan + '\',\'' + r.status + '\')">' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>' +
+            '</button>' +
+          '</td>' +
+        '</tr>';
+      }).join('');
+
+      document.getElementById('paginationInfo').textContent =
+        'Showing ' + (start + 1) + '–' + (start + paged.length) + ' of ' + rows.length + ' customers';
+    }
+
+    document.getElementById('selectAll').checked = rows.length > 0 && rows.every(function (r) { return state.selected.has(r.id); });
+    updateBulkBar();
+  }
+
+  function updateBulkBar() {
+    var bar = document.getElementById('bulkBar');
+    document.getElementById('bulkCount').textContent = state.selected.size;
+    bar.classList.toggle('is-visible', state.selected.size > 0);
+  }
+
+  window.openDrawer = function (id, name, plan, status) {
+    document.getElementById('cdTitle').textContent = name;
+    document.getElementById('cdSubtitle').textContent = plan + ' · ' + status.charAt(0).toUpperCase() + status.slice(1);
+    document.getElementById('custDrawer').classList.add('is-open');
+  };
+
+  document.getElementById('selectAll').addEventListener('change', function () {
+    var rows = getFiltered();
+    if (this.checked) rows.forEach(function (r) { state.selected.add(r.id); });
+    else rows.forEach(function (r) { state.selected.delete(r.id); });
+    render();
+  });
+
+  document.getElementById('clearSelection').addEventListener('click', function () {
+    state.selected.clear(); render();
+  });
+
+  document.getElementById('custBody').addEventListener('click', function (e) {
+    var row = e.target.closest('tr[data-id]');
+    if (!row) return;
+    var id = row.dataset.id;
+    var check = e.target.closest('.rowCheck');
+    if (check) {
+      if (check.checked) state.selected.add(id); else state.selected.delete(id);
+      updateBulkBar(); return;
+    }
+    if (e.target.closest('.icon-btn')) return;
+    var item = DATA.find(function(r){ return r.id === id; });
+    if (item) window.openDrawer(item.id, item.name, item.plan, item.status);
+  });
+
+  ['custSearch','planFilter','statusFilter','sortFilter'].forEach(function (id) {
+    var el = document.getElementById(id);
+    el.addEventListener(el.tagName === 'INPUT' ? 'input' : 'change', function () {
+      state.search = document.getElementById('custSearch').value.trim();
+      state.plan = document.getElementById('planFilter').value;
+      state.status = document.getElementById('statusFilter').value;
+      state.sort = document.getElementById('sortFilter').value;
+      state.page = 1;
+      render();
+    });
+  });
+
+  document.getElementById('clearFilters').addEventListener('click', clearAll);
+  document.getElementById('clearEmptyFilters').addEventListener('click', clearAll);
+  function clearAll() {
+    document.getElementById('custSearch').value = '';
+    document.getElementById('planFilter').value = '';
+    document.getElementById('statusFilter').value = '';
+    document.getElementById('sortFilter').value = 'gmv';
+    state.search=''; state.plan=''; state.status=''; state.sort='gmv'; state.page=1;
+    render();
+  }
+
+  document.getElementById('inviteCustomerBtn').addEventListener('click', function () {
+    toast('info','Invite customer','An invitation form would open here.');
+  });
+
+  function toast(kind, title, msg) {
+    var icons = {
+      success:'<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
+      info:'<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>'
+    };
+    var el = document.createElement('div');
+    el.className = 'toast toast--' + kind;
+    el.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (icons[kind]||icons.info) + '</svg>' +
+      '<div><div class="toast__title">' + title + '</div><div class="toast__msg">' + msg + '</div></div>';
+    document.getElementById('toastRegion').appendChild(el);
+    setTimeout(function () {
+      el.style.transition = 'opacity .3s, transform .3s';
+      el.style.opacity = '0'; el.style.transform = 'translateX(20px)';
+      setTimeout(function () { el.remove(); }, 320);
+    }, 3000);
+  }
+
+  document.getElementById('navToggle').addEventListener('click', function () {
+    var app = document.getElementById('app');
+    if (window.matchMedia('(max-width: 860px)').matches) app.classList.toggle('is-nav-open');
+    else app.classList.toggle('is-collapsed');
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>

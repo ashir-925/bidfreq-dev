@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard · BidFreq™</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+
+<style>
+/* ------------------------------------------------------------------
+   DASHBOARD-SPECIFIC LAYOUT (extends design system)
+   ------------------------------------------------------------------ */
+
+/* Greeting hero */
+.dash-hero {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--s-5);
+  padding: var(--s-5) var(--s-6);
+  border-radius: var(--r-lg);
+  background:
+    radial-gradient(circle at 90% 30%, rgba(124,58,237,.16), transparent 45%),
+    linear-gradient(135deg, var(--navy-800), var(--navy-700));
+  color: #fff;
+  margin-bottom: var(--s-6);
+  position: relative;
+  overflow: hidden;
+}
+.dash-hero::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(circle at 80% 50%, #000 30%, transparent 75%);
+  pointer-events: none;
+}
+.dash-hero__text { position: relative; min-width: 0; }
+.dash-hero__eyebrow {
+  font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+  color: #93C5FD; font-weight: var(--fw-semibold);
+  margin-bottom: var(--s-2);
+}
+.dash-hero__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-bold);
+  color: #fff;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--s-2);
+}
+.dash-hero__sub {
+  color: #B9C7DA;
+  font-size: var(--fs-md);
+  max-width: 60ch;
+}
+.dash-hero__actions {
+  position: relative;
+  display: flex; gap: var(--s-3); flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+/* Quick stats strip */
+.quick-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  margin-bottom: var(--s-6);
+}
+.quick-stat {
+  background: var(--bg-surface);
+  padding: var(--s-4) var(--s-5);
+  display: flex; flex-direction: column; gap: 4px;
+}
+.quick-stat__label {
+  font-size: var(--fs-xs); color: var(--text-muted);
+  font-weight: var(--fw-medium);
+  text-transform: uppercase; letter-spacing: .06em;
+}
+.quick-stat__value {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  color: var(--text-strong);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.quick-stat__value--violet { color: var(--violet-700); }
+.quick-stat__value--emerald { color: var(--emerald-700); }
+.quick-stat__value--warning { color: #B45309; }
+
+/* Two-column layout */
+.dash-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: var(--s-5);
+  align-items: start;
+}
+.dash-col { display: flex; flex-direction: column; gap: var(--s-5); min-width: 0; }
+
+/* Action items (awaiting your action) */
+.action-list { display: flex; flex-direction: column; }
+.action-item {
+  display: flex; align-items: center; gap: var(--s-4);
+  padding: var(--s-4) var(--s-5);
+  border-bottom: 1px solid var(--border);
+  transition: background var(--dur) var(--ease);
+  cursor: pointer;
+}
+.action-item:last-child { border-bottom: none; }
+.action-item:hover { background: var(--n-25); }
+.action-item__icon {
+  width: 40px; height: 40px; border-radius: var(--r-md);
+  display: grid; place-items: center; flex-shrink: 0;
+}
+.action-item__icon svg { width: 18px; height: 18px; }
+.action-item__icon--violet { background: var(--violet-50); color: var(--violet-600); }
+.action-item__icon--blue   { background: var(--blue-50);   color: var(--blue-600); }
+.action-item__icon--warning{ background: var(--warning-50);color: var(--warning-600); }
+.action-item__icon--emerald{ background: var(--emerald-50);color: var(--emerald-600); }
+.action-item__body { flex: 1; min-width: 0; }
+.action-item__title {
+  font-size: var(--fs-sm); font-weight: var(--fw-semibold);
+  color: var(--text-strong); margin-bottom: 2px;
+}
+.action-item__meta {
+  font-size: var(--fs-xs); color: var(--text-muted);
+  display: flex; align-items: center; gap: var(--s-2);
+  flex-wrap: wrap;
+}
+.action-item__meta .dot {
+  width: 3px; height: 3px; border-radius: 50%;
+  background: var(--text-faint);
+}
+.action-item__id { font-family: var(--font-mono); font-size: 11px; }
+
+/* Activity feed */
+.activity { display: flex; flex-direction: column; }
+.activity__item {
+  display: flex; gap: var(--s-3);
+  padding: var(--s-4) var(--s-5);
+  border-bottom: 1px solid var(--border);
+}
+.activity__item:last-child { border-bottom: none; }
+.activity__icon {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: grid; place-items: center; flex-shrink: 0;
+  background: var(--n-100); color: var(--text-muted);
+}
+.activity__icon svg { width: 14px; height: 14px; }
+.activity__icon--violet { background: var(--violet-50); color: var(--violet-600); }
+.activity__icon--emerald{ background: var(--emerald-50); color: var(--emerald-600); }
+.activity__icon--blue   { background: var(--blue-50);    color: var(--blue-600); }
+.activity__icon--warning{ background: var(--warning-50); color: var(--warning-600); }
+.activity__body { flex: 1; min-width: 0; }
+.activity__text {
+  font-size: var(--fs-sm); color: var(--text-default);
+  line-height: 1.5;
+}
+.activity__text strong { color: var(--text-strong); font-weight: var(--fw-semibold); }
+.activity__time { font-size: var(--fs-xs); color: var(--text-faint); margin-top: 2px; }
+
+/* Recent estimate row card */
+.est-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--s-4);
+  padding: var(--s-4) var(--s-5);
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  transition: background var(--dur) var(--ease);
+  cursor: pointer;
+}
+.est-row:last-child { border-bottom: none; }
+.est-row:hover { background: var(--n-25); }
+.est-row__main { min-width: 0; }
+.est-row__top {
+  display: flex; align-items: center; gap: var(--s-3);
+  margin-bottom: 4px; flex-wrap: wrap;
+}
+.est-row__id {
+  font-family: var(--font-mono); font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold); color: var(--text-strong);
+}
+.est-row__property {
+  font-size: var(--fs-sm); color: var(--text-default);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.est-row__meta {
+  font-size: var(--fs-xs); color: var(--text-muted);
+  display: flex; align-items: center; gap: var(--s-2); flex-wrap: wrap;
+}
+.est-row__meta .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text-faint); }
+.est-row__right { text-align: right; flex-shrink: 0; }
+.est-row__amount {
+  font-family: var(--font-display); font-size: var(--fs-lg);
+  font-weight: var(--fw-bold); color: var(--text-strong);
+  font-variant-numeric: tabular-nums; line-height: 1.1;
+}
+.est-row__amount--muted { color: var(--text-faint); font-size: var(--fs-md); font-weight: var(--fw-medium); }
+.est-row__time { font-size: var(--fs-xs); color: var(--text-faint); margin-top: 2px; }
+
+/* Progress ring (used in quick glance) */
+.ring {
+  --p: 0;
+  --size: 44px;
+  width: var(--size); height: var(--size);
+  border-radius: 50%;
+  background: conic-gradient(var(--blue-600) calc(var(--p) * 1%), var(--n-200) 0);
+  display: grid; place-items: center;
+  position: relative;
+  flex-shrink: 0;
+}
+.ring::after {
+  content: "";
+  position: absolute; inset: 5px;
+  background: var(--bg-surface); border-radius: 50%;
+}
+.ring__value {
+  position: relative; z-index: 1;
+  font-size: 10px; font-weight: var(--fw-bold);
+  color: var(--text-strong); font-variant-numeric: tabular-nums;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .dash-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  .dash-hero { flex-direction: column; align-items: stretch; }
+  .dash-hero__actions { justify-content: stretch; }
+  .dash-hero__actions .btn { flex: 1; }
+  .est-row { grid-template-columns: 1fr; }
+  .est-row__right { text-align: left; }
+  .action-item { padding: var(--s-4); }
+  .activity__item { padding: var(--s-3) var(--s-4); }
+}
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <!-- ============================================================
+       SIDEBAR — CUSTOMER
+       ============================================================ -->
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <!-- <div class="sidebar__logo">B</div>
+      <div class="sidebar__brand-text">
+        <div class="sidebar__name">BidFreq™</div>
+        <div class="sidebar__tag">Customer Portal</div>
+      </div> -->
+      <img src="img/logo.webp" class="img-fluid logo-img" style="WIDTH: 170px;">
+    </div>
+
+<nav class="sidebar__nav">
+      <div class="sidebar__section">
+        <div class="sidebar__section-title">Main</div>
+        <a href="customer-dashboard.html" class="nav-item is-active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="estimate-requests.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
+          <span>Estimate Requests</span>
+          <span class="nav-item__badge">12</span>
+        </a>
+        <a href="projects.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>Approved Projects</span>
+        </a>
+      </div>
+
+      <div class="sidebar__section">
+        <div class="sidebar__section-title">Workspace</div>
+        <a href="notifications.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span>Notifications</span>
+          <span class="nav-item__badge is-danger">3</span>
+        </a>
+       
+        <a href="profile.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Profile</span>
+        </a>
+
+         <a href="index.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+  <polyline points="16 17 21 12 16 7"/>
+  <line x1="21" y1="12" x2="9" y2="12"/>
+</svg>
+          <span>Logout</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar__footer">
+      <div class="user-chip">
+        <div class="avatar avatar--sm">JD</div>
+        <div class="user-chip__meta">
+          <span class="user-chip__name">Jane Doe</span>
+          <span class="user-chip__role">Oak Ridge Property Mgmt</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============================================================
+       MAIN
+       ============================================================ -->
+  <div class="app-main">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <button class="topbar__toggle" id="navToggle" aria-label="Toggle navigation">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+
+      <div class="topbar__search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="search" placeholder="Search estimates, properties, projects…" aria-label="Search">
+        <kbd>⌘K</kbd>
+      </div>
+
+      <div class="topbar__spacer"></div>
+
+      <div class="topbar__actions">
+        <button class="icon-btn tooltip" data-tip="Help & Support" aria-label="Help">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </button>
+        <button class="icon-btn tooltip" data-tip="Notifications" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="icon-btn__dot"></span>
+        </button>
+        <div class="divider--vertical"></div>
+        <div class="user-chip">
+          <div class="avatar avatar--sm">JD</div>
+          <div class="user-chip__meta">
+            <span class="user-chip__name">Jane Doe</span>
+           
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="app-content">
+
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="customer-dashboard.html">Home</a>
+        <span class="breadcrumbs__sep">/</span>
+        <span class="breadcrumbs__current">Dashboard</span>
+      </nav>
+
+      <!-- ============================================================
+           HERO
+           ============================================================ -->
+      <section class="dash-hero">
+        <div class="dash-hero__text">
+          <div class="dash-hero__eyebrow">Tuesday · 11 August 2026</div>
+          <h1 class="dash-hero__title">Good afternoon, Jane</h1>
+          <p class="dash-hero__sub">
+            You have <strong style="color:#fff">2 estimates awaiting your approval</strong> and
+            <strong style="color:#fff">12 open requests</strong> in progress.
+          </p>
+        </div>
+        <div class="dash-hero__actions">
+          <a href="estimate-requests.html" class="btn btn--secondary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            View all requests
+          </a>
+          <a href="new-estimate-request.html" class="btn btn--primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Estimate Request
+          </a>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           KPI CARDS
+           ============================================================ -->
+      <section class="grid grid--4 mb-6" aria-label="Key metrics">
+        <div class="stat-card">
+          <div class="stat-card__top">
+            <span class="stat-card__label">Open Requests</span>
+            <div class="stat-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+          </div>
+          <div class="stat-card__value">12</div>
+          <div class="stat-card__delta stat-card__delta--up">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+            4 added this week
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card__top">
+            <span class="stat-card__label">Awaiting Your Approval</span>
+            <div class="stat-card__icon stat-card__icon--violet">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+          </div>
+          <div class="stat-card__value">2</div>
+          <div class="stat-card__delta text-muted">Action required</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card__top">
+            <span class="stat-card__label">Approved Projects</span>
+            <div class="stat-card__icon stat-card__icon--emerald">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+          </div>
+          <div class="stat-card__value">38</div>
+          <div class="stat-card__delta stat-card__delta--up">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+            +12% month-over-month
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card__top">
+            <span class="stat-card__label">Revisions Requested</span>
+            <div class="stat-card__icon stat-card__icon--warning">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            </div>
+          </div>
+          <div class="stat-card__value">3</div>
+          <div class="stat-card__delta stat-card__delta--down">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            2 resolved this week
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           QUICK STATS STRIP
+           ============================================================ -->
+      <section class="quick-stats" aria-label="At a glance">
+        <div class="quick-stat">
+          <span class="quick-stat__label">AI Drafting</span>
+          <span class="quick-stat__value quick-stat__value--violet">1</span>
+        </div>
+        <div class="quick-stat">
+          <span class="quick-stat__label">In Estimator Review</span>
+          <span class="quick-stat__value">4</span>
+        </div>
+        <div class="quick-stat">
+          <span class="quick-stat__label">Awaiting Customer</span>
+          <span class="quick-stat__value quick-stat__value--warning">2</span>
+        </div>
+        <div class="quick-stat">
+          <span class="quick-stat__label">Approved this month</span>
+          <span class="quick-stat__value quick-stat__value--emerald">9</span>
+        </div>
+        <div class="quick-stat">
+          <span class="quick-stat__label">Avg. turnaround</span>
+          <span class="quick-stat__value">1.8<span style="font-size:12px;color:var(--text-muted);font-weight:500"> days</span></span>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           MAIN GRID
+           ============================================================ -->
+      <div class="dash-grid">
+
+        <!-- ============ LEFT COLUMN ============ -->
+        <div class="dash-col">
+
+          <!-- Awaiting your action -->
+          <section class="card" aria-labelledby="action-heading">
+            <div class="card__header">
+              <div>
+                <div class="card__title" id="action-heading">Awaiting your action</div>
+                <div class="card__subtitle">Estimates ready for review or response</div>
+              </div>
+              <span class="badge badge--violet">2</span>
+            </div>
+            <div class="card__body" style="padding:0">
+
+              <div class="action-item">
+                <div class="action-item__icon action-item__icon--violet">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <div class="action-item__body">
+                  <div class="action-item__title">Final estimate ready for approval — $1,482.50</div>
+                  <div class="action-item__meta">
+                    <span class="action-item__id">EST-2026-0040</span>
+                    <span class="dot"></span>
+                    <span>1502 Palm Ave, Houston, TX</span>
+                    <span class="dot"></span>
+                    <span>Sent 2 hours ago</span>
+                  </div>
+                </div>
+                <a href="estimate-detail.html" class="btn btn--primary btn--sm">
+                  Review
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+              </div>
+
+              <div class="action-item">
+                <div class="action-item__icon action-item__icon--blue">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <div class="action-item__body">
+                  <div class="action-item__title">Updated estimate issued after your revision — $3,140.00</div>
+                  <div class="action-item__meta">
+                    <span class="action-item__id">EST-2026-0037</span>
+                    <span class="dot"></span>
+                    <span>12 Cedar Ct, Fort Worth, TX</span>
+                    <span class="dot"></span>
+                    <span>Yesterday</span>
+                  </div>
+                </div>
+                <a href="estimate-detail.html" class="btn btn--secondary btn--sm">
+                  Review
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+              </div>
+
+            </div>
+          </section>
+
+          <!-- Recent estimates -->
+          <section class="card" aria-labelledby="recent-heading">
+            <div class="card__header">
+              <div>
+                <div class="card__title" id="recent-heading">Recent estimates</div>
+                <div class="card__subtitle">Latest activity across your portfolio</div>
+              </div>
+              <a href="estimate-requests.html" class="btn btn--ghost btn--sm">
+                View all
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+            </div>
+            <div class="card__body" style="padding:0">
+
+              <div class="est-row">
+                <div class="est-row__main">
+                  <div class="est-row__top">
+                    <span class="est-row__id">EST-2026-0042</span>
+                    <span class="chip status--ai-processing"><span class="chip__dot"></span>AI Processing</span>
+                  </div>
+                  <div class="est-row__property">421 Oak Ridge Dr, Austin, TX 78745</div>
+                  <div class="est-row__meta">
+                    <span>General Repair</span>
+                    <span class="dot"></span>
+                    <span>6 photos</span>
+                    <span class="dot"></span>
+                    <span>Submitted 2 min ago</span>
+                  </div>
+                </div>
+                <div class="est-row__right">
+                  <div class="est-row__amount est-row__amount--muted">Analyzing…</div>
+                  <div class="est-row__time">Confidence pending</div>
+                </div>
+              </div>
+
+              <div class="est-row">
+                <div class="est-row__main">
+                  <div class="est-row__top">
+                    <span class="est-row__id">EST-2026-0041</span>
+                    <span class="chip status--in-review"><span class="chip__dot"></span>In Estimator Review</span>
+                  </div>
+                  <div class="est-row__property">88 Cypress Ln, Dallas, TX 75204</div>
+                  <div class="est-row__meta">
+                    <span>Roofing</span>
+                    <span class="dot"></span>
+                    <span>8 photos · 1 video</span>
+                    <span class="dot"></span>
+                    <span>Updated 1 hr ago</span>
+                  </div>
+                </div>
+                <div class="est-row__right">
+                  <div class="est-row__amount">$8,420.00</div>
+                  <div class="est-row__time">Draft</div>
+                </div>
+              </div>
+
+              <div class="est-row">
+                <div class="est-row__main">
+                  <div class="est-row__top">
+                    <span class="est-row__id">EST-2026-0040</span>
+                    <span class="chip status--awaiting-customer"><span class="chip__dot"></span>Awaiting Customer</span>
+                  </div>
+                  <div class="est-row__property">1502 Palm Ave, Houston, TX 77002</div>
+                  <div class="est-row__meta">
+                    <span>Plumbing</span>
+                    <span class="dot"></span>
+                    <span>5 photos</span>
+                    <span class="dot"></span>
+                    <span>Sent 2 hr ago</span>
+                  </div>
+                </div>
+                <div class="est-row__right">
+                  <div class="est-row__amount">$1,482.50</div>
+                  <div class="est-row__time">Human verified</div>
+                </div>
+              </div>
+
+              <div class="est-row">
+                <div class="est-row__main">
+                  <div class="est-row__top">
+                    <span class="est-row__id">EST-2026-0039</span>
+                    <span class="chip status--revision"><span class="chip__dot"></span>Revision Requested</span>
+                  </div>
+                  <div class="est-row__property">77 Birch St, Plano, TX 75024</div>
+                  <div class="est-row__meta">
+                    <span>Electrical</span>
+                    <span class="dot"></span>
+                    <span>4 photos</span>
+                    <span class="dot"></span>
+                    <span>Returned to estimator</span>
+                  </div>
+                </div>
+                <div class="est-row__right">
+                  <div class="est-row__amount">$2,310.00</div>
+                  <div class="est-row__time">2 days ago</div>
+                </div>
+              </div>
+
+              <div class="est-row">
+                <div class="est-row__main">
+                  <div class="est-row__top">
+                    <span class="est-row__id">EST-2026-0038</span>
+                    <span class="chip status--approved"><span class="chip__dot"></span>Approved</span>
+                  </div>
+                  <div class="est-row__property">305 Meadow Rd, Austin, TX 78704</div>
+                  <div class="est-row__meta">
+                    <span>HVAC</span>
+                    <span class="dot"></span>
+                    <span>7 photos · 1 report</span>
+                    <span class="dot"></span>
+                    <span>Approved 3 days ago</span>
+                  </div>
+                </div>
+                <div class="est-row__right">
+                  <div class="est-row__amount">$4,950.00</div>
+                  <div class="est-row__time">→ Approved Project</div>
+                </div>
+              </div>
+
+            </div>
+          </section>
+
+        </div>
+
+        <!-- ============ RIGHT COLUMN ============ -->
+        <div class="dash-col">
+
+          <!-- Portfolio health -->
+          <section class="card" aria-labelledby="health-heading">
+            <div class="card__header">
+              <div>
+                <div class="card__title" id="health-heading">Portfolio snapshot</div>
+                <div class="card__subtitle">This month</div>
+              </div>
+            </div>
+            <div class="card__body">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="ring" style="--p: 74;">
+                  <span class="ring__value">74%</span>
+                </div>
+                <div class="flex-1">
+                  <div class="text-sm" style="font-weight:600;color:var(--text-strong)">Approval rate</div>
+                  <div class="text-xs text-muted">9 of 12 estimates approved without revision</div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-4 mb-4">
+                <div class="ring" style="--p: 62;">
+                  <span class="ring__value">62%</span>
+                </div>
+                <div class="flex-1">
+                  <div class="text-sm" style="font-weight:600;color:var(--text-strong)">AI confidence avg.</div>
+                  <div class="text-xs text-muted">Based on 12 estimates this month</div>
+                </div>
+              </div>
+
+              <hr class="divider">
+
+              <dl class="kv">
+                <dt>Avg. turnaround</dt>
+                <dd><strong>1.8 days</strong> <span class="text-xs text-muted">(vs 2.4 last month)</span></dd>
+                <dt>Active properties</dt>
+                <dd><strong>24</strong></dd>
+                <dt>Total estimate value</dt>
+                <dd><strong>$48,210.00</strong> <span class="text-xs text-muted">this month</span></dd>
+              </dl>
+            </div>
+          </section>
+
+          <!-- Recent activity -->
+          <section class="card" aria-labelledby="activity-heading">
+            <div class="card__header">
+              <div>
+                <div class="card__title" id="activity-heading">Recent activity</div>
+              </div>
+              <a href="notifications.html" class="btn btn--ghost btn--sm">All</a>
+            </div>
+            <div class="card__body" style="padding:0">
+
+              <div class="activity">
+                <div class="activity__item">
+                  <div class="activity__icon activity__icon--violet">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.5 2.3 7.1-6.3-4.6L5.7 21 8 14 2 9.5h7.6z"/></svg>
+                  </div>
+                  <div class="activity__body">
+                    <div class="activity__text"><strong>AI analysis started</strong> for EST-2026-0042</div>
+                    <div class="activity__time">2 minutes ago</div>
+                  </div>
+                </div>
+
+                <div class="activity__item">
+                  <div class="activity__icon activity__icon--emerald">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                  <div class="activity__body">
+                    <div class="activity__text"><strong>B. Hayes</strong> verified estimate for 1502 Palm Ave</div>
+                    <div class="activity__time">2 hours ago</div>
+                  </div>
+                </div>
+
+                <div class="activity__item">
+                  <div class="activity__icon activity__icon--blue">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  </div>
+                  <div class="activity__body">
+                    <div class="activity__text">Final PDF emailed for <strong>EST-2026-0040</strong></div>
+                    <div class="activity__time">2 hours ago</div>
+                  </div>
+                </div>
+
+                <div class="activity__item">
+                  <div class="activity__icon activity__icon--warning">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                  </div>
+                  <div class="activity__body">
+                    <div class="activity__text">Revision requested on <strong>EST-2026-0039</strong></div>
+                    <div class="activity__time">2 days ago</div>
+                  </div>
+                </div>
+
+                <div class="activity__item">
+                  <div class="activity__icon activity__icon--emerald">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                  </div>
+                  <div class="activity__body">
+                    <div class="activity__text"><strong>EST-2026-0038</strong> moved to Approved Project</div>
+                    <div class="activity__time">3 days ago</div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </section>
+
+          <!-- Help / prompt card -->
+          
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script>
+  // Sidebar / mobile nav toggle
+  document.getElementById('navToggle').addEventListener('click', function () {
+    var app = document.getElementById('app');
+    if (window.matchMedia('(max-width: 860px)').matches) {
+      app.classList.toggle('is-nav-open');
+    } else {
+      app.classList.toggle('is-collapsed');
+    }
+  });
+
+  // Clickable rows → navigate to detail
+  document.querySelectorAll('.est-row, .action-item').forEach(function (row) {
+    row.addEventListener('click', function (e) {
+      if (e.target.closest('a, button')) return;
+      window.location.href = 'estimate-detail.html';
+    });
+  });
+
+  // Escape closes mobile nav
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      document.getElementById('app').classList.remove('is-nav-open');
+    }
+  });
+</script>
+
+</body>
+</html>

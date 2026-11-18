@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estimate Requests · BidFreq™</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+
+<style>
+/* ------------------------------------------------------------------
+   REQUESTS PAGE — extends design system
+   ------------------------------------------------------------------ */
+
+/* Status filter strip */
+.status-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--s-3);
+  margin-bottom: var(--s-5);
+}
+.status-tile {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: var(--s-3) var(--s-4);
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+  display: flex; align-items: center; gap: var(--s-3);
+  position: relative;
+}
+.status-tile:hover { border-color: var(--blue-500); box-shadow: var(--sh-sm); }
+.status-tile.is-active {
+  border-color: var(--blue-600);
+  box-shadow: 0 0 0 3px var(--blue-100);
+  background: var(--blue-50);
+}
+.status-tile__dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  flex-shrink: 0;
+}
+.status-tile__body { flex: 1; min-width: 0; }
+.status-tile__label {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  font-weight: var(--fw-medium);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  margin-bottom: 2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.status-tile__value {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  color: var(--text-strong);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+/* Color mapping for tiles */
+.dot--draft     { background: var(--n-400); }
+.dot--submitted { background: var(--info-600); }
+.dot--ai        { background: var(--violet-600); }
+.dot--review    { background: var(--warning-600); }
+.dot--awaiting  { background: var(--blue-600); }
+.dot--revision  { background: var(--warning-600); }
+.dot--approved  { background: var(--success-600); }
+.dot--declined  { background: var(--danger-600); }
+.dot--project   { background: var(--emerald-600); }
+
+/* Filter bar */
+.filter-bar {
+  display: flex; align-items: center; gap: var(--s-3);
+  flex-wrap: wrap;
+  padding: var(--s-3) var(--s-4);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  margin-bottom: var(--s-5);
+  box-shadow: var(--sh-xs);
+}
+.filter-bar__search {
+  flex: 1; min-width: 220px;
+  max-width: 400px;
+}
+.filter-bar__group {
+  display: inline-flex; align-items: center; gap: var(--s-2);
+}
+.filter-bar__label {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+.filter-bar select {
+  height: 36px;
+  padding: 0 32px 0 var(--s-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  background-color: var(--bg-surface);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 14px;
+  appearance: none;
+  font-size: var(--fs-sm);
+  color: var(--text-strong);
+  cursor: pointer;
+}
+.filter-bar select:focus {
+  outline: none;
+  border-color: var(--blue-500);
+  box-shadow: var(--sh-focus);
+}
+
+/* Active filter chips */
+.filter-chips {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2);
+  padding: 0 var(--s-1) var(--s-4);
+}
+.filter-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 6px 5px 12px;
+  border-radius: var(--r-full);
+  background: var(--blue-50);
+  border: 1px solid var(--blue-100);
+  color: var(--blue-700);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+}
+.filter-chip button {
+  width: 18px; height: 18px; border-radius: 50%;
+  border: none; background: rgba(37,99,235,.15);
+  color: var(--blue-700); cursor: pointer;
+  display: grid; place-items: center;
+}
+.filter-chip button:hover { background: rgba(37,99,235,.3); }
+.filter-chip svg { width: 10px; height: 10px; }
+
+/* Bulk action bar */
+.bulk-bar {
+  display: none;
+  align-items: center; justify-content: space-between;
+  gap: var(--s-4);
+  padding: var(--s-3) var(--s-5);
+  background: var(--navy-800);
+  color: #fff;
+  border-radius: var(--r-lg);
+  margin-bottom: var(--s-4);
+  flex-wrap: wrap;
+}
+.bulk-bar.is-visible { display: flex; }
+.bulk-bar__left {
+  display: flex; align-items: center; gap: var(--s-3);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+}
+.bulk-bar__count {
+  display: inline-grid; place-items: center;
+  min-width: 22px; height: 22px;
+  padding: 0 7px;
+  border-radius: var(--r-full);
+  background: var(--blue-600);
+  font-size: 12px; font-weight: var(--fw-bold);
+}
+.bulk-bar__actions { display: flex; gap: var(--s-2); flex-wrap: wrap; }
+.bulk-bar .btn--secondary {
+  background: rgba(255,255,255,.1); color: #fff;
+  border-color: rgba(255,255,255,.18);
+}
+.bulk-bar .btn--secondary:hover { background: rgba(255,255,255,.18); border-color: rgba(255,255,255,.3); }
+.bulk-bar .btn--ghost { color: #CBD5E1; }
+.bulk-bar .btn--ghost:hover { background: rgba(255,255,255,.1); color: #fff; }
+
+/* Table extras */
+.est-id-cell {
+  display: flex; align-items: center; gap: var(--s-3);
+}
+.est-id-cell__icon {
+  width: 32px; height: 32px; border-radius: var(--r-sm);
+  background: var(--n-100); color: var(--text-muted);
+  display: grid; place-items: center;
+  flex-shrink: 0;
+}
+.est-id-cell__icon svg { width: 15px; height: 15px; }
+.est-id-cell__icon--violet { background: var(--violet-50); color: var(--violet-600); }
+.est-id-cell__icon--warning { background: var(--warning-50); color: var(--warning-600); }
+.est-id-cell__icon--emerald { background: var(--emerald-50); color: var(--emerald-600); }
+.est-id-cell__icon--blue { background: var(--blue-50); color: var(--blue-600); }
+.est-id-cell__icon--danger { background: var(--danger-50); color: var(--danger-600); }
+
+.est-id-cell__text { min-width: 0; }
+.est-id-cell__id {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--text-strong);
+}
+.est-id-cell__time {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.property-cell { min-width: 220px; }
+.property-cell__addr {
+  font-size: var(--fs-sm);
+  color: var(--text-strong);
+  font-weight: var(--fw-medium);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.property-cell__meta {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  margin-top: 2px;
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+}
+.property-cell__meta .dot {
+  width: 3px; height: 3px; border-radius: 50%;
+  background: var(--text-faint);
+}
+
+.amount-cell {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  color: var(--text-strong);
+  font-variant-numeric: tabular-nums;
+}
+.amount-cell--muted { color: var(--text-faint); font-weight: var(--fw-medium); font-size: var(--fs-sm); }
+
+/* Row menu */
+.row-menu { position: relative; display: inline-block; }
+.row-menu__trigger {
+  width: 32px; height: 32px; border-radius: var(--r-sm);
+  border: 1px solid transparent; background: transparent;
+  cursor: pointer; color: var(--text-muted);
+  display: grid; place-items: center;
+  transition: all var(--dur) var(--ease);
+}
+.row-menu__trigger:hover { background: var(--n-100); color: var(--text-strong); }
+.row-menu__panel {
+  position: absolute; top: calc(100% + 4px); right: 0;
+  min-width: 180px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  box-shadow: var(--sh-lg);
+  padding: 4px;
+  z-index: 5;
+  display: none;
+}
+.row-menu.is-open .row-menu__panel { display: block; }
+.row-menu__item {
+  display: flex; align-items: center; gap: var(--s-2);
+  padding: 8px 10px;
+  border-radius: var(--r-sm);
+  font-size: var(--fs-sm);
+  color: var(--text-default);
+  cursor: pointer;
+  width: 100%; border: none; background: transparent;
+  text-align: left;
+}
+.row-menu__item:hover { background: var(--n-100); color: var(--text-strong); }
+.row-menu__item svg { width: 14px; height: 14px; color: var(--text-muted); }
+.row-menu__item--danger { color: var(--danger-600); }
+.row-menu__item--danger svg { color: var(--danger-600); }
+.row-menu__item--danger:hover { background: var(--danger-50); color: var(--danger-600); }
+.row-menu__divider { height: 1px; background: var(--border); margin: 4px 0; border: none; }
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .status-strip { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 720px) {
+  .status-strip { grid-template-columns: repeat(2, 1fr); }
+  .filter-bar { padding: var(--s-3); }
+  .filter-bar__search { max-width: none; }
+  .filter-bar select { width: 100%; }
+  .filter-bar__group { flex: 1; }
+  .bulk-bar { flex-direction: column; align-items: stretch; }
+  .bulk-bar__actions { justify-content: stretch; }
+  .bulk-bar__actions .btn { flex: 1; }
+}
+@media (max-width: 480px) {
+  .status-strip { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <!-- ============================================================
+       SIDEBAR — CUSTOMER
+       ============================================================ -->
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <!-- <div class="sidebar__logo">B</div>
+      <div class="sidebar__brand-text">
+        <div class="sidebar__name">BidFreq™</div>
+        <div class="sidebar__tag">Customer Portal</div>
+      </div> -->
+       <img src="img/logo.webp" class="img-fluid logo-img" style="WIDTH: 170px;">
+    </div>
+<nav class="sidebar__nav">
+      <div class="sidebar__section">
+        <div class="sidebar__section-title">Main</div>
+        <a href="customer-dashboard.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="estimate-requests.html" class="nav-item  is-active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
+          <span>Estimate Requests</span>
+          <span class="nav-item__badge">12</span>
+        </a>
+        <a href="projects.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>Approved Projects</span>
+        </a>
+      </div>
+
+      <div class="sidebar__section">
+        <div class="sidebar__section-title">Workspace</div>
+        <a href="notifications.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span>Notifications</span>
+          <span class="nav-item__badge is-danger">3</span>
+        </a>
+       
+        <a href="profile.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Profile</span>
+        </a>
+
+         <a href="index.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+  <polyline points="16 17 21 12 16 7"/>
+  <line x1="21" y1="12" x2="9" y2="12"/>
+</svg>
+          <span>Logout</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar__footer">
+      <div class="user-chip">
+        <div class="avatar avatar--sm">JD</div>
+        <div class="user-chip__meta">
+          <span class="user-chip__name">Jane Doe</span>
+          <span class="user-chip__role">Oak Ridge Property Mgmt</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============================================================
+       MAIN
+       ============================================================ -->
+  <div class="app-main">
+
+    <header class="topbar">
+      <button class="topbar__toggle" id="navToggle" aria-label="Toggle navigation">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+
+      <div class="topbar__search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="search" placeholder="Search estimates, properties, projects…" aria-label="Search">
+        <kbd>⌘K</kbd>
+      </div>
+
+      <div class="topbar__spacer"></div>
+
+      <div class="topbar__actions">
+        <button class="icon-btn tooltip" data-tip="Help" aria-label="Help">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </button>
+        <button class="icon-btn tooltip" data-tip="Notifications" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="icon-btn__dot"></span>
+        </button>
+        <div class="divider--vertical"></div>
+        <div class="user-chip">
+          <div class="avatar avatar--sm">JD</div>
+          <div class="user-chip__meta">
+            <span class="user-chip__name">Jane Doe</span>
+           
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-content">
+
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="customer-dashboard.html">Home</a>
+        <span class="breadcrumbs__sep">/</span>
+        <span class="breadcrumbs__current">Estimate Requests</span>
+      </nav>
+
+      <header class="page-header">
+        <div class="page-header__text">
+          <h1 class="page-header__title">Estimate Requests</h1>
+          <p class="page-header__subtitle">
+            Every request your organization has submitted, with live status through the
+            AI-assisted and human-verified estimating workflow.
+          </p>
+        </div>
+        <div class="page-header__actions">
+          <button class="btn btn--secondary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export CSV
+          </button>
+          <a href="new-estimate-request.html" class="btn btn--primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Estimate Request
+          </a>
+        </div>
+      </header>
+
+      <!-- ============================================================
+           STATUS STRIP
+           ============================================================ -->
+      <section class="status-strip" aria-label="Filter by status">
+        <button class="status-tile is-active" data-status="all">
+          <span class="status-tile__dot" style="background:var(--navy-800)"></span>
+          <div class="status-tile__body">
+            <div class="status-tile__label">All requests</div>
+            <div class="status-tile__value">12</div>
+          </div>
+        </button>
+        <button class="status-tile" data-status="ai-processing">
+          <span class="status-tile__dot dot--ai"></span>
+          <div class="status-tile__body">
+            <div class="status-tile__label">AI processing</div>
+            <div class="status-tile__value">1</div>
+          </div>
+        </button>
+        <button class="status-tile" data-status="in-review">
+          <span class="status-tile__dot dot--review"></span>
+          <div class="status-tile__body">
+            <div class="status-tile__label">In review</div>
+            <div class="status-tile__value">4</div>
+          </div>
+        </button>
+        <!-- <button class="status-tile" data-status="awaiting-customer">
+          <span class="status-tile__dot dot--awaiting"></span>
+          <div class="status-tile__body">
+            <div class="status-tile__label">Awaiting you</div>
+            <div class="status-tile__value">2</div>
+          </div>
+        </button>
+        <button class="status-tile" data-status="revision">
+          <span class="status-tile__dot dot--revision"></span>
+          <div class="status-tile__body">
+            <div class="status-tile__label">Revision</div>
+            <div class="status-tile__value">1</div>
+          </div>
+        </button> -->
+        <button class="status-tile" data-status="approved">
+          <span class="status-tile__dot dot--approved"></span>
+          <div class="status-tile__body">
+            <div class="status-tile__label">Approved</div>
+            <div class="status-tile__value">3</div>
+          </div>
+        </button>
+        <button class="status-tile" data-status="declined">
+          <span class="status-tile__dot dot--declined"></span>
+          <div class="status-tile__body">
+            <div class="status-tile__label">Declined</div>
+            <div class="status-tile__value">1</div>
+          </div>
+        </button>
+      </section>
+
+      <!-- ============================================================
+           FILTER BAR
+           ============================================================ -->
+      <div class="filter-bar">
+        <div class="filter-bar__search">
+          <div class="input-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="input" type="search" id="tableSearch" placeholder="Search by ID, address, ZIP, or description…">
+          </div>
+        </div>
+
+        <div class="filter-bar__group">
+          <span class="filter-bar__label">Trade</span>
+          <select id="tradeFilter">
+            <option value="">All trades</option>
+            <option>General Repair</option>
+            <option>Electrical</option>
+            <option>Plumbing</option>
+            <option>HVAC</option>
+            <option>Roofing</option>
+            <option>Flooring</option>
+            <option>Drywall / Paint</option>
+          </select>
+        </div>
+
+        <div class="filter-bar__group">
+          <span class="filter-bar__label">Date</span>
+          <select id="dateFilter">
+            <option value="">Any time</option>
+            <option>Today</option>
+            <option>Last 7 days</option>
+            <option>Last 30 days</option>
+            <option>Last 90 days</option>
+          </select>
+        </div>
+
+        <div class="filter-bar__group">
+          <span class="filter-bar__label">Sort</span>
+          <select id="sortFilter">
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+            <option value="amount-high">Amount (high → low)</option>
+            <option value="amount-low">Amount (low → high)</option>
+          </select>
+        </div>
+
+        <button class="btn btn--ghost btn--sm" id="clearFilters">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          Clear
+        </button>
+      </div>
+
+      <!-- Active filter chips -->
+      <div class="filter-chips" id="filterChips"></div>
+
+      <!-- ============================================================
+           BULK ACTION BAR
+           ============================================================ -->
+      <div class="bulk-bar" id="bulkBar">
+        <div class="bulk-bar__left">
+          <span class="bulk-bar__count" id="bulkCount">0</span>
+          <span>selected</span>
+        </div>
+        <div class="bulk-bar__actions">
+          <button class="btn btn--secondary btn--sm">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download PDFs
+          </button>
+          <button class="btn btn--secondary btn--sm">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>
+            Email
+          </button>
+          <button class="btn btn--ghost btn--sm" id="clearSelection">Cancel</button>
+        </div>
+      </div>
+
+      <!-- ============================================================
+           TABLE
+           ============================================================ -->
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table class="table" id="requestsTable">
+            <thead>
+              <tr>
+                <th class="table__checkbox">
+                  <label class="check" style="margin:0">
+                    <input type="checkbox" id="selectAll">
+                    <span class="check__box">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    </span>
+                  </label>
+                </th>
+                <th class="sortable" data-sort="id">Estimate ID <span class="sort-ind">↓</span></th>
+                <th>Property</th>
+                <th>Trade</th>
+                <th>Status</th>
+                <th class="num sortable" data-sort="amount">Amount</th>
+                <th>Updated</th>
+                <th class="actions">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="requestsBody"></tbody>
+          </table>
+        </div>
+
+        <!-- Empty state (hidden by default) -->
+        <div class="empty hidden" id="emptyState">
+          <div class="empty__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <div class="empty__title">No matching requests</div>
+          <p class="empty__text">Try adjusting your search or filters, or start a new estimate request.</p>
+          <button class="btn btn--secondary" id="clearEmptyFilters">Clear filters</button>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" id="pagination">
+          <span class="pagination__info" id="paginationInfo">Showing 1–8 of 12 requests</span>
+          <div class="pagination__controls">
+            <button class="pagination__btn" aria-label="Previous page" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <button class="pagination__btn is-active">1</button>
+            <button class="pagination__btn">2</button>
+            <button class="pagination__btn" aria-label="Next page">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ================================================================
+  // MOCK DATA (would come from API in production)
+  // ================================================================
+  var DATA = [
+    { id:'EST-2026-0042', address:'421 Oak Ridge Dr', city:'Austin, TX', zip:'78745', trade:'General Repair', status:'ai-processing', statusLabel:'AI Processing', amount:null, updated:2, updatedLabel:'2 min ago', photos:6, icon:'violet' },
+    { id:'EST-2026-0041', address:'88 Cypress Ln', city:'Dallas, TX', zip:'75204', trade:'Roofing', status:'in-review', statusLabel:'In Estimator Review', amount:8420.00, updated:60, updatedLabel:'1 hr ago', photos:8, icon:'warning' },
+    { id:'EST-2026-0040', address:'1502 Palm Ave', city:'Houston, TX', zip:'77002', trade:'Plumbing', status:'awaiting-customer', statusLabel:'Awaiting Customer', amount:1482.50, updated:120, updatedLabel:'2 hr ago', photos:5, icon:'blue' },
+    { id:'EST-2026-0039', address:'77 Birch St', city:'Plano, TX', zip:'75024', trade:'Electrical', status:'revision', statusLabel:'Revision Requested', amount:2310.00, updated:2880, updatedLabel:'2 days ago', photos:4, icon:'warning' },
+    { id:'EST-2026-0038', address:'305 Meadow Rd', city:'Austin, TX', zip:'78704', trade:'HVAC', status:'approved', statusLabel:'Approved', amount:4950.00, updated:4320, updatedLabel:'3 days ago', photos:7, icon:'emerald' },
+    { id:'EST-2026-0037', address:'12 Cedar Ct', city:'Fort Worth, TX', zip:'76102', trade:'Flooring', status:'declined', statusLabel:'Declined', amount:3140.00, updated:7200, updatedLabel:'5 days ago', photos:3, icon:'danger' },
+    { id:'EST-2026-0036', address:'901 Riverbend Way', city:'Austin, TX', zip:'78730', trade:'Drywall / Paint', status:'in-review', statusLabel:'In Estimator Review', amount:1875.00, updated:1440, updatedLabel:'Yesterday', photos:6, icon:'warning' },
+    { id:'EST-2026-0035', address:'245 Sundial Blvd', city:'San Antonio, TX', zip:'78205', trade:'General Repair', status:'in-review', statusLabel:'In Estimator Review', amount:2240.00, updated:1500, updatedLabel:'Yesterday', photos:5, icon:'warning' },
+    { id:'EST-2026-0034', address:'78 Lakeline Dr', city:'Austin, TX', zip:'78717', trade:'Plumbing', status:'approved', statusLabel:'Approved', amount:980.00, updated:5760, updatedLabel:'4 days ago', photos:4, icon:'emerald' },
+    { id:'EST-2026-0033', address:'1100 Congress Ave', city:'Austin, TX', zip:'78701', trade:'HVAC', status:'approved', statusLabel:'Approved', amount:6320.00, updated:8640, updatedLabel:'6 days ago', photos:9, icon:'emerald' },
+    { id:'EST-2026-0032', address:'2201 Barton Springs', city:'Austin, TX', zip:'78704', trade:'Electrical', status:'in-review', statusLabel:'In Estimator Review', amount:3480.00, updated:10080, updatedLabel:'7 days ago', photos:5, icon:'warning' },
+    { id:'EST-2026-0031', address:'455 Post Oak Blvd', city:'Houston, TX', zip:'77056', trade:'Flooring', status:'awaiting-customer', statusLabel:'Awaiting Customer', amount:2660.00, updated:11520, updatedLabel:'8 days ago', photos:6, icon:'blue' }
+  ];
+
+  var state = {
+    status: 'all',
+    search: '',
+    trade: '',
+    date: '',
+    sort: 'newest',
+    selected: new Set(),
+    page: 1,
+    perPage: 8
+  };
+
+  // ================================================================
+  // STATUS HELPERS
+  // ================================================================
+  function statusChip(s) {
+    var map = {
+      'draft':             'status--draft',
+      'submitted':         'status--submitted',
+      'ai-processing':     'status--ai-processing',
+      'in-review':         'status--in-review',
+      'awaiting-customer': 'status--awaiting-customer',
+      'revision':          'status--revision',
+      'approved':          'status--approved',
+      'declined':          'status--declined',
+      'project':           'status--project'
+    };
+    return '<span class="chip ' + (map[s] || 'status--draft') + '"><span class="chip__dot"></span>' + labelFor(s) + '</span>';
+  }
+
+  function labelFor(s) {
+    return {
+      'draft': 'Draft',
+      'submitted': 'Submitted',
+      'ai-processing': 'AI Processing',
+      'in-review': 'In Estimator Review',
+      'awaiting-customer': 'Awaiting Customer',
+      'revision': 'Revision Requested',
+      'approved': 'Approved',
+      'declined': 'Declined',
+      'project': 'Approved Project'
+    }[s] || s;
+  }
+
+  function iconForRow(icon) {
+    var cls = icon ? ' est-id-cell__icon--' + icon : '';
+    return '<div class="est-id-cell__icon' + cls + '">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+        '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>' +
+        '<polyline points="14 2 14 8 20 8"/>' +
+      '</svg>' +
+    '</div>';
+  }
+
+  function formatAmount(n) {
+    if (n == null) return '<span class="amount-cell amount-cell--muted">Analyzing…</span>';
+    return '<span class="amount-cell">$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</span>';
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+    });
+  }
+
+  // ================================================================
+  // FILTER + SORT
+  // ================================================================
+  function getFiltered() {
+    var rows = DATA.slice();
+
+    if (state.status !== 'all') {
+      rows = rows.filter(function (r) { return r.status === state.status; });
+    }
+    if (state.trade) {
+      rows = rows.filter(function (r) { return r.trade === state.trade; });
+    }
+    if (state.search) {
+      var q = state.search.toLowerCase();
+      rows = rows.filter(function (r) {
+        return (r.id + ' ' + r.address + ' ' + r.city + ' ' + r.zip + ' ' + r.trade).toLowerCase().indexOf(q) !== -1;
+      });
+    }
+    if (state.date === 'Today') rows = rows.filter(function (r) { return r.updated < 1440; });
+    else if (state.date === 'Last 7 days') rows = rows.filter(function (r) { return r.updated < 10080; });
+    else if (state.date === 'Last 30 days') rows = rows.filter(function (r) { return r.updated < 43200; });
+    else if (state.date === 'Last 90 days') rows = rows.filter(function (r) { return r.updated < 129600; });
+
+    // Sort
+    if (state.sort === 'oldest') rows.sort(function (a,b) { return b.updated - a.updated; });
+    else if (state.sort === 'newest') rows.sort(function (a,b) { return a.updated - b.updated; });
+    else if (state.sort === 'amount-high') rows.sort(function (a,b) { return (b.amount||0) - (a.amount||0); });
+    else if (state.sort === 'amount-low') rows.sort(function (a,b) { return (a.amount||0) - (b.amount||0); });
+
+    return rows;
+  }
+
+  // ================================================================
+  // RENDER TABLE
+  // ================================================================
+  function render() {
+    var rows = getFiltered();
+    var body = document.getElementById('requestsBody');
+    var empty = document.getElementById('emptyState');
+    var wrap = document.querySelector('.table-scroll');
+    var pg = document.getElementById('pagination');
+
+    // Pagination slice
+    var start = (state.page - 1) * state.perPage;
+    var paged = rows.slice(start, start + state.perPage);
+
+    if (rows.length === 0) {
+      body.innerHTML = '';
+      wrap.classList.add('hidden');
+      pg.classList.add('hidden');
+      empty.classList.remove('hidden');
+    } else {
+      wrap.classList.remove('hidden');
+      pg.classList.remove('hidden');
+      empty.classList.add('hidden');
+
+      body.innerHTML = paged.map(function (r) {
+        var checked = state.selected.has(r.id) ? 'checked' : '';
+        return '<tr data-id="' + r.id + '">' +
+          '<td class="table__checkbox">' +
+            '<label class="check" style="margin:0">' +
+              '<input type="checkbox" class="rowCheck" data-id="' + r.id + '" ' + checked + '>' +
+              '<span class="check__box">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' +
+              '</span>' +
+            '</label>' +
+          '</td>' +
+          '<td>' +
+            '<div class="est-id-cell">' +
+              iconForRow(r.icon) +
+              '<div class="est-id-cell__text">' +
+                '<div class="est-id-cell__id">' + r.id + '</div>' +
+                '<div class="est-id-cell__time">' + r.photos + ' photos</div>' +
+              '</div>' +
+            '</div>' +
+          '</td>' +
+          '<td>' +
+            '<div class="property-cell">' +
+              '<div class="property-cell__addr">' + escapeHtml(r.address) + '</div>' +
+              '<div class="property-cell__meta">' +
+                '<span>' + escapeHtml(r.city) + '</span>' +
+                '<span class="dot"></span>' +
+                '<span class="text-mono">' + r.zip + '</span>' +
+              '</div>' +
+            '</div>' +
+          '</td>' +
+          '<td class="text-sm">' + r.trade + '</td>' +
+          '<td>' + statusChip(r.status) + '</td>' +
+          '<td class="num">' + formatAmount(r.amount) + '</td>' +
+          '<td class="text-muted text-sm">' + r.updatedLabel + '</td>' +
+          '<td class="actions">' +
+            '<div class="row-menu">' +
+              '<button class="row-menu__trigger" aria-label="Row actions">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>' +
+              '</button>' +
+              '<div class="row-menu__panel">' +
+                '<button class="row-menu__item" data-action="open">' +
+                  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>' +
+                  'Open estimate' +
+                '</button>' +
+                '<button class="row-menu__item" data-action="download">' +
+                  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>' +
+                  'Download PDF' +
+                '</button>' +
+                '<hr class="row-menu__divider">' +
+                '<button class="row-menu__item row-menu__item--danger" data-action="archive">' +
+                  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>' +
+                  'Archive' +
+                '</button>' +
+              '</div>' +
+            '</div>' +
+          '</td>' +
+        '</tr>';
+      }).join('');
+
+      // Update pagination info
+      var info = document.getElementById('paginationInfo');
+      info.textContent = 'Showing ' + (start + 1) + '–' + (start + paged.length) + ' of ' + rows.length + ' requests';
+    }
+
+    // Update checkbox states
+    document.getElementById('selectAll').checked = rows.length > 0 && rows.every(function (r) { return state.selected.has(r.id); });
+    updateBulkBar();
+    renderFilterChips();
+  }
+
+  // ================================================================
+  // SELECTION
+  // ================================================================
+  function updateBulkBar() {
+    var bar = document.getElementById('bulkBar');
+    var count = document.getElementById('bulkCount');
+    count.textContent = state.selected.size;
+    bar.classList.toggle('is-visible', state.selected.size > 0);
+  }
+
+  document.getElementById('selectAll').addEventListener('change', function () {
+    var rows = getFiltered();
+    if (this.checked) {
+      rows.forEach(function (r) { state.selected.add(r.id); });
+    } else {
+      rows.forEach(function (r) { state.selected.delete(r.id); });
+    }
+    render();
+  });
+
+  document.getElementById('clearSelection').addEventListener('click', function () {
+    state.selected.clear();
+    render();
+  });
+
+  // ================================================================
+  // TABLE EVENT DELEGATION
+  // ================================================================
+  document.getElementById('requestsBody').addEventListener('click', function (e) {
+    var row = e.target.closest('tr[data-id]');
+    if (!row) return;
+    var id = row.dataset.id;
+
+    // Checkbox
+    var check = e.target.closest('.rowCheck');
+    if (check) {
+      if (check.checked) state.selected.add(id);
+      else state.selected.delete(id);
+      updateBulkBar();
+      document.getElementById('selectAll').checked = getFiltered().every(function (r) { return state.selected.has(r.id); });
+      return;
+    }
+
+    // Row menu trigger
+    var trigger = e.target.closest('.row-menu__trigger');
+    if (trigger) {
+      e.stopPropagation();
+      document.querySelectorAll('.row-menu').forEach(function (m) {
+        if (m !== trigger.closest('.row-menu')) m.classList.remove('is-open');
+      });
+      trigger.closest('.row-menu').classList.toggle('is-open');
+      return;
+    }
+
+    // Row menu item
+    var item = e.target.closest('.row-menu__item');
+    if (item) {
+      e.stopPropagation();
+      var action = item.dataset.action;
+      if (action === 'open' || action === 'download') {
+        window.location.href = 'estimate-detail.html';
+      } else if (action === 'archive') {
+        row.style.opacity = '0.4';
+        setTimeout(function () { row.remove(); }, 300);
+      }
+      return;
+    }
+
+    // Whole-row click → open detail
+    if (!e.target.closest('.check, .row-menu')) {
+      window.location.href = 'estimate-detail.html';
+    }
+  });
+
+  // Close menus on outside click
+  document.addEventListener('click', function () {
+    document.querySelectorAll('.row-menu').forEach(function (m) { m.classList.remove('is-open'); });
+  });
+
+  // ================================================================
+  // STATUS TILES
+  // ================================================================
+  document.querySelectorAll('.status-tile').forEach(function (tile) {
+    tile.addEventListener('click', function () {
+      document.querySelectorAll('.status-tile').forEach(function (t) { t.classList.remove('is-active'); });
+      tile.classList.add('is-active');
+      state.status = tile.dataset.status;
+      state.page = 1;
+      render();
+    });
+  });
+
+  // ================================================================
+  // FILTER CONTROLS
+  // ================================================================
+  document.getElementById('tableSearch').addEventListener('input', function () {
+    state.search = this.value.trim();
+    state.page = 1;
+    render();
+  });
+  document.getElementById('tradeFilter').addEventListener('change', function () {
+    state.trade = this.value;
+    state.page = 1;
+    render();
+  });
+  document.getElementById('dateFilter').addEventListener('change', function () {
+    state.date = this.value;
+    state.page = 1;
+    render();
+  });
+  document.getElementById('sortFilter').addEventListener('change', function () {
+    state.sort = this.value;
+    render();
+  });
+
+  document.getElementById('clearFilters').addEventListener('click', clearAll);
+  document.getElementById('clearEmptyFilters').addEventListener('click', clearAll);
+
+  function clearAll() {
+    state.search = '';
+    state.trade = '';
+    state.date = '';
+    state.sort = 'newest';
+    state.status = 'all';
+    state.page = 1;
+    document.getElementById('tableSearch').value = '';
+    document.getElementById('tradeFilter').value = '';
+    document.getElementById('dateFilter').value = '';
+    document.getElementById('sortFilter').value = 'newest';
+    document.querySelectorAll('.status-tile').forEach(function (t) {
+      t.classList.toggle('is-active', t.dataset.status === 'all');
+    });
+    render();
+  }
+
+  // ================================================================
+  // FILTER CHIPS
+  // ================================================================
+  function renderFilterChips() {
+    var wrap = document.getElementById('filterChips');
+    var chips = [];
+    if (state.status !== 'all') chips.push({ k: 'status', label: 'Status: ' + labelFor(state.status) });
+    if (state.trade) chips.push({ k: 'trade', label: 'Trade: ' + state.trade });
+    if (state.date) chips.push({ k: 'date', label: 'Date: ' + state.date });
+    if (state.search) chips.push({ k: 'search', label: 'Search: "' + state.search + '"' });
+
+    wrap.innerHTML = chips.map(function (c) {
+      return '<span class="filter-chip">' +
+        escapeHtml(c.label) +
+        '<button data-remove="' + c.k + '" aria-label="Remove filter">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
+        '</button>' +
+      '</span>';
+    }).join('');
+
+    wrap.querySelectorAll('[data-remove]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var k = this.dataset.remove;
+        if (k === 'status') {
+          state.status = 'all';
+          document.querySelectorAll('.status-tile').forEach(function (t) {
+            t.classList.toggle('is-active', t.dataset.status === 'all');
+          });
+        } else if (k === 'trade') { state.trade = ''; document.getElementById('tradeFilter').value = ''; }
+        else if (k === 'date') { state.date = ''; document.getElementById('dateFilter').value = ''; }
+        else if (k === 'search') { state.search = ''; document.getElementById('tableSearch').value = ''; }
+        render();
+      });
+    });
+  }
+
+  // ================================================================
+  // INITIAL RENDER
+  // ================================================================
+  render();
+
+  // ================================================================
+  // NAV TOGGLE
+  // ================================================================
+  document.getElementById('navToggle').addEventListener('click', function () {
+    var app = document.getElementById('app');
+    if (window.matchMedia('(max-width: 860px)').matches) {
+      app.classList.toggle('is-nav-open');
+    } else {
+      app.classList.toggle('is-collapsed');
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

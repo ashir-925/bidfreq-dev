@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notifications · BidFreq™</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+
+<style>
+/* ------------------------------------------------------------------
+   NOTIFICATIONS PAGE — extends design system
+   ------------------------------------------------------------------ */
+
+.notif-grid {
+  display: grid;
+  /* grid-template-columns: minmax(0, 1fr) 320px; */
+  gap: var(--s-5);
+  align-items: start;
+}
+.notif-main { display: flex; flex-direction: column; gap: var(--s-5); min-width: 0; }
+.notif-side { display: flex; flex-direction: column; gap: var(--s-5); position: sticky; top: calc(var(--topbar-h) + var(--s-5)); }
+
+/* Tabs (reuse design system tabs, add count badge) */
+.notif-tabs-wrap {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--s-4); flex-wrap: wrap;
+  margin-bottom: var(--s-4);
+}
+.notif-tabs {
+  display: flex; gap: 4px;
+  border-bottom: 1px solid var(--border);
+  flex: 1; min-width: 0;
+  overflow-x: auto;
+}
+
+/* Toolbar */
+.notif-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  border-bottom: 1px solid var(--border);
+  background: var(--n-25);
+  flex-wrap: wrap;
+}
+.notif-toolbar__left {
+  display: flex; align-items: center; gap: var(--s-3);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+.notif-toolbar__left strong { color: var(--text-strong); font-weight: var(--fw-semibold); }
+.notif-toolbar__actions { display: flex; gap: var(--s-2); flex-wrap: wrap; }
+
+/* Notification list */
+.notif-list { display: flex; flex-direction: column; }
+
+/* Date separator */
+.notif-day {
+  padding: var(--s-3) var(--s-5);
+  background: var(--n-25);
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  font-weight: var(--fw-semibold);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--text-muted);
+  position: sticky; top: 0; z-index: 1;
+}
+.notif-day:first-child { border-top: none; }
+
+/* Notification item */
+.notif {
+  display: flex;
+  gap: var(--s-4);
+  padding: var(--s-4) var(--s-5);
+  border-bottom: 1px solid var(--border);
+  transition: background var(--dur) var(--ease);
+  cursor: pointer;
+  position: relative;
+}
+.notif:hover { background: var(--n-25); }
+.notif:last-child { border-bottom: none; }
+
+.notif.is-unread {
+  background: linear-gradient(90deg, rgba(37,99,235,.03), transparent 40%);
+}
+.notif.is-unread::before {
+  content: "";
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; background: var(--blue-600);
+}
+
+/* Checkbox */
+.notif__check {
+  flex-shrink: 0;
+  margin-top: 8px;
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+}
+.notif:hover .notif__check,
+.notif.is-unread .notif__check,
+.notif__check:focus-within {
+  opacity: 1;
+}
+
+/* Icon */
+.notif__icon {
+  width: 40px; height: 40px; border-radius: var(--r-md);
+  display: grid; place-items: center;
+  flex-shrink: 0;
+  position: relative;
+}
+.notif__icon svg { width: 18px; height: 18px; }
+.notif__icon--violet { background: var(--violet-50); color: var(--violet-600); }
+.notif__icon--emerald { background: var(--emerald-50); color: var(--emerald-600); }
+.notif__icon--blue { background: var(--blue-50); color: var(--blue-600); }
+.notif__icon--warning { background: var(--warning-50); color: var(--warning-600); }
+.notif__icon--danger { background: var(--danger-50); color: var(--danger-600); }
+.notif__icon--neutral { background: var(--n-100); color: var(--text-muted); }
+
+/* Body */
+.notif__body { flex: 1; min-width: 0; }
+.notif__row {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: var(--s-4);
+  margin-bottom: 4px;
+}
+.notif__title {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--text-strong);
+  line-height: 1.4;
+}
+.notif__title--muted { font-weight: var(--fw-medium); color: var(--text-default); }
+.notif__time {
+  font-size: var(--fs-xs);
+  color: var(--text-faint);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.notif__text {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin-bottom: var(--s-2);
+}
+.notif__text strong { color: var(--text-strong); font-weight: var(--fw-semibold); }
+.notif__text .text-mono { font-size: var(--fs-xs); color: var(--text-default); }
+
+/* Meta tags (ID, status chip) */
+.notif__meta {
+  display: flex; align-items: center; gap: var(--s-2);
+  flex-wrap: wrap;
+}
+.notif__id {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: var(--r-sm);
+  background: var(--n-100);
+  color: var(--text-muted);
+  font-weight: var(--fw-medium);
+}
+
+/* Quick action buttons on hover */
+.notif__actions {
+  display: flex; align-items: center; gap: 4px;
+  margin-top: var(--s-2);
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+}
+.notif:hover .notif__actions { opacity: 1; }
+.notif__action-btn {
+  padding: 4px 10px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  color: var(--text-default);
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.notif__action-btn:hover {
+  border-color: var(--blue-500);
+  color: var(--blue-700);
+  background: var(--blue-50);
+}
+.notif__action-btn svg { width: 12px; height: 12px; }
+
+/* Unread indicator */
+.notif__unread-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--blue-600);
+  flex-shrink: 0;
+  margin-top: 16px;
+}
+.notif:not(.is-unread) .notif__unread-dot { background: transparent; }
+
+/* Sidebar card: preferences */
+.pref-list { display: flex; flex-direction: column; }
+.pref-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-3) 0;
+  border-bottom: 1px solid var(--border);
+}
+.pref-row:last-child { border-bottom: none; }
+.pref-row__body { flex: 1; min-width: 0; }
+.pref-row__title {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-strong);
+  margin-bottom: 1px;
+}
+.pref-row__desc {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* Summary stat cards */
+.notif-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s-2);
+}
+.notif-stat {
+  padding: var(--s-3);
+  text-align: center;
+  border-radius: var(--r-md);
+  background: var(--n-25);
+  border: 1px solid var(--border);
+}
+.notif-stat__value {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  color: var(--text-strong);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.notif-stat__value--blue { color: var(--blue-600); }
+.notif-stat__value--violet { color: var(--violet-600); }
+.notif-stat__value--warning { color: #B45309; }
+.notif-stat__label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--text-muted);
+  font-weight: var(--fw-semibold);
+  line-height: 1.2;
+}
+
+/* Empty state */
+.notif-empty {
+  padding: var(--s-12) var(--s-6);
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .notif-grid { grid-template-columns: 1fr; }
+  .notif-side { position: static; }
+}
+@media (max-width: 640px) {
+  .notif { padding: var(--s-4); }
+  .notif__row { gap: var(--s-3); }
+  .notif__actions { opacity: 1; }
+  .notif__check { opacity: 1; }
+  .notif-stats { grid-template-columns: repeat(3, 1fr); }
+  .notif-toolbar { flex-direction: column; align-items: stretch; }
+  .notif-toolbar__actions { justify-content: stretch; }
+  .notif-toolbar__actions .btn { flex: 1; }
+}
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <!-- ============================================================
+       SIDEBAR — CUSTOMER
+       ============================================================ -->
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <!-- <div class="sidebar__logo">B</div>
+      <div class="sidebar__brand-text">
+        <div class="sidebar__name">BidFreq™</div>
+        <div class="sidebar__tag">Customer Portal</div>
+      </div> -->
+       <img src="img/logo.webp" class="img-fluid logo-img" style="WIDTH: 170px;">
+    </div>
+
+     <nav class="sidebar__nav">
+      <div class="sidebar__section">
+        <div class="sidebar__section-title">Main</div>
+        <a href="customer-dashboard.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="estimate-requests.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
+          <span>Estimate Requests</span>
+          <span class="nav-item__badge">12</span>
+        </a>
+        <a href="projects.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>Approved Projects</span>
+        </a>
+      </div>
+
+      <div class="sidebar__section">
+        <div class="sidebar__section-title">Workspace</div>
+        <a href="notifications.html" class="nav-item is-active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span>Notifications</span>
+          <span class="nav-item__badge is-danger">3</span>
+        </a>
+       
+        <a href="profile.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Profile</span>
+        </a>
+
+         <a href="index.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+  <polyline points="16 17 21 12 16 7"/>
+  <line x1="21" y1="12" x2="9" y2="12"/>
+</svg>
+          <span>Logout</span>
+        </a>
+      </div>
+    </nav>
+
+
+
+    <div class="sidebar__footer">
+      <div class="user-chip">
+        <div class="avatar avatar--sm">JD</div>
+        <div class="user-chip__meta">
+          <span class="user-chip__name">Jane Doe</span>
+          <span class="user-chip__role">Oak Ridge Property Mgmt</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============================================================
+       MAIN
+       ============================================================ -->
+  <div class="app-main">
+
+    <header class="topbar">
+      <button class="topbar__toggle" id="navToggle" aria-label="Toggle navigation">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+
+      <div class="topbar__search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="search" placeholder="Search notifications…" aria-label="Search notifications">
+        <kbd>⌘K</kbd>
+      </div>
+
+      <div class="topbar__spacer"></div>
+
+      <div class="topbar__actions">
+        <button class="icon-btn tooltip" data-tip="Help" aria-label="Help">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </button>
+        <button class="icon-btn tooltip" data-tip="Notifications" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="icon-btn__dot"></span>
+        </button>
+        <div class="divider--vertical"></div>
+        <div class="user-chip">
+          <div class="avatar avatar--sm">JD</div>
+          <div class="user-chip__meta">
+            <span class="user-chip__name">Jane Doe</span>
+           
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-content">
+
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="customer-dashboard.html">Home</a>
+        <span class="breadcrumbs__sep">/</span>
+        <span class="breadcrumbs__current">Notifications</span>
+      </nav>
+
+      <header class="page-header">
+        <div class="page-header__text">
+          <h1 class="page-header__title">Notifications</h1>
+          <p class="page-header__subtitle">
+            Every event across your estimating workflow — AI drafts, human-verified
+            estimates, revisions, approvals, and project updates.
+          </p>
+        </div>
+        <div class="page-header__actions">
+          <a href="profile.html" class="btn btn--secondary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Preferences
+          </a>
+          <button class="btn btn--primary" id="markAllRead">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Mark all read
+          </button>
+        </div>
+      </header>
+
+      <!-- ============================================================
+           MAIN GRID
+           ============================================================ -->
+      <div class="notif-grid">
+
+        <!-- ============ LEFT: LIST ============ -->
+        <div class="notif-main">
+
+          <!-- Tabs -->
+          <div class="notif-tabs-wrap">
+            <nav class="notif-tabs" role="tablist" aria-label="Notification filters">
+              <button class="tab is-active" data-filter="all" role="tab">
+                All
+                <span class="badge">18</span>
+              </button>
+              <button class="tab" data-filter="unread" role="tab">
+                Unread
+                <span class="badge badge--blue">3</span>
+              </button>
+              <button class="tab" data-filter="estimates" role="tab">
+                Estimates
+                <span class="badge">10</span>
+              </button>
+              <button class="tab" data-filter="projects" role="tab">
+                Projects
+                <span class="badge">5</span>
+              </button>
+              <button class="tab" data-filter="system" role="tab">
+                System
+                <span class="badge">3</span>
+              </button>
+            </nav>
+          </div>
+
+          <!-- Panel -->
+          <div class="card" style="overflow:hidden">
+
+            <!-- Toolbar -->
+            <div class="notif-toolbar">
+              <div class="notif-toolbar__left">
+                <label class="check" style="margin:0">
+                  <input type="checkbox" id="selectAll">
+                  <span class="check__box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  </span>
+                  <span class="check__label">Select all</span>
+                </label>
+                <span id="selectionInfo" class="hidden">
+                  · <strong id="selectedCount">0</strong> selected
+                </span>
+              </div>
+              <div class="notif-toolbar__actions">
+                <button class="btn btn--ghost btn--sm" id="markSelectedRead" disabled>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  Mark as read
+                </button>
+                <button class="btn btn--ghost btn--sm" id="markSelectedUnread" disabled>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  Mark as unread
+                </button>
+              </div>
+            </div>
+
+            <!-- List -->
+            <div class="notif-list" id="notifList"></div>
+
+            <!-- Empty state -->
+            <div class="empty notif-empty hidden" id="emptyState">
+              <div class="empty__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              </div>
+              <div class="empty__title">You're all caught up</div>
+              <p class="empty__text">No notifications match this filter.</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ============ RIGHT: SIDEBAR ============ -->
+        
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- TOAST REGION -->
+<div class="toast-region" id="toastRegion"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ================================================================
+  // MOCK NOTIFICATION DATA
+  // ================================================================
+  var NOTIFS = [
+    // Today
+    { id:'n1', day:'Today', time:'2 min ago', kind:'ai', unread:true, category:'estimates',
+      title:'AI analysis started',
+      text:'BidFreq AI is analyzing 6 photos and your description for <strong>EST-2026-0042</strong> (421 Oak Ridge Dr).',
+      ref:'EST-2026-0042', refUrl:'estimate-detail.html',
+      actions:[{ label:'View request', href:'estimate-detail.html' }] },
+
+    { id:'n2', day:'Today', time:'2 hours ago', kind:'emerald', unread:true, category:'estimates',
+      title:'Human-verified estimate ready for approval',
+      text:'A BidFreq estimator verified the estimate for <strong>EST-2026-0040</strong> at <strong>$1,482.50</strong>. Awaiting your review.',
+      ref:'EST-2026-0040', refUrl:'estimate-detail.html',
+      actions:[{ label:'Review & approve', href:'estimate-detail.html', primary:true }] },
+
+    { id:'n3', day:'Today', time:'2 hours ago', kind:'blue', unread:false, category:'estimates',
+      title:'Final PDF emailed',
+      text:'The final PDF for <strong>EST-2026-0040</strong> was delivered to jane@oakridge.com.',
+      ref:'EST-2026-0040', refUrl:'estimate-detail.html' },
+
+    // Yesterday
+    { id:'n4', day:'Yesterday', time:'Yesterday · 4:15 PM', kind:'warning', unread:true, category:'estimates',
+      title:'Updated estimate issued after your revision',
+      text:'The estimator revised <strong>EST-2026-0037</strong> in response to your feedback. New total: <strong>$3,140.00</strong>.',
+      ref:'EST-2026-0037', refUrl:'estimate-detail.html',
+      actions:[{ label:'Review updated estimate', href:'estimate-detail.html', primary:true }] },
+
+    { id:'n5', day:'Yesterday', time:'Yesterday · 10:02 AM', kind:'emerald', unread:false, category:'projects',
+      title:'Project progressed to 60%',
+      text:'HVAC installation for <strong>PRJ-2026-0021</strong> at 305 Meadow Rd is now 60% complete.',
+      ref:'PRJ-2026-0021', refUrl:'project-detail.html',
+      actions:[{ label:'View project', href:'project-detail.html' }] },
+
+    { id:'n6', day:'Yesterday', time:'Yesterday · 9:14 AM', kind:'neutral', unread:false, category:'system',
+      title:'Pricing source updated',
+      text:'Localized pricing for ZIP <strong>78704</strong> was refreshed. New rates apply to future estimates only.',
+      ref:'Pricing', refUrl:'estimate-requests.html' },
+
+    // 2 days ago
+    { id:'n7', day:'Aug 9, 2026', time:'2 days ago', kind:'warning', unread:false, category:'estimates',
+      title:'Revision requested',
+      text:'You requested a revision on <strong>EST-2026-0039</strong> (Electrical · 77 Birch St). It has returned to the estimator.',
+      ref:'EST-2026-0039', refUrl:'estimate-detail.html' },
+
+    { id:'n8', day:'Aug 9, 2026', time:'2 days ago', kind:'emerald', unread:false, category:'projects',
+      title:'Project approved',
+      text:'Your approval of <strong>EST-2026-0038</strong> created project <strong>PRJ-2026-0021</strong> at 305 Meadow Rd.',
+      ref:'PRJ-2026-0021', refUrl:'project-detail.html',
+      actions:[{ label:'View project', href:'project-detail.html' }] },
+
+    { id:'n9', day:'Aug 9, 2026', time:'2 days ago', kind:'violet', unread:false, category:'estimates',
+      title:'Draft estimate ready for estimator review',
+      text:'AI drafted a $8,420.00 estimate for <strong>EST-2026-0041</strong> (Roofing · 88 Cypress Ln). A human estimator will verify it shortly.',
+      ref:'EST-2026-0041', refUrl:'estimate-detail.html' },
+
+    // 3 days ago
+    { id:'n10', day:'Aug 8, 2026', time:'3 days ago', kind:'emerald', unread:false, category:'projects',
+      title:'Project completed',
+      text:'<strong>PRJ-2026-0020</strong> at 78 Lakeline Dr has been completed and closed.',
+      ref:'PRJ-2026-0020', refUrl:'project-detail.html' },
+
+    { id:'n11', day:'Aug 8, 2026', time:'3 days ago', kind:'blue', unread:false, category:'estimates',
+      title:'New estimate request submitted',
+      text:'You submitted <strong>EST-2026-0042</strong> for 421 Oak Ridge Dr with 6 photos.',
+      ref:'EST-2026-0042', refUrl:'estimate-detail.html' },
+
+    // Last week
+    { id:'n12', day:'Aug 5, 2026', time:'6 days ago', kind:'neutral', unread:false, category:'system',
+      title:'Security: new sign-in',
+      text:'New sign-in from Chrome on macOS · Austin, TX. If this wasn\'t you, reset your password.',
+      ref:'Security', refUrl:'profile.html',
+      actions:[{ label:'Review activity', href:'profile.html' }] },
+
+    { id:'n13', day:'Aug 5, 2026', time:'6 days ago', kind:'danger', unread:false, category:'estimates',
+      title:'Estimate declined',
+      text:'<strong>EST-2026-0037</strong> was declined by your organization. Reason: pricing above budget.',
+      ref:'EST-2026-0037', refUrl:'estimate-detail.html' },
+
+    { id:'n14', day:'Aug 5, 2026', time:'6 days ago', kind:'violet', unread:false, category:'estimates',
+      title:'AI draft revised by estimator',
+      text:'Estimator B. Hayes adjusted 3 line items on <strong>EST-2026-0038</strong> before approval. Final confidence: 94%.',
+      ref:'EST-2026-0038', refUrl:'estimate-detail.html' },
+
+    { id:'n15', day:'Aug 4, 2026', time:'7 days ago', kind:'emerald', unread:false, category:'projects',
+      title:'Project scheduled',
+      text:'<strong>PRJ-2026-0021</strong> is scheduled to begin Aug 15, 2026. Estimated completion Aug 22.',
+      ref:'PRJ-2026-0021', refUrl:'project-detail.html' },
+
+    { id:'n16', day:'Aug 4, 2026', time:'7 days ago', kind:'neutral', unread:false, category:'system',
+      title:'Team member invited',
+      text:'You invited <strong>marcus@oakridge.com</strong> to your organization as a Submitter.',
+      ref:'Team', refUrl:'organization-settings.html' },
+
+    { id:'n17', day:'Aug 4, 2026', time:'7 days ago', kind:'emerald', unread:false, category:'estimates',
+      title:'Estimate approved & e-signed',
+      text:'You approved <strong>EST-2026-0038</strong> ($4,950.00) with electronic signature. Project created.',
+      ref:'EST-2026-0038', refUrl:'estimate-detail.html' },
+
+    { id:'n18', day:'Aug 4, 2026', time:'7 days ago', kind:'blue', unread:false, category:'estimates',
+      title:'Welcome to BidFreq',
+      text:'Your account is ready. Start a new estimate request by uploading photos of the repair area.',
+      ref:'Welcome', refUrl:'new-estimate-request.html',
+      actions:[{ label:'Start a request', href:'new-estimate-request.html', primary:true }] }
+  ];
+
+  // ================================================================
+  // STATE
+  // ================================================================
+  var state = {
+    filter: 'all',
+    selected: new Set(),
+    data: NOTIFS.map(function (n) { return Object.assign({}, n); })
+  };
+
+  // ================================================================
+  // ICONS
+  // ================================================================
+  function iconFor(kind) {
+    var icons = {
+      ai: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.5 2.3 7.1-6.3-4.6L5.7 21 8 14 2 9.5h7.6z"/></svg>',
+      emerald: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+      violet: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
+      blue: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>',
+      warning: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+      danger: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
+      neutral: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
+    };
+    return icons[kind] || icons.neutral;
+  }
+
+  var KIND_CLASS = {
+    ai: 'violet',
+    emerald: 'emerald',
+    violet: 'violet',
+    blue: 'blue',
+    warning: 'warning',
+    danger: 'danger',
+    neutral: 'neutral'
+  };
+
+  // ================================================================
+  // RENDER
+  // ================================================================
+  function render() {
+    var list = document.getElementById('notifList');
+    var empty = document.getElementById('emptyState');
+
+    // Apply filter
+    var rows = state.data.slice();
+    if (state.filter === 'unread') rows = rows.filter(function (n) { return n.unread; });
+    else if (state.filter !== 'all') rows = rows.filter(function (n) { return n.category === state.filter; });
+
+    if (rows.length === 0) {
+      list.innerHTML = '';
+      empty.classList.remove('hidden');
+      updateBulkActions();
+      return;
+    }
+    empty.classList.add('hidden');
+
+    // Group by day, preserving original day order
+    var groups = [];
+    rows.forEach(function (n) {
+      var last = groups[groups.length - 1];
+      if (!last || last.day !== n.day) {
+        groups.push({ day: n.day, items: [n] });
+      } else {
+        last.items.push(n);
+      }
+    });
+
+    list.innerHTML = groups.map(function (g) {
+      return '<div class="notif-day">' + g.day + '</div>' +
+        g.items.map(renderItem).join('');
+    }).join('');
+
+    updateBulkActions();
+    updateSelectAll();
+  }
+
+  function renderItem(n) {
+    var checked = state.selected.has(n.id) ? 'checked' : '';
+    var unreadClass = n.unread ? ' is-unread' : '';
+    var kindClass = KIND_CLASS[n.kind] || 'neutral';
+
+    var actionsHtml = '';
+    if (n.actions && n.actions.length) {
+      actionsHtml = '<div class="notif__actions">' +
+        n.actions.map(function (a) {
+          return '<button class="notif__action-btn' + (a.primary ? '' : '') + '" data-href="' + a.href + '">' +
+            (a.primary
+              ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
+              : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>') +
+            a.label +
+          '</button>';
+        }).join('') +
+      '</div>';
+    }
+
+    var refChip = n.ref
+      ? '<span class="notif__id">' + n.ref + '</span>'
+      : '';
+
+    return '<article class="notif' + unreadClass + '" data-id="' + n.id + '">' +
+      '<div class="notif__check">' +
+        '<label class="check" style="margin:0">' +
+          '<input type="checkbox" class="notifCheck" data-id="' + n.id + '" ' + checked + '>' +
+          '<span class="check__box">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' +
+          '</span>' +
+        '</label>' +
+      '</div>' +
+      '<div class="notif__icon notif__icon--' + kindClass + '">' +
+        iconFor(n.kind) +
+      '</div>' +
+      '<div class="notif__body">' +
+        '<div class="notif__row">' +
+          '<div class="notif__title' + (n.unread ? '' : ' notif__title--muted') + '">' + n.title + '</div>' +
+          '<div class="notif__time">' + n.time + '</div>' +
+        '</div>' +
+        '<div class="notif__text">' + n.text + '</div>' +
+        '<div class="notif__meta">' + refChip + '</div>' +
+        actionsHtml +
+      '</div>' +
+      '<div class="notif__unread-dot" aria-label="' + (n.unread ? 'Unread' : '') + '"></div>' +
+    '</article>';
+  }
+
+  // ================================================================
+  // SELECTION
+  // ================================================================
+  function getVisible() {
+    var rows = state.data.slice();
+    if (state.filter === 'unread') rows = rows.filter(function (n) { return n.unread; });
+    else if (state.filter !== 'all') rows = rows.filter(function (n) { return n.category === state.filter; });
+    return rows;
+  }
+
+  function updateBulkActions() {
+    var count = state.selected.size;
+    document.getElementById('markSelectedRead').disabled = count === 0;
+    document.getElementById('markSelectedUnread').disabled = count === 0;
+    var info = document.getElementById('selectionInfo');
+    info.classList.toggle('hidden', count === 0);
+    document.getElementById('selectedCount').textContent = count;
+  }
+
+  function updateSelectAll() {
+    var visible = getVisible();
+    var cb = document.getElementById('selectAll');
+    if (visible.length === 0) { cb.checked = false; cb.indeterminate = false; return; }
+    var allSelected = visible.every(function (n) { return state.selected.has(n.id); });
+    var someSelected = visible.some(function (n) { return state.selected.has(n.id); });
+    cb.checked = allSelected;
+    cb.indeterminate = !allSelected && someSelected;
+  }
+
+  // ================================================================
+  // EVENTS
+  // ================================================================
+  // Tabs
+  document.querySelectorAll('.notif-tabs .tab').forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      document.querySelectorAll('.notif-tabs .tab').forEach(function (t) { t.classList.remove('is-active'); });
+      tab.classList.add('is-active');
+      state.filter = tab.dataset.filter;
+      render();
+    });
+  });
+
+  // Select all
+  document.getElementById('selectAll').addEventListener('change', function () {
+    var visible = getVisible();
+    if (this.checked) visible.forEach(function (n) { state.selected.add(n.id); });
+    else visible.forEach(function (n) { state.selected.delete(n.id); });
+    render();
+  });
+
+  // Row clicks + checkbox + actions
+  document.getElementById('notifList').addEventListener('click', function (e) {
+    var row = e.target.closest('.notif');
+    if (!row) return;
+    var id = row.dataset.id;
+    var item = state.data.find(function (n) { return n.id === id; });
+    if (!item) return;
+
+    // Checkbox
+    var check = e.target.closest('.notifCheck');
+    if (check) {
+      if (check.checked) state.selected.add(id);
+      else state.selected.delete(id);
+      updateBulkActions();
+      updateSelectAll();
+      return;
+    }
+
+    // Action button
+    var actionBtn = e.target.closest('.notif__action-btn');
+    if (actionBtn) {
+      e.stopPropagation();
+      // Mark read then navigate
+      item.unread = false;
+      window.location.href = actionBtn.dataset.href;
+      return;
+    }
+
+    // Anywhere else in the row → mark read + navigate to ref
+    item.unread = false;
+    if (item.refUrl) window.location.href = item.refUrl;
+    else render();
+  });
+
+  // Mark selected read / unread
+  document.getElementById('markSelectedRead').addEventListener('click', function () {
+    state.selected.forEach(function (id) {
+      var item = state.data.find(function (n) { return n.id === id; });
+      if (item) item.unread = false;
+    });
+    state.selected.clear();
+    render();
+    toast('success', 'Marked as read', 'Selected notifications updated.');
+  });
+
+  document.getElementById('markSelectedUnread').addEventListener('click', function () {
+    state.selected.forEach(function (id) {
+      var item = state.data.find(function (n) { return n.id === id; });
+      if (item) item.unread = true;
+    });
+    state.selected.clear();
+    render();
+    toast('info', 'Marked as unread', 'Selected notifications updated.');
+  });
+
+  // Mark all read
+  document.getElementById('markAllRead').addEventListener('click', function () {
+    state.data.forEach(function (n) { n.unread = false; });
+    render();
+    toast('success', 'All caught up', 'Every notification was marked as read.');
+  });
+
+  // ================================================================
+  // TOASTS
+  // ================================================================
+  function toast(kind, title, msg) {
+    var icons = {
+      success: '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
+      info: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>'
+    };
+    var el = document.createElement('div');
+    el.className = 'toast toast--' + kind;
+    el.innerHTML =
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+        (icons[kind] || icons.info) + '</svg>' +
+      '<div><div class="toast__title">' + title + '</div><div class="toast__msg">' + msg + '</div></div>';
+    document.getElementById('toastRegion').appendChild(el);
+    setTimeout(function () {
+      el.style.transition = 'opacity .3s, transform .3s';
+      el.style.opacity = '0';
+      el.style.transform = 'translateX(20px)';
+      setTimeout(function () { el.remove(); }, 320);
+    }, 3000);
+  }
+
+  // ================================================================
+  // NAV TOGGLE
+  // ================================================================
+  document.getElementById('navToggle').addEventListener('click', function () {
+    var app = document.getElementById('app');
+    if (window.matchMedia('(max-width: 860px)').matches) {
+      app.classList.toggle('is-nav-open');
+    } else {
+      app.classList.toggle('is-collapsed');
+    }
+  });
+
+  // Initial render
+  render();
+})();
+</script>
+
+</body>
+</html>

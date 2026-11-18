@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile · BidFreq™</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <!-- ============================================================
+       SIDEBAR
+       ============================================================ -->
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <img src="../img/logo.webp" class="img-fluid logo-img" alt="BidFreq" style="width: 170px;">
+      <div class="sidebar__brand-text" style="margin-top:6px">
+        <div class="sidebar__tag" style="color:#6EE7B7">Estimator Console</div>
+      </div>
+    </div>
+
+    <nav class="sidebar__nav">
+      <div class="sidebar__section">
+        <div class="sidebar__section-title">Operations</div>
+        <a href="dashboard.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="estimates.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
+          <span>Estimate Queue</span>
+          <span class="nav-item__badge is-danger">8</span>
+        </a>
+        <a href="estimates.html?view=all" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          <span>All Estimates</span>
+        </a>
+        <a href="projects.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>Projects</span>
+        </a>
+      </div>
+
+      <div class="sidebar__section">
+        <div class="sidebar__section-title">Management</div>
+        <a href="customers.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg>
+          <span>Customers</span>
+        </a>
+        <a href="estimators.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span>Estimators</span>
+        </a>
+        <a href="reports.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <span>Reports</span>
+        </a>
+      </div>
+
+      <div class="sidebar__section">
+        <div class="sidebar__section-title">Workspace</div>
+        <a href="notifications.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span>Notifications</span>
+          <span class="nav-item__badge is-danger">5</span>
+        </a>
+        <a href="profile.html" class="nav-item is-active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Profile</span>
+        </a>
+        <a href="../index.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span>Logout</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar__footer">
+      <div class="user-chip">
+        <div class="avatar avatar--sm">BH</div>
+        <div class="user-chip__meta">
+          <span class="user-chip__name">B. Hayes</span>
+          <span class="user-chip__role">Senior Estimator</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============================================================
+       MAIN
+       ============================================================ -->
+  <div class="app-main">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <button class="topbar__toggle" id="navToggle" aria-label="Toggle navigation">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+
+      <div class="topbar__search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="search" placeholder="Search…" aria-label="Search">
+        <kbd>⌘K</kbd>
+      </div>
+
+      <div class="topbar__spacer"></div>
+
+      <div class="topbar__actions">
+        <button class="icon-btn tooltip" data-tip="Help" aria-label="Help">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </button>
+        <button class="icon-btn tooltip" data-tip="Notifications" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="icon-btn__dot"></span>
+        </button>
+        <div class="divider--vertical"></div>
+        <div class="user-chip">
+          <div class="avatar avatar--sm">BH</div>
+          <div class="user-chip__meta">
+            <span class="user-chip__name">B. Hayes</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="app-content">
+
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="dashboard.html">Console</a>
+        <span class="breadcrumbs__sep">/</span>
+        <span class="breadcrumbs__current">Profile</span>
+      </nav>
+
+      <header class="page-header">
+        <div class="page-header__text">
+          <h1 class="page-header__title">My Profile</h1>
+          <p class="page-header__subtitle">Manage your personal info, security, e-signature, verification preferences, and active sessions.</p>
+        </div>
+      </header>
+
+      <div class="profile-grid">
+        <nav class="settings-nav">
+          <div class="settings-nav__title">Profile Settings</div>
+          <button class="settings-nav__item is-active" data-tab="general">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            General
+          </button>
+          <button class="settings-nav__item" data-tab="security">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Security
+          </button>
+          <button class="settings-nav__item" data-tab="signature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/></svg>
+            E-Signature
+          </button>
+          <button class="settings-nav__item" data-tab="prefs">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4"/></svg>
+            Verification Prefs
+          </button>
+          <button class="settings-nav__item" data-tab="sessions">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            Sessions
+          </button>
+        </nav>
+
+        <div class="panel-stack">
+
+          <!-- GENERAL -->
+          <div class="panel-tab is-active" data-panel="general">
+            <section class="profile-header">
+              <div class="profile-header__cover"></div>
+              <div class="profile-header__inner">
+                <div class="profile-header__row">
+                  <div class="profile-header__avatar">BH</div>
+                  <div style="flex:1;min-width:0;padding-bottom:4px">
+                    <h2 class="profile-header__name">B. Hayes</h2>
+                    <div class="profile-header__meta">
+                      <span>b.hayes@bidfreq.com</span>
+                      <span class="dot"></span>
+                      <span>Senior Estimator</span>
+                      <span class="dot"></span>
+                      <span class="profile-header__role">Estimator Team</span>
+                    </div>
+                  </div>
+                  <div style="display:flex;gap:var(--s-3);flex-wrap:wrap">
+                    <button class="btn btn--secondary" id="cancelGeneral">Cancel</button>
+                    <button class="btn btn--primary" id="saveGeneral">Save changes</button>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="sec">
+              <div class="sec__head">
+                <div class="sec__head-left">
+                  <div class="sec__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+                  <div><div class="sec__title">Personal Information</div><div class="sec__sub">Your team profile</div></div>
+                </div>
+              </div>
+              <div class="sec__body">
+                <div class="form-row mb-5">
+                  <div class="form-group" style="margin-bottom:0"><label class="label">First name</label><input class="input" value="Brandon"></div>
+                  <div class="form-group" style="margin-bottom:0"><label class="label">Last name</label><input class="input" value="Hayes"></div>
+                </div>
+                <div class="form-row mb-5">
+                  <div class="form-group" style="margin-bottom:0"><label class="label">Work email</label><input class="input" type="email" value="b.hayes@bidfreq.com"></div>
+                  <div class="form-group" style="margin-bottom:0"><label class="label">Phone</label><input class="input" type="tel" value="+1 (512) 555-0188"></div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group" style="margin-bottom:0"><label class="label">Role</label><input class="input" value="Senior Estimator" disabled></div>
+                  <div class="form-group" style="margin-bottom:0"><label class="label">Specialties</label><input class="input" value="General Repair, Drywall / Paint"></div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- SECURITY -->
+          <div class="panel-tab" data-panel="security">
+            <section class="sec">
+              <div class="sec__head">
+                <div class="sec__head-left">
+                  <div class="sec__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+                  <div><div class="sec__title">Password</div><div class="sec__sub">Last changed 12 days ago</div></div>
+                </div>
+              </div>
+              <div class="sec__body">
+                <div class="form-group"><label class="label">Current password</label><input class="input" type="password" placeholder="Enter current password"></div>
+                <div class="form-row mb-3">
+                  <div class="form-group" style="margin-bottom:0"><label class="label">New password</label><input class="input" type="password" placeholder="At least 12 characters"></div>
+                  <div class="form-group" style="margin-bottom:0"><label class="label">Confirm</label><input class="input" type="password" placeholder="Re-enter"></div>
+                </div>
+                <button class="btn btn--primary" onclick="toast('success','Password updated','')">Update password</button>
+              </div>
+            </section>
+
+            <section class="sec">
+              <div class="sec__head">
+                <div class="sec__head-left">
+                  <div class="sec__icon sec__icon--emerald"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                  <div><div class="sec__title">Two-Factor Authentication</div><div class="sec__sub">Required for estimator console access</div></div>
+                </div>
+              </div>
+              <div class="sec__body">
+                <div class="flag flag--info">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                  <div><div class="flag__title">Authenticator app enabled</div><div class="flag__body">Configured on iPhone · Added Aug 4, 2026</div></div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- SIGNATURE -->
+          <div class="panel-tab" data-panel="signature">
+            <section class="sec">
+              <div class="sec__head">
+                <div class="sec__head-left">
+                  <div class="sec__icon sec__icon--violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/></svg></div>
+                  <div><div class="sec__title">Verification Signature</div><div class="sec__sub">Applied to every estimate you verify</div></div>
+                </div>
+              </div>
+              <div class="sec__body">
+                <div style="background:var(--bg-surface);border:2px dashed var(--border-strong);border-radius:var(--r-md);padding:var(--s-5) var(--s-6);min-height:100px;display:flex;flex-direction:column;justify-content:flex-end;margin-bottom:var(--s-5)">
+                  <div style="border-bottom:1px solid var(--n-400);padding-bottom:6px;margin-bottom:8px"><div style="font-family:'Brush Script MT','Segoe Script',cursive;font-size:36px;color:var(--navy-800);line-height:1">Brandon Hayes</div></div>
+                  <div style="font-size:var(--fs-xs);color:var(--text-muted);font-weight:500">Saved signature · used for estimate verification</div>
+                </div>
+                <div class="form-group"><label class="label">Signature text</label><input class="input text-mono" value="Brandon Hayes"></div>
+                <div class="form-group"><label class="label">Estimator ID <span class="label__hint">displayed on PDFs</span></label><input class="input text-mono" value="B. Hayes · Senior Estimator"></div>
+                <div class="flex gap-3 flex-wrap mt-4">
+                  <button class="btn btn--secondary" onclick="toast('info','Clear signature','')">Clear</button>
+                  <button class="btn btn--primary" onclick="toast('success','Signature saved','')">Save signature</button>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- PREFS -->
+          <div class="panel-tab" data-panel="prefs">
+            <section class="sec">
+              <div class="sec__head">
+                <div class="sec__head-left">
+                  <div class="sec__icon sec__icon--warning"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+                  <div><div class="sec__title">SLA &amp; Queue Preferences</div><div class="sec__sub">Control how the queue assigns work to you</div></div>
+                </div>
+              </div>
+              <div class="sec__body">
+                <div class="form-row mb-5">
+                  <div class="form-group" style="margin-bottom:0"><label class="label">Max concurrent assignments</label><input class="input" type="number" value="8"></div>
+                  <div class="form-group" style="margin-bottom:0">
+                    <label class="label">Trade specialties</label>
+                    <select class="select" multiple style="height:auto;min-height:90px">
+                      <option selected>General Repair</option>
+                      <option selected>Drywall / Paint</option>
+                      <option>Electrical</option>
+                      <option>Plumbing</option>
+                      <option>HVAC</option>
+                      <option>Roofing</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="flag flag--warning mb-4">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                  <div><div class="flag__title">SLA alert threshold</div><div class="flag__body">You will be notified when an assigned estimate has less than 2 hours until SLA breach.</div></div>
+                </div>
+                <label class="check mb-4">
+                  <input type="checkbox" checked>
+                  <span class="check__box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+                  <span class="check__label"><strong>Auto-assign high priority estimates to me</strong><span class="check__desc">When I have fewer than 5 open assignments.</span></span>
+                </label>
+                <label class="check mb-4">
+                  <input type="checkbox" checked>
+                  <span class="check__box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+                  <span class="check__label"><strong>Email me a daily digest</strong><span class="check__desc">A summary of assignments, verifications, and SLA metrics.</span></span>
+                </label>
+                <label class="check">
+                  <input type="checkbox">
+                  <span class="check__box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+                  <span class="check__label"><strong>SMS alerts for SLA breaches</strong><span class="check__desc">Requires a verified phone number.</span></span>
+                </label>
+                <div class="mt-5"><button class="btn btn--primary" onclick="toast('success','Preferences saved','')">Save preferences</button></div>
+              </div>
+            </section>
+          </div>
+
+          <!-- SESSIONS -->
+          <div class="panel-tab" data-panel="sessions">
+            <section class="sec">
+              <div class="sec__head">
+                <div class="sec__head-left">
+                  <div class="sec__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+                  <div><div class="sec__title">Active Sessions</div><div class="sec__sub">Devices signed into your account</div></div>
+                </div>
+                <button class="btn btn--danger-outline btn--sm" onclick="toast('warning','Signed out other devices','')">Sign out other devices</button>
+              </div>
+              <div class="sec__body">
+                <div class="status-row">
+                  <span class="status-row__label">Chrome · macOS (this device)</span>
+                  <span class="status-row__value"><span class="chip chip--success" style="padding:2px 8px"><span class="chip__dot"></span>Active now</span></span>
+                </div>
+                <div class="status-row"><span class="status-row__label">BidFreq iOS App · iPhone 15 Pro</span><span class="status-row__value text-muted">2 hours ago</span></div>
+                <div class="status-row"><span class="status-row__label">Safari · iPad Pro</span><span class="status-row__value text-muted">3 days ago</span></div>
+              </div>
+            </section>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="toast-region" id="toastRegion"></div>
+
+<script>
+(function () {
+  'use strict';
+  document.querySelectorAll('.settings-nav__item').forEach(function (item) {
+    item.addEventListener('click', function () {
+      document.querySelectorAll('.settings-nav__item').forEach(function (i) { i.classList.remove('is-active'); });
+      item.classList.add('is-active');
+      document.querySelectorAll('.panel-tab').forEach(function (p) { p.classList.toggle('is-active', p.dataset.panel === item.dataset.tab); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+  document.getElementById('saveGeneral').addEventListener('click', function () {
+    toast('success', 'Profile updated', 'Your information was saved.');
+  });
+  document.getElementById('cancelGeneral').addEventListener('click', function () {
+    toast('info', 'Changes discarded', '');
+  });
+  function toast(kind, title, msg) {
+    var icons = { success:'<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>', info:'<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>', warning:'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>' };
+    var el = document.createElement('div');
+    el.className = 'toast toast--' + kind;
+    el.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' + (icons[kind]||icons.info) + '</svg><div><div class="toast__title">' + title + '</div><div class="toast__msg">' + msg + '</div></div>';
+    document.getElementById('toastRegion').appendChild(el);
+    setTimeout(function () { el.style.transition='opacity .3s, transform .3s'; el.style.opacity='0'; el.style.transform='translateX(20px)'; setTimeout(function(){ el.remove(); }, 320); }, 3000);
+  }
+  // Exposed globally because the buttons above call toast() from inline onclick handlers
+  window.toast = toast;
+
+  document.getElementById('navToggle').addEventListener('click', function () {
+    var app = document.getElementById('app');
+    if (window.matchMedia('(max-width: 860px)').matches) app.classList.toggle('is-nav-open');
+    else app.classList.toggle('is-collapsed');
+  });
+})();
+</script>
+
+</body>
+</html>

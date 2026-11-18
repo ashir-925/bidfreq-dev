@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estimators · BidFreq™</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <!-- ============================================================
+       SIDEBAR
+       ============================================================ -->
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <img src="../img/logo.webp" class="img-fluid logo-img" alt="BidFreq" style="width: 170px;">
+      <div class="sidebar__brand-text" style="margin-top:6px">
+        <div class="sidebar__tag" style="color:#6EE7B7">Estimator Console</div>
+      </div>
+    </div>
+
+    <nav class="sidebar__nav">
+      <div class="sidebar__section">
+        <div class="sidebar__section-title">Operations</div>
+        <a href="dashboard.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="estimates.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
+          <span>Estimate Queue</span>
+          <span class="nav-item__badge is-danger">8</span>
+        </a>
+        <a href="estimates.html?view=all" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          <span>All Estimates</span>
+        </a>
+        <a href="projects.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>Projects</span>
+        </a>
+      </div>
+
+      <div class="sidebar__section">
+        <div class="sidebar__section-title">Management</div>
+        <a href="customers.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg>
+          <span>Customers</span>
+        </a>
+        <a href="estimators.html" class="nav-item is-active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span>Estimators</span>
+        </a>
+        <a href="reports.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <span>Reports</span>
+        </a>
+      </div>
+
+      <div class="sidebar__section">
+        <div class="sidebar__section-title">Workspace</div>
+        <a href="notifications.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span>Notifications</span>
+          <span class="nav-item__badge is-danger">5</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Profile</span>
+        </a>
+        <a href="../index.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span>Logout</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar__footer">
+      <div class="user-chip">
+        <div class="avatar avatar--sm">BH</div>
+        <div class="user-chip__meta">
+          <span class="user-chip__name">B. Hayes</span>
+          <span class="user-chip__role">Senior Estimator</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============================================================
+       MAIN
+       ============================================================ -->
+  <div class="app-main">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <button class="topbar__toggle" id="navToggle" aria-label="Toggle navigation">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+
+      <div class="topbar__search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="search" placeholder="Search team…" aria-label="Search">
+        <kbd>⌘K</kbd>
+      </div>
+
+      <div class="topbar__spacer"></div>
+
+      <div class="topbar__actions">
+        <button class="icon-btn tooltip" data-tip="Help" aria-label="Help">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </button>
+        <button class="icon-btn tooltip" data-tip="Notifications" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="icon-btn__dot"></span>
+        </button>
+        <div class="divider--vertical"></div>
+        <div class="user-chip">
+          <div class="avatar avatar--sm">BH</div>
+          <div class="user-chip__meta">
+            <span class="user-chip__name">B. Hayes</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="app-content">
+
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="dashboard.html">Console</a>
+        <span class="breadcrumbs__sep">/</span>
+        <span class="breadcrumbs__current">Estimators</span>
+      </nav>
+
+      <header class="page-header">
+        <div class="page-header__text">
+          <h1 class="page-header__title">Estimator Team</h1>
+          <p class="page-header__subtitle">
+            Manage your estimating team, monitor workload balance, and review verification quality.
+          </p>
+        </div>
+        <div class="page-header__actions">
+          <button class="btn btn--secondary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export
+          </button>
+          <button class="btn btn--primary" id="inviteEstimatorBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Invite estimator
+          </button>
+        </div>
+      </header>
+
+      <!-- KPIs -->
+      <section class="quick-stats" aria-label="Team metrics">
+        <div class="quick-stat"><span class="quick-stat__label">Team Size</span><span class="quick-stat__value">6</span></div>
+        <div class="quick-stat"><span class="quick-stat__label">Online Now</span><span class="quick-stat__value quick-stat__value--emerald">4</span></div>
+        <div class="quick-stat"><span class="quick-stat__label">Open Assignments</span><span class="quick-stat__value quick-stat__value--violet">17</span></div>
+        <div class="quick-stat"><span class="quick-stat__label">Avg. Turnaround</span><span class="quick-stat__value">1.8<span style="font-size:12px;color:var(--text-muted);font-weight:500"> days</span></span></div>
+        <div class="quick-stat"><span class="quick-stat__label">Verified Today</span><span class="quick-stat__value quick-stat__value--emerald">14</span></div>
+        <div class="quick-stat"><span class="quick-stat__label">Team Quality</span><span class="quick-stat__value">94%</span></div>
+      </section>
+
+      <!-- Estimator cards -->
+      <section class="est-grid" id="estimatorGrid"></section>
+
+    </main>
+  </div>
+</div>
+
+<div class="toast-region" id="toastRegion"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  var ESTIMATORS = [
+    { id:'u1', name:'B. Hayes', initials:'BH', role:'Senior Estimator', status:'online', open:5, verifiedToday:6, turnaround:'1.4d', quality:96, specialties:['General Repair','Drywall'] },
+    { id:'u2', name:'M. Alvarez', initials:'MA', role:'Estimator', status:'online', open:3, verifiedToday:4, turnaround:'1.6d', quality:94, specialties:['Roofing','HVAC'] },
+    { id:'u3', name:'R. Kapoor', initials:'RK', role:'Estimator', status:'online', open:7, verifiedToday:3, turnaround:'2.1d', quality:91, specialties:['Electrical','Plumbing'] },
+    { id:'u4', name:'T. Nakamura', initials:'TN', role:'Junior Estimator', status:'away', open:2, verifiedToday:1, turnaround:'2.6d', quality:88, specialties:['General Repair'] },
+    { id:'u5', name:'S. Okafor', initials:'SO', role:'Estimator', status:'online', open:4, verifiedToday:5, turnaround:'1.7d', quality:93, specialties:['Flooring','Drywall'] },
+    { id:'u6', name:'L. Petrov', initials:'LP', role:'Junior Estimator', status:'offline', open:0, verifiedToday:0, turnaround:'—', quality:'—', specialties:['Trainee'] }
+  ];
+
+  var STATUS_LABEL = { online:'Online', away:'Away', offline:'Offline' };
+
+  function workloadColor(n) {
+    if (n >= 7) return 'warning';
+    if (n >= 5) return '';
+    return 'emerald';
+  }
+
+  function render() {
+    document.getElementById('estimatorGrid').innerHTML = ESTIMATORS.map(function (u) {
+      var pct = Math.min((u.open / 8) * 100, 100);
+      var fillClass = workloadColor(u.open);
+      return '<article class="est-card" data-id="' + u.id + '">' +
+        '<div class="est-card__head">' +
+          '<div class="est-card__avatar">' + u.initials +
+            '<span class="est-card__status est-card__status--' + u.status + '"></span>' +
+          '</div>' +
+          '<div style="flex:1;min-width:0">' +
+            '<div class="est-card__name">' + u.name + '</div>' +
+            '<div class="est-card__role">' + u.role + ' · ' + STATUS_LABEL[u.status] + '</div>' +
+          '</div>' +
+          '<button class="icon-btn tooltip" data-tip="More" aria-label="More">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>' +
+          '</button>' +
+        '</div>' +
+        '<div class="est-card__stats">' +
+          '<div><div class="est-card__stat-label">Open</div><div class="est-card__stat-value">' + u.open + '</div></div>' +
+          '<div><div class="est-card__stat-label">Verified today</div><div class="est-card__stat-value est-card__stat-value--emerald">' + u.verifiedToday + '</div></div>' +
+          '<div><div class="est-card__stat-label">Avg. turnaround</div><div class="est-card__stat-value">' + u.turnaround + '</div></div>' +
+          '<div><div class="est-card__stat-label">Quality score</div><div class="est-card__stat-value">' + (u.quality === '—' ? '—' : u.quality + '%') + '</div></div>' +
+        '</div>' +
+        '<div class="est-card__workload">' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">' +
+            '<span class="text-xs text-muted" style="font-weight:600">Workload</span>' +
+            '<span class="text-xs text-muted" style="font-variant-numeric:tabular-nums">' + u.open + ' / 8 capacity</span>' +
+          '</div>' +
+          '<div class="workload-row__bar"><div class="workload-row__fill' + (fillClass ? ' workload-row__fill--' + fillClass : '') + '" style="width:' + pct + '%"></div></div>' +
+        '</div>' +
+        '<div class="est-card__actions">' +
+          '<button class="btn btn--secondary btn--sm">View profile</button>' +
+          '<button class="btn btn--primary btn--sm">Assign queue</button>' +
+        '</div>' +
+      '</article>';
+    }).join('');
+  }
+
+  document.getElementById('inviteEstimatorBtn').addEventListener('click', function () {
+    toast('info', 'Invite estimator', 'An invitation form would open here.');
+  });
+
+  function toast(kind, title, msg) {
+    var icons = { info:'<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>' };
+    var el = document.createElement('div');
+    el.className = 'toast toast--' + kind;
+    el.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (icons[kind]||icons.info) + '</svg>' +
+      '<div><div class="toast__title">' + title + '</div><div class="toast__msg">' + msg + '</div></div>';
+    document.getElementById('toastRegion').appendChild(el);
+    setTimeout(function () {
+      el.style.transition = 'opacity .3s, transform .3s';
+      el.style.opacity = '0'; el.style.transform = 'translateX(20px)';
+      setTimeout(function () { el.remove(); }, 320);
+    }, 3000);
+  }
+
+  document.getElementById('navToggle').addEventListener('click', function () {
+    var app = document.getElementById('app');
+    if (window.matchMedia('(max-width: 860px)').matches) app.classList.toggle('is-nav-open');
+    else app.classList.toggle('is-collapsed');
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>

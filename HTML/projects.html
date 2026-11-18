@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Approved Projects · BidFreq™</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+
+<style>
+/* ------------------------------------------------------------------
+   PROJECTS PAGE — extends design system
+   ------------------------------------------------------------------ */
+
+/* KPI strip */
+.proj-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--s-4);
+  margin-bottom: var(--s-5);
+}
+.proj-kpi {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: var(--s-4) var(--s-5);
+  box-shadow: var(--sh-xs);
+  display: flex; align-items: center; gap: var(--s-4);
+}
+.proj-kpi__icon {
+  width: 44px; height: 44px; border-radius: var(--r-md);
+  display: grid; place-items: center;
+  flex-shrink: 0;
+}
+.proj-kpi__icon svg { width: 20px; height: 20px; }
+.proj-kpi__icon--emerald { background: var(--emerald-50); color: var(--emerald-600); }
+.proj-kpi__icon--blue    { background: var(--blue-50);    color: var(--blue-600); }
+.proj-kpi__icon--violet  { background: var(--violet-50);  color: var(--violet-600); }
+.proj-kpi__icon--warning { background: var(--warning-50); color: var(--warning-600); }
+.proj-kpi__body { flex: 1; min-width: 0; }
+.proj-kpi__label {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  font-weight: var(--fw-medium);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom: 4px;
+}
+.proj-kpi__value {
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-bold);
+  color: var(--text-strong);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.proj-kpi__sub {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Filter bar (slightly different from estimate requests) */
+.proj-filter-bar {
+  display: flex; align-items: center; gap: var(--s-3);
+  flex-wrap: wrap;
+  padding: var(--s-3) var(--s-4);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  margin-bottom: var(--s-5);
+  box-shadow: var(--sh-xs);
+}
+.proj-filter-bar__search {
+  flex: 1; min-width: 220px; max-width: 380px;
+}
+.proj-filter-bar select {
+  height: 36px;
+  padding: 0 32px 0 var(--s-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  background-color: var(--bg-surface);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 14px;
+  appearance: none;
+  font-size: var(--fs-sm);
+  color: var(--text-strong);
+  cursor: pointer;
+}
+.proj-filter-bar select:focus {
+  outline: none;
+  border-color: var(--blue-500);
+  box-shadow: var(--sh-focus);
+}
+
+/* View toggle */
+.view-toggle {
+  display: inline-flex; padding: 3px;
+  gap: 2px;
+  background: var(--n-100);
+  border-radius: var(--r-md);
+  margin-left: auto;
+}
+.view-toggle button {
+  border: none; background: transparent; cursor: pointer;
+  padding: 6px 10px; border-radius: var(--r-sm);
+  color: var(--text-muted);
+  display: grid; place-items: center;
+  transition: all var(--dur) var(--ease);
+}
+.view-toggle button svg { width: 14px; height: 14px; }
+.view-toggle button.is-active {
+  background: var(--bg-surface);
+  box-shadow: var(--sh-xs);
+  color: var(--text-strong);
+}
+
+/* Project row (grid variant) */
+.project-list {
+  display: flex; flex-direction: column;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--sh-xs);
+}
+
+.project-row {
+  display: grid;
+  grid-template-columns: 52px 1fr auto auto;
+  gap: var(--s-4);
+  align-items: center;
+  padding: var(--s-4) var(--s-5);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background var(--dur) var(--ease);
+}
+.project-row:last-child { border-bottom: none; }
+.project-row:hover { background: var(--n-25); }
+
+.project-row__icon {
+  width: 44px; height: 44px; border-radius: var(--r-md);
+  display: grid; place-items: center;
+  background: var(--emerald-50); color: var(--emerald-600);
+  flex-shrink: 0;
+}
+.project-row__icon svg { width: 20px; height: 20px; }
+
+.project-row__main { min-width: 0; }
+.project-row__top {
+  display: flex; align-items: center; gap: var(--s-3);
+  margin-bottom: 3px; flex-wrap: wrap;
+}
+.project-row__id {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--text-strong);
+}
+.project-row__addr {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-semibold);
+  color: var(--text-strong);
+  margin-bottom: 2px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.project-row__meta {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  display: flex; align-items: center; gap: var(--s-2);
+  flex-wrap: wrap;
+}
+.project-row__meta .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text-faint); }
+
+.project-row__stats {
+  display: flex; gap: var(--s-5);
+  align-items: center;
+  padding-right: var(--s-3);
+}
+.project-row__stat {
+  text-align: right;
+}
+.project-row__stat-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--text-faint);
+  font-weight: var(--fw-semibold);
+  margin-bottom: 2px;
+}
+.project-row__stat-value {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-semibold);
+  color: var(--text-strong);
+  font-variant-numeric: tabular-nums;
+}
+.project-row__stat-value--amount {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  color: var(--emerald-700);
+}
+.project-row__stat-value--muted {
+  color: var(--text-faint);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-sm);
+}
+
+.project-row__actions {
+  display: flex; align-items: center; gap: var(--s-2);
+}
+
+/* Grid view */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--s-4);
+}
+.project-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: var(--s-5);
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+  box-shadow: var(--sh-xs);
+  display: flex; flex-direction: column; gap: var(--s-4);
+}
+.project-card:hover {
+  border-color: var(--emerald-500);
+  box-shadow: var(--sh-md);
+  transform: translateY(-2px);
+}
+.project-card__head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: var(--s-3);
+}
+.project-card__icon {
+  width: 40px; height: 40px; border-radius: var(--r-md);
+  display: grid; place-items: center;
+  background: var(--emerald-50); color: var(--emerald-600);
+}
+.project-card__icon svg { width: 18px; height: 18px; }
+.project-card__id {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  font-weight: var(--fw-semibold);
+}
+.project-card__addr {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-semibold);
+  color: var(--text-strong);
+  line-height: 1.3;
+  margin-bottom: var(--s-1);
+}
+.project-card__meta {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  display: flex; align-items: center; gap: var(--s-2);
+  flex-wrap: wrap;
+}
+.project-card__meta .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text-faint); }
+.project-card__amount {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  color: var(--emerald-700);
+  font-variant-numeric: tabular-nums;
+}
+.project-card__footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--border);
+}
+.project-card__trade {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  font-weight: var(--fw-medium);
+}
+
+/* Empty state */
+.empty-projects {
+  padding: var(--s-12) var(--s-6);
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .project-row {
+    grid-template-columns: 44px 1fr;
+    gap: var(--s-3) var(--s-4);
+  }
+  .project-row__stats { grid-column: 1 / -1; padding-right: 0; padding-left: 60px; gap: var(--s-6); }
+  .project-row__actions { grid-column: 2 / -1; justify-self: start; }
+}
+@media (max-width: 640px) {
+  .proj-kpis { grid-template-columns: 1fr 1fr; }
+  .proj-kpi { padding: var(--s-3) var(--s-4); }
+  .proj-kpi__value { font-size: var(--fs-xl); }
+  .proj-filter-bar { padding: var(--s-3); }
+  .proj-filter-bar select { width: 100%; }
+  .project-row { padding: var(--s-4); }
+  .project-row__stats { padding-left: 0; flex-wrap: wrap; gap: var(--s-4); }
+  .projects-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <!-- ============================================================
+       SIDEBAR — CUSTOMER
+       ============================================================ -->
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <!-- <div class="sidebar__logo">B</div>
+      <div class="sidebar__brand-text">
+        <div class="sidebar__name">BidFreq™</div>
+        <div class="sidebar__tag">Customer Portal</div>
+      </div> -->
+       <img src="img/logo.webp" class="img-fluid logo-img" style="WIDTH: 170px;">
+    </div>
+
+   
+   <nav class="sidebar__nav">
+      <div class="sidebar__section">
+        <div class="sidebar__section-title">Main</div>
+        <a href="customer-dashboard.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="estimate-requests.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
+          <span>Estimate Requests</span>
+          <span class="nav-item__badge">12</span>
+        </a>
+        <a href="projects.html" class="nav-item is-active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>Approved Projects</span>
+        </a>
+      </div>
+
+      <div class="sidebar__section">
+        <div class="sidebar__section-title">Workspace</div>
+        <a href="notifications.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span>Notifications</span>
+          <span class="nav-item__badge is-danger">3</span>
+        </a>
+       
+        <a href="profile.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Profile</span>
+        </a>
+
+         <a href="index.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+  <polyline points="16 17 21 12 16 7"/>
+  <line x1="21" y1="12" x2="9" y2="12"/>
+</svg>
+          <span>Logout</span>
+        </a>
+      </div>
+    </nav>
+
+
+    <div class="sidebar__footer">
+      <div class="user-chip">
+        <div class="avatar avatar--sm">JD</div>
+        <div class="user-chip__meta">
+          <span class="user-chip__name">Jane Doe</span>
+          <span class="user-chip__role">Oak Ridge Property Mgmt</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============================================================
+       MAIN
+       ============================================================ -->
+  <div class="app-main">
+
+    <header class="topbar">
+      <button class="topbar__toggle" id="navToggle" aria-label="Toggle navigation">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+
+      <div class="topbar__search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="search" placeholder="Search projects, properties, addresses…" aria-label="Search">
+        <kbd>⌘K</kbd>
+      </div>
+
+      <div class="topbar__spacer"></div>
+
+      <div class="topbar__actions">
+        <button class="icon-btn tooltip" data-tip="Help" aria-label="Help">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </button>
+        <button class="icon-btn tooltip" data-tip="Notifications" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="icon-btn__dot"></span>
+        </button>
+        <div class="divider--vertical"></div>
+        <div class="user-chip">
+          <div class="avatar avatar--sm">JD</div>
+          <div class="user-chip__meta">
+            <span class="user-chip__name">Jane Doe</span>
+           
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-content">
+
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="customer-dashboard.html">Home</a>
+        <span class="breadcrumbs__sep">/</span>
+        <span class="breadcrumbs__current">Approved Projects</span>
+      </nav>
+
+      <header class="page-header">
+        <div class="page-header__text">
+          <h1 class="page-header__title">Approved Projects</h1>
+          <p class="page-header__subtitle">
+            Estimates approved by your organization. Each project retains its approved estimate,
+            property information, approval status, and related estimate records (SOW §3.9).
+          </p>
+        </div>
+        <div class="page-header__actions">
+          <button class="btn btn--secondary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export CSV
+          </button>
+          <a href="new-estimate-request.html" class="btn btn--primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Estimate Request
+          </a>
+        </div>
+      </header>
+
+      <!-- ============================================================
+           KPI STRIP
+           ============================================================ -->
+      <section class="proj-kpis" aria-label="Project metrics">
+        <div class="proj-kpi">
+          <div class="proj-kpi__icon proj-kpi__icon--emerald">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div class="proj-kpi__body">
+            <div class="proj-kpi__label">Total Projects</div>
+            <div class="proj-kpi__value">38</div>
+            <div class="proj-kpi__sub">Since account start</div>
+          </div>
+        </div>
+
+        <div class="proj-kpi">
+          <div class="proj-kpi__icon proj-kpi__icon--blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="proj-kpi__body">
+            <div class="proj-kpi__label">Approved Value</div>
+            <div class="proj-kpi__value">$184K</div>
+            <div class="proj-kpi__sub">Across all projects</div>
+          </div>
+        </div>
+
+        <div class="proj-kpi">
+          <div class="proj-kpi__icon proj-kpi__icon--violet">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div class="proj-kpi__body">
+            <div class="proj-kpi__label">This Month</div>
+            <div class="proj-kpi__value">9</div>
+            <div class="proj-kpi__sub">+12% vs last month</div>
+          </div>
+        </div>
+
+        <div class="proj-kpi">
+          <div class="proj-kpi__icon proj-kpi__icon--warning">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="proj-kpi__body">
+            <div class="proj-kpi__label">Avg. Value</div>
+            <div class="proj-kpi__value">$4.8K</div>
+            <div class="proj-kpi__sub">Per approved project</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           FILTER BAR
+           ============================================================ -->
+      <div class="proj-filter-bar">
+        <div class="proj-filter-bar__search">
+          <div class="input-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="input" type="search" id="projSearch" placeholder="Search by ID, address, ZIP, or trade…">
+          </div>
+        </div>
+
+        <select id="projTrade" aria-label="Filter by trade">
+          <option value="">All trades</option>
+          <option>General Repair</option>
+          <option>Electrical</option>
+          <option>Plumbing</option>
+          <option>HVAC</option>
+          <option>Roofing</option>
+          <option>Flooring</option>
+          <option>Drywall / Paint</option>
+        </select>
+
+        <select id="projDate" aria-label="Filter by date">
+          <option value="">Any time</option>
+          <option>Last 7 days</option>
+          <option>Last 30 days</option>
+          <option>Last 90 days</option>
+        </select>
+
+        <select id="projSort" aria-label="Sort">
+          <option value="newest">Newest first</option>
+          <option value="oldest">Oldest first</option>
+          <option value="amount-high">Amount (high → low)</option>
+          <option value="amount-low">Amount (low → high)</option>
+        </select>
+
+        <div class="view-toggle" role="tablist" aria-label="View">
+          <button class="is-active" data-view="list" aria-label="List view" title="List view">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          </button>
+          <button data-view="grid" aria-label="Grid view" title="Grid view">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ============================================================
+           LIST VIEW
+           ============================================================ -->
+      <div class="project-list" id="projectList"></div>
+
+      <!-- GRID VIEW (hidden by default) -->
+      <div class="projects-grid hidden" id="projectGrid"></div>
+
+      <!-- EMPTY STATE -->
+      <div class="empty empty-projects hidden" id="emptyProjects">
+        <div class="empty__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div class="empty__title">No approved projects match</div>
+        <p class="empty__text">Try adjusting your filters, or approve a pending estimate to create your first project.</p>
+        <div class="flex items-center gap-3 justify-center flex-wrap">
+          <button class="btn btn--secondary" id="clearProjects">Clear filters</button>
+          <a href="estimate-requests.html" class="btn btn--primary">View pending estimates</a>
+        </div>
+      </div>
+
+      <!-- PAGINATION -->
+      <div class="pagination" id="projPagination" style="border:1px solid var(--border);border-top:none;border-radius:0 0 var(--r-lg) var(--r-lg);background:var(--bg-surface);">
+        <span class="pagination__info" id="projPaginationInfo">Showing 1–8 of 38 projects</span>
+        <div class="pagination__controls">
+          <button class="pagination__btn" aria-label="Previous page" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button class="pagination__btn is-active">1</button>
+          <button class="pagination__btn">2</button>
+          <button class="pagination__btn">3</button>
+          <button class="pagination__btn">4</button>
+          <button class="pagination__btn">5</button>
+          <button class="pagination__btn" aria-label="Next page">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ================================================================
+  // MOCK PROJECT DATA
+  // (Approved estimates that transitioned to Approved Project status)
+  // ================================================================
+  var PROJECTS = [
+    { id:'EST-2026-0038', projId:'PRJ-2026-0021', address:'305 Meadow Rd', city:'Austin, TX', zip:'78704', trade:'HVAC', amount:4950.00, approvedDays:3, approvedLabel:'Aug 8, 2026', completed:false },
+    { id:'EST-2026-0034', projId:'PRJ-2026-0020', address:'78 Lakeline Dr', city:'Austin, TX', zip:'78717', trade:'Plumbing', amount:980.00, approvedDays:4, approvedLabel:'Aug 7, 2026', completed:true },
+    { id:'EST-2026-0033', projId:'PRJ-2026-0019', address:'1100 Congress Ave', city:'Austin, TX', zip:'78701', trade:'HVAC', amount:6320.00, approvedDays:6, approvedLabel:'Aug 5, 2026', completed:false },
+    { id:'EST-2026-0029', projId:'PRJ-2026-0018', address:'815 Rio Grande St', city:'Austin, TX', zip:'78701', trade:'Electrical', amount:2140.00, approvedDays:9, approvedLabel:'Aug 2, 2026', completed:true },
+    { id:'EST-2026-0027', projId:'PRJ-2026-0017', address:'204 W 6th St', city:'Austin, TX', zip:'78701', trade:'Drywall / Paint', amount:3680.00, approvedDays:12, approvedLabel:'Jul 30, 2026', completed:false },
+    { id:'EST-2026-0024', projId:'PRJ-2026-0016', address:'68 Elm Creek Dr', city:'Round Rock, TX', zip:'78664', trade:'Roofing', amount:9450.00, approvedDays:15, approvedLabel:'Jul 27, 2026', completed:true },
+    { id:'EST-2026-0021', projId:'PRJ-2026-0015', address:'1409 Manchaca Rd', city:'Austin, TX', zip:'78704', trade:'General Repair', amount:1785.00, approvedDays:18, approvedLabel:'Jul 24, 2026', completed:true },
+    { id:'EST-2026-0018', projId:'PRJ-2026-0014', address:'5511 Airport Blvd', city:'Austin, TX', zip:'78751', trade:'Flooring', amount:4820.00, approvedDays:22, approvedLabel:'Jul 20, 2026', completed:false }
+  ];
+
+  var view = 'list';
+
+  // ================================================================
+  // RENDER
+  // ================================================================
+  function render() {
+    var rows = filterAndSort(PROJECTS);
+    var list = document.getElementById('projectList');
+    var grid = document.getElementById('projectGrid');
+    var empty = document.getElementById('emptyProjects');
+    var pg = document.getElementById('projPagination');
+
+    if (rows.length === 0) {
+      list.classList.add('hidden');
+      grid.classList.add('hidden');
+      empty.classList.remove('hidden');
+      pg.classList.add('hidden');
+      return;
+    }
+
+    list.classList.remove('hidden');
+    grid.classList.remove('hidden');
+    empty.classList.add('hidden');
+    pg.classList.remove('hidden');
+
+    // LIST VIEW
+    list.innerHTML = rows.map(function (p) {
+      return '<div class="project-row" data-id="' + p.projId + '">' +
+        '<div class="project-row__icon">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>' +
+        '</div>' +
+        '<div class="project-row__main">' +
+          '<div class="project-row__top">' +
+            '<span class="project-row__id">' + p.projId + '</span>' +
+            '<span class="chip status--project"><span class="chip__dot"></span>Approved Project</span>' +
+            (p.completed
+              ? '<span class="chip chip--success"><span class="chip__dot"></span>Completed</span>'
+              : '<span class="chip chip--warning"><span class="chip__dot"></span>In Progress</span>') +
+          '</div>' +
+          '<div class="project-row__addr">' + p.address + '</div>' +
+          '<div class="project-row__meta">' +
+            '<span>' + p.city + '</span>' +
+            '<span class="dot"></span>' +
+            '<span class="text-mono">' + p.zip + '</span>' +
+            '<span class="dot"></span>' +
+            '<span>' + p.trade + '</span>' +
+            '<span class="dot"></span>' +
+            '<span>From ' + p.id + '</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="project-row__stats">' +
+          '<div class="project-row__stat">' +
+            '<div class="project-row__stat-label">Approved</div>' +
+            '<div class="project-row__stat-value project-row__stat-value--muted">' + p.approvedLabel + '</div>' +
+          '</div>' +
+          '<div class="project-row__stat">' +
+            '<div class="project-row__stat-label">Amount</div>' +
+            '<div class="project-row__stat-value project-row__stat-value--amount">$' + p.amount.toLocaleString('en-US', {minimumFractionDigits:2}) + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="project-row__actions">' +
+          '<button class="icon-btn tooltip" data-tip="Download PDF" aria-label="Download PDF">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>' +
+          '</button>' +
+          '<button class="icon-btn tooltip" data-tip="Open project" aria-label="Open project">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>' +
+          '</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    // GRID VIEW
+    grid.innerHTML = rows.map(function (p) {
+      return '<div class="project-card" data-id="' + p.projId + '">' +
+        '<div class="project-card__head">' +
+          '<div class="project-card__icon">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>' +
+          '</div>' +
+          '<span class="project-card__id">' + p.projId + '</span>' +
+        '</div>' +
+        '<div>' +
+          '<div class="project-card__addr">' + p.address + '</div>' +
+          '<div class="project-card__meta">' +
+            '<span>' + p.city + '</span>' +
+            '<span class="dot"></span>' +
+            '<span class="text-mono">' + p.zip + '</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="project-card__amount">$' + p.amount.toLocaleString('en-US', {minimumFractionDigits:2}) + '</div>' +
+        '<div class="project-card__footer">' +
+          '<span class="project-card__trade">' + p.trade + '</span>' +
+          (p.completed
+            ? '<span class="chip chip--success"><span class="chip__dot"></span>Completed</span>'
+            : '<span class="chip chip--warning"><span class="chip__dot"></span>In Progress</span>') +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    // Update view visibility
+    list.classList.toggle('hidden', view !== 'list');
+    grid.classList.toggle('hidden', view !== 'grid');
+
+    // Pagination info
+    document.getElementById('projPaginationInfo').textContent =
+      'Showing 1–' + rows.length + ' of 38 projects';
+  }
+
+  // ================================================================
+  // FILTER + SORT
+  // ================================================================
+  function filterAndSort(rows) {
+    var q = document.getElementById('projSearch').value.toLowerCase().trim();
+    var trade = document.getElementById('projTrade').value;
+    var date = document.getElementById('projDate').value;
+    var sort = document.getElementById('projSort').value;
+
+    var out = rows.slice();
+
+    if (q) {
+      out = out.filter(function (r) {
+        return (r.id + ' ' + r.projId + ' ' + r.address + ' ' + r.city + ' ' + r.zip + ' ' + r.trade).toLowerCase().indexOf(q) !== -1;
+      });
+    }
+    if (trade) out = out.filter(function (r) { return r.trade === trade; });
+    if (date === 'Last 7 days') out = out.filter(function (r) { return r.approvedDays <= 7; });
+    else if (date === 'Last 30 days') out = out.filter(function (r) { return r.approvedDays <= 30; });
+    else if (date === 'Last 90 days') out = out.filter(function (r) { return r.approvedDays <= 90; });
+
+    if (sort === 'newest') out.sort(function (a,b) { return a.approvedDays - b.approvedDays; });
+    else if (sort === 'oldest') out.sort(function (a,b) { return b.approvedDays - a.approvedDays; });
+    else if (sort === 'amount-high') out.sort(function (a,b) { return b.amount - a.amount; });
+    else if (sort === 'amount-low') out.sort(function (a,b) { return a.amount - b.amount; });
+
+    return out;
+  }
+
+  // ================================================================
+  // EVENTS
+  // ================================================================
+  ['projSearch', 'projTrade', 'projDate', 'projSort'].forEach(function (id) {
+    var el = document.getElementById(id);
+    el.addEventListener(el.tagName === 'INPUT' ? 'input' : 'change', render);
+  });
+
+  document.getElementById('clearProjects').addEventListener('click', function () {
+    document.getElementById('projSearch').value = '';
+    document.getElementById('projTrade').value = '';
+    document.getElementById('projDate').value = '';
+    document.getElementById('projSort').value = 'newest';
+    render();
+  });
+
+  // View toggle
+  document.querySelectorAll('.view-toggle button').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.view-toggle button').forEach(function (b) { b.classList.remove('is-active'); });
+      btn.classList.add('is-active');
+      view = btn.dataset.view;
+      render();
+    });
+  });
+
+  // Row / card click → project detail
+  ['projectList', 'projectGrid'].forEach(function (container) {
+    document.getElementById(container).addEventListener('click', function (e) {
+      if (e.target.closest('.icon-btn')) return;
+      var row = e.target.closest('[data-id]');
+      if (row) window.location.href = 'project-detail.html';
+    });
+  });
+
+  // ================================================================
+  // NAV TOGGLE
+  // ================================================================
+  document.getElementById('navToggle').addEventListener('click', function () {
+    var app = document.getElementById('app');
+    if (window.matchMedia('(max-width: 860px)').matches) {
+      app.classList.toggle('is-nav-open');
+    } else {
+      app.classList.toggle('is-collapsed');
+    }
+  });
+
+  // Initial render
+  render();
+})();
+</script>
+
+</body>
+</html>

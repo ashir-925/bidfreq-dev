@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design System · BidFreq™</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <!-- ============================================================
+       SIDEBAR
+       ============================================================ -->
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <div class="sidebar__logo">B</div>
+      <div class="sidebar__brand-text">
+        <div class="sidebar__name">BidFreq™</div>
+        <div class="sidebar__tag">Design System</div>
+      </div>
+    </div>
+
+    <nav class="sidebar__nav">
+      <div class="sidebar__section">
+        <div class="sidebar__section-title">Overview</div>
+        <a href="#colors" class="nav-item is-active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="8.5" cy="7.5" r="2.5"/><circle cx="6.5" cy="12.5" r="2.5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+          <span>Colors</span>
+        </a>
+        <a href="#typography" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+          <span>Typography</span>
+        </a>
+        <a href="#spacing" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg>
+          <span>Spacing & Radius</span>
+        </a>
+      </div>
+
+      <div class="sidebar__section">
+        <div class="sidebar__section-title">Components</div>
+        <a href="#buttons" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="8" rx="4"/></svg>
+          <span>Buttons</span>
+        </a>
+        <a href="#forms" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h10M7 13h6"/></svg>
+          <span>Forms</span>
+        </a>
+        <a href="#cards" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
+          <span>Cards</span>
+        </a>
+        <a href="#tables" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
+          <span>Tables</span>
+        </a>
+        <a href="#chips" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          <span>Status & Chips</span>
+        </a>
+        <a href="#ai" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.5 2.3 7.1-6.3-4.6L5.7 21 8 14 2 9.5h7.6z"/></svg>
+          <span>AI / Verified</span>
+        </a>
+        <a href="#modals" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
+          <span>Modals</span>
+        </a>
+        <a href="#alerts" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <span>Alerts & Toasts</span>
+        </a>
+      </div>
+
+      <div class="sidebar__section">
+        <div class="sidebar__section-title">Patterns</div>
+        <a href="#steps" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>Steps & Progress</span>
+        </a>
+        <a href="#timeline" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>Timeline</span>
+        </a>
+        <a href="#states" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span>Empty & Loading</span>
+        </a>
+        <a href="#icons" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <span>Icons</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar__footer">
+      <div class="user-chip">
+        <div class="avatar avatar--sm">BF</div>
+        <div class="user-chip__meta">
+          <span class="user-chip__name">BidFreq Team</span>
+          <span class="user-chip__role">v1.0 · Design</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============================================================
+       MAIN
+       ============================================================ -->
+  <div class="app-main">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <button class="topbar__toggle" id="navToggle" aria-label="Toggle navigation">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+
+      <div class="topbar__search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="search" placeholder="Search components…" aria-label="Search design system">
+        <kbd>⌘K</kbd>
+      </div>
+
+      <div class="topbar__spacer"></div>
+
+      <div class="topbar__actions">
+        <button class="icon-btn" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="icon-btn__dot"></span>
+        </button>
+        <button class="icon-btn" aria-label="Help">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </button>
+        <div class="user-chip">
+          <div class="avatar avatar--sm">BF</div>
+          <div class="user-chip__meta">
+            <span class="user-chip__name">BidFreq Team</span>
+            <span class="user-chip__role">Administrator</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="app-content">
+
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="#">Home</a>
+        <span class="breadcrumbs__sep">/</span>
+        <span class="breadcrumbs__current">Design System</span>
+      </nav>
+
+      <header class="page-header">
+        <div class="page-header__text">
+          <h1 class="page-header__title">BidFreq Design System</h1>
+          <p class="page-header__subtitle">
+            Single source of truth for the BidFreq™ V1.0 platform. Every screen imports
+            <code class="text-mono">css/styles.css</code> and inherits these tokens, components, and states.
+          </p>
+        </div>
+        <div class="page-header__actions">
+          <button class="btn btn--secondary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export tokens
+          </button>
+          <button class="btn btn--primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            View source
+          </button>
+        </div>
+      </header>
+
+      <!-- ==========================================================
+           COLORS
+           ========================================================== -->
+      <section id="colors" class="mb-8">
+        <div class="card mb-5">
+          <div class="card__header">
+            <div>
+              <div class="card__title">Color Palette</div>
+              <div class="card__subtitle">Brand, semantic, and neutral scales</div>
+            </div>
+          </div>
+          <div class="card__body">
+
+            <h4 class="mb-3">Brand</h4>
+            <div class="grid grid--auto mb-6">
+              <div>
+                <div style="height:64px;border-radius:var(--r-md);background:var(--navy-800);"></div>
+                <div class="mt-2"><strong class="text-sm">Navy 800</strong><div class="text-xs text-muted text-mono">#0B1B33</div></div>
+              </div>
+              <div>
+                <div style="height:64px;border-radius:var(--r-md);background:var(--blue-600);"></div>
+                <div class="mt-2"><strong class="text-sm">Action Blue</strong><div class="text-xs text-muted text-mono">#2563EB</div></div>
+              </div>
+              <div>
+                <div style="height:64px;border-radius:var(--r-md);background:var(--violet-600);"></div>
+                <div class="mt-2"><strong class="text-sm">AI Violet</strong><div class="text-xs text-muted text-mono">#7C3AED</div></div>
+              </div>
+              <div>
+                <div style="height:64px;border-radius:var(--r-md);background:var(--emerald-600);"></div>
+                <div class="mt-2"><strong class="text-sm">Verified Emerald</strong><div class="text-xs text-muted text-mono">#059669</div></div>
+              </div>
+            </div>
+
+            <h4 class="mb-3">Semantic</h4>
+            <div class="grid grid--auto mb-6">
+              <div>
+                <div style="height:56px;border-radius:var(--r-md);background:var(--success-600);"></div>
+                <div class="mt-2 text-sm">Success</div>
+              </div>
+              <div>
+                <div style="height:56px;border-radius:var(--r-md);background:var(--warning-600);"></div>
+                <div class="mt-2 text-sm">Warning</div>
+              </div>
+              <div>
+                <div style="height:56px;border-radius:var(--r-md);background:var(--danger-600);"></div>
+                <div class="mt-2 text-sm">Danger</div>
+              </div>
+              <div>
+                <div style="height:56px;border-radius:var(--r-md);background:var(--info-600);"></div>
+                <div class="mt-2 text-sm">Info</div>
+              </div>
+            </div>
+
+            <h4 class="mb-3">Neutrals</h4>
+            <div style="display:grid;grid-template-columns:repeat(10,1fr);gap:0;border-radius:var(--r-md);overflow:hidden;border:1px solid var(--border);">
+              <div style="height:60px;background:var(--n-0)"></div>
+              <div style="height:60px;background:var(--n-50)"></div>
+              <div style="height:60px;background:var(--n-100)"></div>
+              <div style="height:60px;background:var(--n-200)"></div>
+              <div style="height:60px;background:var(--n-300)"></div>
+              <div style="height:60px;background:var(--n-400)"></div>
+              <div style="height:60px;background:var(--n-500)"></div>
+              <div style="height:60px;background:var(--n-600)"></div>
+              <div style="height:60px;background:var(--n-700)"></div>
+              <div style="height:60px;background:var(--n-900)"></div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           TYPOGRAPHY
+           ========================================================== -->
+      <section id="typography" class="mb-8">
+        <div class="card">
+          <div class="card__header">
+            <div>
+              <div class="card__title">Typography</div>
+              <div class="card__subtitle">Plus Jakarta Sans for display · Inter for UI · JetBrains Mono for data</div>
+            </div>
+          </div>
+          <div class="card__body">
+            <div class="grid grid--2">
+              <div>
+                <h1 class="mb-2">Heading 1 / 30px</h1>
+                <h2 class="mb-2">Heading 2 / 24px</h2>
+                <h3 class="mb-2">Heading 3 / 20px</h3>
+                <h4 class="mb-2">Heading 4 / 17px</h4>
+                <h5 class="mb-2">Heading 5 / 15px</h5>
+              </div>
+              <div>
+                <p class="mb-3">
+                  Body copy at 14px with 1.55 line-height. Used for paragraphs,
+                  descriptions, and table content throughout the platform.
+                </p>
+                <p class="text-sm text-muted mb-3">
+                  Small muted text at 13px — used for helper text and metadata.
+                </p>
+                <p class="text-xs text-faint mb-3">
+                  Extra-small faint text at 12px — timestamps and captions.
+                </p>
+                <p class="eyebrow mb-3">Eyebrow / Section Label</p>
+                <p class="text-mono text-sm">$ 1,482.50 · EST-2026-0042</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           SPACING
+           ========================================================== -->
+      <section id="spacing" class="mb-8">
+        <div class="card">
+          <div class="card__header">
+            <div>
+              <div class="card__title">Spacing & Radius</div>
+              <div class="card__subtitle">4px base scale · Consistent radii across surfaces</div>
+            </div>
+          </div>
+          <div class="card__body">
+            <div class="flex flex-wrap gap-4 mb-6">
+              <div><div style="width:4px;height:32px;background:var(--blue-500);border-radius:2px"></div><div class="text-xs mt-2">4</div></div>
+              <div><div style="width:8px;height:32px;background:var(--blue-500);border-radius:2px"></div><div class="text-xs mt-2">8</div></div>
+              <div><div style="width:12px;height:32px;background:var(--blue-500);border-radius:2px"></div><div class="text-xs mt-2">12</div></div>
+              <div><div style="width:16px;height:32px;background:var(--blue-500);border-radius:2px"></div><div class="text-xs mt-2">16</div></div>
+              <div><div style="width:20px;height:32px;background:var(--blue-500);border-radius:2px"></div><div class="text-xs mt-2">20</div></div>
+              <div><div style="width:24px;height:32px;background:var(--blue-500);border-radius:2px"></div><div class="text-xs mt-2">24</div></div>
+              <div><div style="width:32px;height:32px;background:var(--blue-500);border-radius:2px"></div><div class="text-xs mt-2">32</div></div>
+              <div><div style="width:40px;height:32px;background:var(--blue-500);border-radius:2px"></div><div class="text-xs mt-2">40</div></div>
+              <div><div style="width:48px;height:32px;background:var(--blue-500);border-radius:2px"></div><div class="text-xs mt-2">48</div></div>
+              <div><div style="width:64px;height:32px;background:var(--blue-500);border-radius:2px"></div><div class="text-xs mt-2">64</div></div>
+            </div>
+
+            <div class="flex flex-wrap gap-4">
+              <div style="width:100px;height:60px;background:var(--n-100);border-radius:6px;display:grid;place-items:center" class="text-xs">r-sm · 6</div>
+              <div style="width:100px;height:60px;background:var(--n-100);border-radius:8px;display:grid;place-items:center" class="text-xs">r-md · 8</div>
+              <div style="width:100px;height:60px;background:var(--n-100);border-radius:12px;display:grid;place-items:center" class="text-xs">r-lg · 12</div>
+              <div style="width:100px;height:60px;background:var(--n-100);border-radius:16px;display:grid;place-items:center" class="text-xs">r-xl · 16</div>
+              <div style="width:100px;height:60px;background:var(--n-100);border-radius:999px;display:grid;place-items:center" class="text-xs">full</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           BUTTONS
+           ========================================================== -->
+      <section id="buttons" class="mb-8">
+        <div class="card">
+          <div class="card__header">
+            <div>
+              <div class="card__title">Buttons</div>
+              <div class="card__subtitle">Variants, sizes, states, and groups</div>
+            </div>
+          </div>
+          <div class="card__body">
+            <h5 class="mb-3">Variants</h5>
+            <div class="flex flex-wrap gap-3 mb-6">
+              <button class="btn btn--primary">Primary</button>
+              <button class="btn btn--secondary">Secondary</button>
+              <button class="btn btn--ghost">Ghost</button>
+              <button class="btn btn--subtle">Subtle</button>
+              <button class="btn btn--ai">AI Action</button>
+              <button class="btn btn--success">Approve</button>
+              <button class="btn btn--danger">Decline</button>
+              <button class="btn btn--danger-outline">Remove</button>
+              <button class="btn btn--dark">Dark</button>
+              <button class="btn btn--primary is-disabled">Disabled</button>
+            </div>
+
+            <h5 class="mb-3">Sizes</h5>
+            <div class="flex flex-wrap items-center gap-3 mb-6">
+              <button class="btn btn--primary btn--sm">Small</button>
+              <button class="btn btn--primary">Default</button>
+              <button class="btn btn--primary btn--lg">Large</button>
+              <button class="btn btn--primary btn--xl">Extra large</button>
+              <button class="btn btn--secondary btn--icon" aria-label="Settings">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              </button>
+            </div>
+
+            <h5 class="mb-3">With icons & groups</h5>
+            <div class="flex flex-wrap items-center gap-3 mb-6">
+              <button class="btn btn--primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                New Estimate Request
+              </button>
+              <button class="btn btn--secondary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Download PDF
+              </button>
+              <div class="btn-group">
+                <button class="btn btn--secondary">Day</button>
+                <button class="btn btn--secondary">Week</button>
+                <button class="btn btn--secondary">Month</button>
+              </div>
+              <button class="btn btn--primary" disabled>
+                <span class="spinner spinner--sm spinner--white"></span>
+                Processing…
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           FORMS
+           ========================================================== -->
+      <section id="forms" class="mb-8">
+        <div class="card">
+          <div class="card__header">
+            <div>
+              <div class="card__title">Forms & Inputs</div>
+              <div class="card__subtitle">Inputs, selects, textareas, checks, switches, uploads</div>
+            </div>
+          </div>
+          <div class="card__body">
+
+            <div class="form-row mb-5">
+              <div class="form-group" style="margin-bottom:0">
+                <label class="label" for="sg-name">Full name <span class="req">*</span></label>
+                <input class="input" id="sg-name" type="text" placeholder="Jane Doe">
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="label" for="sg-email">Email address <span class="req">*</span></label>
+                <div class="input-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22 6 12 13 2 6"/></svg>
+                  <input class="input" id="sg-email" type="email" placeholder="jane@company.com">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row mb-5">
+              <div class="form-group" style="margin-bottom:0">
+                <label class="label" for="sg-zip">Property ZIP code <span class="req">*</span></label>
+                <input class="input" id="sg-zip" type="text" placeholder="78701" maxlength="10">
+                <div class="form-hint">Used for localized pricing (SOW §3.4).</div>
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="label" for="sg-trade">Trade</label>
+                <select class="select" id="sg-trade">
+                  <option>General Repair</option>
+                  <option>Electrical</option>
+                  <option>Plumbing</option>
+                  <option>HVAC</option>
+                  <option>Roofing</option>
+                  <option>Flooring</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="sg-desc">Description of repair/work needed <span class="req">*</span></label>
+              <textarea class="textarea" id="sg-desc" placeholder="Describe the damage, scope, and any visible concerns…"></textarea>
+              <div class="form-hint">AI uses this description alongside photos to draft the initial Scope of Work.</div>
+            </div>
+
+            <div class="form-row mb-5">
+              <div class="form-group" style="margin-bottom:0">
+                <label class="label">Labor cost</label>
+                <div class="input-affix">
+                  <span class="input-affix__prefix">$</span>
+                  <input class="input" type="text" value="480.00">
+                </div>
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="label">Quantity</label>
+                <div class="input-affix">
+                  <input class="input" type="text" value="12">
+                  <span class="input-affix__suffix">sq ft</span>
+                </div>
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="label">Error state</label>
+                <input class="input input--error" type="text" value="Invalid value">
+                <div class="form-error">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  This field is required.
+                </div>
+              </div>
+            </div>
+
+            <hr class="divider">
+
+            <h5 class="mb-3">Checkboxes & Radios</h5>
+            <div class="grid grid--2 mb-5">
+              <label class="check">
+                <input type="checkbox" checked>
+                <span class="check__box">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+                <span class="check__label">
+                  <strong>Include assumptions</strong>
+                  <span class="check__desc">Add AI-generated assumptions to the proposal.</span>
+                </span>
+              </label>
+              <label class="check">
+                <input type="checkbox">
+                <span class="check__box">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+                <span class="check__label">
+                  <strong>Send copy to owner</strong>
+                  <span class="check__desc">Forward the finalized PDF to the property owner.</span>
+                </span>
+              </label>
+            </div>
+
+            <div class="flex flex-wrap gap-6 mb-6">
+              <label class="check check--radio">
+                <input type="radio" name="sg-r" checked>
+                <span class="check__box"></span>
+                <span class="check__label">Approve</span>
+              </label>
+              <label class="check check--radio">
+                <input type="radio" name="sg-r">
+                <span class="check__box"></span>
+                <span class="check__label">Request revision</span>
+              </label>
+              <label class="check check--radio">
+                <input type="radio" name="sg-r">
+                <span class="check__box"></span>
+                <span class="check__label">Decline</span>
+              </label>
+            </div>
+
+            <h5 class="mb-3">Switches & Segmented</h5>
+            <div class="flex flex-wrap items-center gap-6 mb-6">
+              <label class="switch">
+                <input type="checkbox" checked>
+                <span class="switch__track"></span>
+                <span class="text-sm">Email notifications</span>
+              </label>
+              <label class="switch">
+                <input type="checkbox">
+                <span class="switch__track"></span>
+                <span class="text-sm">Auto-assign estimator</span>
+              </label>
+              <div class="segmented">
+                <button class="is-active">AI Draft</button>
+                <button>Final</button>
+                <button>Both</button>
+              </div>
+            </div>
+
+            <h5 class="mb-3">Photo Upload (mandatory gate)</h5>
+            <div class="dropzone" id="dropzone">
+              <div class="dropzone__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              </div>
+              <div class="dropzone__title">Upload repair-area photos</div>
+              <div class="dropzone__hint">Drag & drop or click to browse · JPG, PNG, HEIC · Minimum 2 photos required</div>
+            </div>
+
+            <div class="upload-grid">
+              <div class="upload-thumb" style="background:linear-gradient(135deg,#CBD5E1,#94A3B8)"><span class="upload-thumb__badge">photo-1.jpg</span><button class="upload-thumb__remove" aria-label="Remove">×</button></div>
+              <div class="upload-thumb" style="background:linear-gradient(135deg,#A5B4FC,#6366F1)"><span class="upload-thumb__badge">photo-2.jpg</span><button class="upload-thumb__remove" aria-label="Remove">×</button></div>
+              <div class="upload-thumb upload-thumb--file">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                <span>inspection-report.pdf</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           CARDS
+           ========================================================== -->
+      <section id="cards" class="mb-8">
+        <div class="card__header" style="padding:0;border:none;margin-bottom:var(--s-4)">
+          <div>
+            <div class="card__title">Cards & Stat Cards</div>
+            <div class="card__subtitle">Surface containers and KPI presentation</div>
+          </div>
+        </div>
+
+        <div class="grid grid--4 mb-5">
+          <div class="stat-card">
+            <div class="stat-card__top">
+              <span class="stat-card__label">Open Requests</span>
+              <div class="stat-card__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              </div>
+            </div>
+            <div class="stat-card__value">12</div>
+            <div class="stat-card__delta stat-card__delta--up">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+              4 new this week
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card__top">
+              <span class="stat-card__label">Awaiting Approval</span>
+              <div class="stat-card__icon stat-card__icon--violet">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.5 2.3 7.1-6.3-4.6L5.7 21 8 14 2 9.5h7.6z"/></svg>
+              </div>
+            </div>
+            <div class="stat-card__value">5</div>
+            <div class="stat-card__delta text-muted">2 need your review</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card__top">
+              <span class="stat-card__label">Approved Projects</span>
+              <div class="stat-card__icon stat-card__icon--emerald">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+            </div>
+            <div class="stat-card__value">38</div>
+            <div class="stat-card__delta stat-card__delta--up">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+              +12% MoM
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card__top">
+              <span class="stat-card__label">Revisions Requested</span>
+              <div class="stat-card__icon stat-card__icon--warning">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+              </div>
+            </div>
+            <div class="stat-card__value">3</div>
+            <div class="stat-card__delta stat-card__delta--down">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              2 resolved
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid--3">
+          <div class="card card--interactive">
+            <div class="card__body">
+              <div class="flex items-center justify-between mb-3">
+                <span class="chip chip--violet"><span class="chip__dot"></span>AI Processing</span>
+                <span class="text-xs text-muted">2m ago</span>
+              </div>
+              <h4 class="mb-2">EST-2026-0042</h4>
+              <p class="text-sm text-muted mb-4">Kitchen water damage — 421 Oak Ridge Dr, Austin, TX</p>
+              <div class="confidence">
+                <span class="text-xs text-muted">Confidence</span>
+                <div class="confidence__bar"><div class="confidence__fill confidence__fill--high" style="width:82%"></div></div>
+                <span class="confidence__value">82%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card__header">
+              <div class="card__title">Card with header</div>
+            </div>
+            <div class="card__body">
+              <p class="text-sm text-muted mb-0">Standard surface container for grouped content, forms, and detail views.</p>
+            </div>
+            <div class="card__footer">
+              <button class="btn btn--ghost btn--sm">Cancel</button>
+              <button class="btn btn--primary btn--sm">Save</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card__body">
+              <h4 class="mb-3">AI Draft Panel</h4>
+              <div class="panel-ai mb-3">
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="tag-ai">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.5 2.3 7.1-6.3-4.6L5.7 21 8 14 2 9.5h7.6z"/></svg>
+                    AI Generated
+                  </span>
+                </div>
+                <p class="text-sm mb-0">Replace 12 sq ft of drywall; re-texture and paint to match adjacent wall.</p>
+              </div>
+              <div class="panel-verified">
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="tag-verified">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    Verified
+                  </span>
+                </div>
+                <p class="text-sm mb-0">Confirmed by estimator B. Hayes · 11 Aug 2026</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           TABLES
+           ========================================================== -->
+      <section id="tables" class="mb-8">
+        <div class="card__header" style="padding:0;border:none;margin-bottom:var(--s-4)">
+          <div>
+            <div class="card__title">Tables</div>
+            <div class="card__subtitle">Data tables with toolbar, sorting, status chips, and pagination</div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <div class="table-toolbar">
+            <div class="table-toolbar__search">
+              <div class="input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input class="input" type="search" placeholder="Search estimates…">
+              </div>
+            </div>
+            <div class="table-toolbar__spacer"></div>
+            <button class="btn btn--secondary btn--sm">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+              Filter
+            </button>
+            <button class="btn btn--primary btn--sm">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              New Request
+            </button>
+          </div>
+
+          <div class="table-scroll">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="table__checkbox"><input type="checkbox" aria-label="Select all"></th>
+                  <th class="sortable">Estimate ID <span class="sort-ind">↓</span></th>
+                  <th>Property</th>
+                  <th>Trade</th>
+                  <th>Status</th>
+                  <th class="num">Amount</th>
+                  <th>Updated</th>
+                  <th class="actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input type="checkbox" aria-label="Select"></td>
+                  <td class="strong text-mono">EST-2026-0042</td>
+                  <td>421 Oak Ridge Dr, Austin, TX</td>
+                  <td>General Repair</td>
+                  <td><span class="chip chip--violet"><span class="chip__dot"></span>AI Processing</span></td>
+                  <td class="num">—</td>
+                  <td class="text-muted text-sm">2 min ago</td>
+                  <td class="actions"><button class="icon-btn tooltip" data-tip="Open" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" aria-label="Select"></td>
+                  <td class="strong text-mono">EST-2026-0041</td>
+                  <td>88 Cypress Ln, Dallas, TX</td>
+                  <td>Roofing</td>
+                  <td><span class="chip chip--warning"><span class="chip__dot"></span>In Estimator Review</span></td>
+                  <td class="num">$8,420.00</td>
+                  <td class="text-muted text-sm">1 hr ago</td>
+                  <td class="actions"><button class="icon-btn tooltip" data-tip="Open" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" aria-label="Select"></td>
+                  <td class="strong text-mono">EST-2026-0040</td>
+                  <td>1502 Palm Ave, Houston, TX</td>
+                  <td>Plumbing</td>
+                  <td><span class="chip chip--blue"><span class="chip__dot"></span>Awaiting Customer</span></td>
+                  <td class="num">$1,482.50</td>
+                  <td class="text-muted text-sm">Yesterday</td>
+                  <td class="actions"><button class="icon-btn tooltip" data-tip="Open" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" aria-label="Select"></td>
+                  <td class="strong text-mono">EST-2026-0039</td>
+                  <td>77 Birch St, Plano, TX</td>
+                  <td>Electrical</td>
+                  <td><span class="chip chip--warning"><span class="chip__dot"></span>Revision Requested</span></td>
+                  <td class="num">$2,310.00</td>
+                  <td class="text-muted text-sm">2 days ago</td>
+                  <td class="actions"><button class="icon-btn tooltip" data-tip="Open" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" aria-label="Select"></td>
+                  <td class="strong text-mono">EST-2026-0038</td>
+                  <td>305 Meadow Rd, Austin, TX</td>
+                  <td>HVAC</td>
+                  <td><span class="chip chip--success"><span class="chip__dot"></span>Approved</span></td>
+                  <td class="num">$4,950.00</td>
+                  <td class="text-muted text-sm">3 days ago</td>
+                  <td class="actions"><button class="icon-btn tooltip" data-tip="Open" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" aria-label="Select"></td>
+                  <td class="strong text-mono">EST-2026-0037</td>
+                  <td>12 Cedar Ct, Fort Worth, TX</td>
+                  <td>Flooring</td>
+                  <td><span class="chip chip--danger"><span class="chip__dot"></span>Declined</span></td>
+                  <td class="num">$3,140.00</td>
+                  <td class="text-muted text-sm">5 days ago</td>
+                  <td class="actions"><button class="icon-btn tooltip" data-tip="Open" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="pagination">
+            <span class="pagination__info">Showing 1–6 of 42 estimates</span>
+            <div class="pagination__controls">
+              <button class="pagination__btn" disabled aria-label="Previous">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              <button class="pagination__btn is-active">1</button>
+              <button class="pagination__btn">2</button>
+              <button class="pagination__btn">3</button>
+              <button class="pagination__btn" aria-label="Next">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           CHIPS / STATUS
+           ========================================================== -->
+      <section id="chips" class="mb-8">
+        <div class="card">
+          <div class="card__header">
+            <div>
+              <div class="card__title">Status Chips & Badges</div>
+              <div class="card__subtitle">Estimate lifecycle states mapped from the SOW</div>
+            </div>
+          </div>
+          <div class="card__body">
+            <h5 class="mb-3">Estimate Lifecycle</h5>
+            <div class="flex flex-wrap gap-2 mb-6">
+              <span class="chip status--draft"><span class="chip__dot"></span>Draft</span>
+              <span class="chip status--submitted"><span class="chip__dot"></span>Submitted</span>
+              <span class="chip status--ai-processing"><span class="chip__dot"></span>AI Processing</span>
+              <span class="chip status--in-review"><span class="chip__dot"></span>In Estimator Review</span>
+              <span class="chip status--awaiting-customer"><span class="chip__dot"></span>Awaiting Customer</span>
+              <span class="chip status--revision"><span class="chip__dot"></span>Revision Requested</span>
+              <span class="chip status--approved"><span class="chip__dot"></span>Approved</span>
+              <span class="chip status--declined"><span class="chip__dot"></span>Declined</span>
+              <span class="chip status--project"><span class="chip__dot"></span>Approved Project</span>
+            </div>
+
+            <h5 class="mb-3">Semantic Chips</h5>
+            <div class="flex flex-wrap gap-2 mb-6">
+              <span class="chip chip--neutral">Neutral</span>
+              <span class="chip chip--blue">Blue</span>
+              <span class="chip chip--violet">Violet</span>
+              <span class="chip chip--emerald">Emerald</span>
+              <span class="chip chip--success">Success</span>
+              <span class="chip chip--warning">Warning</span>
+              <span class="chip chip--danger">Danger</span>
+              <span class="chip chip--info">Info</span>
+            </div>
+
+            <h5 class="mb-3">Badges</h5>
+            <div class="flex flex-wrap items-center gap-3">
+              <span class="badge">8</span>
+              <span class="badge badge--blue">12</span>
+              <span class="badge badge--violet">3</span>
+              <span class="badge badge--danger">2</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           AI / VERIFIED
+           ========================================================== -->
+      <section id="ai" class="mb-8">
+        <div class="card">
+          <div class="card__header">
+            <div>
+              <div class="card__title">AI vs Human-Verified</div>
+              <div class="card__subtitle">Visual language for the mandatory human-verification workflow (SOW §3.5)</div>
+            </div>
+          </div>
+          <div class="card__body">
+            <div class="grid grid--2 mb-6">
+              <div>
+                <div class="flex items-center gap-2 mb-3">
+                  <span class="tag-ai">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.5 2.3 7.1-6.3-4.6L5.7 21 8 14 2 9.5h7.6z"/></svg>
+                    AI Draft
+                  </span>
+                  <span class="risk-flag risk-flag--high">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    High risk
+                  </span>
+                </div>
+                <div class="panel-ai">
+                  <p class="text-sm mb-3"><strong>Scope of Work</strong> — Replace 12 sq ft of drywall, re-texture, prime, and paint to match existing finish.</p>
+                  <div class="confidence">
+                    <span class="text-xs text-muted">AI Confidence</span>
+                    <div class="confidence__bar"><div class="confidence__fill confidence__fill--med" style="width:64%"></div></div>
+                    <span class="confidence__value">64%</span>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex items-center gap-2 mb-3">
+                  <span class="tag-verified">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    Human Verified
+                  </span>
+                </div>
+                <div class="panel-verified">
+                  <p class="text-sm mb-3"><strong>Scope of Work</strong> — Replace 14 sq ft of drywall, re-texture, prime, and paint to match existing finish. Estimator adjusted quantity after photo review.</p>
+                  <div class="confidence">
+                    <span class="text-xs text-muted">Final Confidence</span>
+                    <div class="confidence__bar"><div class="confidence__fill confidence__fill--high" style="width:94%"></div></div>
+                    <span class="confidence__value">94%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <h5 class="mb-3">Risk Flags</h5>
+            <div class="flex flex-wrap gap-2">
+              <span class="risk-flag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Moderate risk</span>
+              <span class="risk-flag risk-flag--high"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>High risk — hidden moisture</span>
+              <span class="risk-flag risk-flag--low"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Low risk</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           MODALS
+           ========================================================== -->
+      <section id="modals" class="mb-8">
+        <div class="card">
+          <div class="card__header">
+            <div>
+              <div class="card__title">Modals & Dialogs</div>
+              <div class="card__subtitle">Approval, revision, decline, and confirmation patterns</div>
+            </div>
+          </div>
+          <div class="card__body">
+            <div class="flex flex-wrap gap-3">
+              <button class="btn btn--secondary" onclick="document.getElementById('modal-approve').classList.add('is-open')">Approve Estimate</button>
+              <button class="btn btn--secondary" onclick="document.getElementById('modal-revision').classList.add('is-open')">Request Revision</button>
+              <button class="btn btn--secondary" onclick="document.getElementById('modal-decline').classList.add('is-open')">Decline Estimate</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           ALERTS
+           ========================================================== -->
+      <section id="alerts" class="mb-8">
+        <div class="card">
+          <div class="card__header">
+            <div>
+              <div class="card__title">Alerts & Toasts</div>
+              <div class="card__subtitle">Inline feedback and transient notifications</div>
+            </div>
+          </div>
+          <div class="card__body">
+            <div class="grid grid--2 mb-6">
+              <div class="alert alert--info">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <div class="alert__body"><div class="alert__title">Pricing source connected</div>Localized ZIP pricing is active for this region.</div>
+              </div>
+              <div class="alert alert--success">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <div class="alert__body"><div class="alert__title">Estimate approved</div>The project has moved to Approved Project status.</div>
+              </div>
+              <div class="alert alert--warning">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                <div class="alert__body"><div class="alert__title">Minimum 2 photos required</div>Add at least two repair-area photos to continue.</div>
+              </div>
+              <div class="alert alert--danger">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                <div class="alert__body"><div class="alert__title">Upload failed</div>photo-3.heic exceeded the 25 MB limit.</div>
+              </div>
+              <div class="alert alert--ai" style="grid-column:1/-1">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.5 2.3 7.1-6.3-4.6L5.7 21 8 14 2 9.5h7.6z"/></svg>
+                <div class="alert__body"><div class="alert__title">AI draft ready for verification</div>This estimate must be reviewed and approved by a BidFreq human estimator before delivery.</div>
+              </div>
+            </div>
+
+            <h5 class="mb-3">Toasts</h5>
+            <div class="toast-region" style="position:static;max-width:100%;">
+              <div class="toast toast--success">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <div><div class="toast__title">Estimate sent</div><div class="toast__msg">Final PDF emailed to the customer.</div></div>
+              </div>
+              <div class="toast toast--ai">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.5 2.3 7.1-6.3-4.6L5.7 21 8 14 2 9.5h7.6z"/></svg>
+                <div><div class="toast__title">AI analysis complete</div><div class="toast__msg">Draft added to the estimator queue.</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           STEPS
+           ========================================================== -->
+      <section id="steps" class="mb-8">
+        <div class="card">
+          <div class="card__header">
+            <div>
+              <div class="card__title">Steps & Progress</div>
+              <div class="card__subtitle">Wizard indicator for the New Estimate Request flow</div>
+            </div>
+          </div>
+          <div class="card__body">
+            <div class="steps">
+              <div class="step is-done"><div class="step__num">✓</div><div class="step__label">Property</div></div>
+              <div class="step__connector is-done"></div>
+              <div class="step is-done"><div class="step__num">✓</div><div class="step__label">Description</div></div>
+              <div class="step__connector is-done"></div>
+              <div class="step is-active"><div class="step__num">3</div><div class="step__label">Photos</div></div>
+              <div class="step__connector"></div>
+              <div class="step"><div class="step__num">4</div><div class="step__label">Supporting Files</div></div>
+              <div class="step__connector"></div>
+              <div class="step"><div class="step__num">5</div><div class="step__label">Review & Submit</div></div>
+            </div>
+
+            <div class="progress mb-6"><div class="progress__fill" style="width:60%"></div></div>
+
+            <div class="grid grid--2">
+              <div>
+                <div class="text-sm mb-2">Upload progress</div>
+                <div class="progress progress--sm mb-2"><div class="progress__fill" style="width:42%"></div></div>
+                <div class="text-xs text-muted">3 of 7 files uploaded</div>
+              </div>
+              <div>
+                <div class="text-sm mb-2">AI analysis</div>
+                <div class="progress progress--sm mb-2"><div class="progress__fill" style="width:78%;background:var(--violet-600)"></div></div>
+                <div class="text-xs text-muted">Analyzing images and generating Scope of Work…</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           TIMELINE
+           ========================================================== -->
+      <section id="timeline" class="mb-8">
+        <div class="card">
+          <div class="card__header">
+            <div>
+              <div class="card__title">Timeline</div>
+              <div class="card__subtitle">Estimate status history and activity feed</div>
+            </div>
+          </div>
+          <div class="card__body">
+            <div class="timeline">
+              <div class="timeline__item is-done">
+                <div class="timeline__dot"></div>
+                <div class="timeline__title">Request submitted</div>
+                <div class="timeline__meta">Aug 9, 2026 · 9:14 AM</div>
+                <div class="timeline__desc">Customer uploaded 4 photos and a description.</div>
+              </div>
+              <div class="timeline__item is-done">
+                <div class="timeline__dot"></div>
+                <div class="timeline__title">AI analysis complete</div>
+                <div class="timeline__meta">Aug 9, 2026 · 9:17 AM</div>
+                <div class="timeline__desc">Draft Scope of Work generated with 82% confidence.</div>
+              </div>
+              <div class="timeline__item is-done">
+                <div class="timeline__dot"></div>
+                <div class="timeline__title">Estimator verified</div>
+                <div class="timeline__meta">Aug 10, 2026 · 2:45 PM</div>
+                <div class="timeline__desc">B. Hayes adjusted quantities and approved the estimate.</div>
+              </div>
+              <div class="timeline__item is-active">
+                <div class="timeline__dot"></div>
+                <div class="timeline__title">Awaiting customer decision</div>
+                <div class="timeline__meta">Sent Aug 10, 2026 · 2:46 PM</div>
+              </div>
+              <div class="timeline__item">
+                <div class="timeline__dot"></div>
+                <div class="timeline__title">Approved Project</div>
+                <div class="timeline__meta">Pending</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           STATES
+           ========================================================== -->
+      <section id="states" class="mb-8">
+        <div class="grid grid--2">
+          <div class="card">
+            <div class="card__header"><div class="card__title">Empty State</div></div>
+            <div class="empty">
+              <div class="empty__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              </div>
+              <div class="empty__title">No estimate requests yet</div>
+              <p class="empty__text">Start your first request by uploading property photos and a short description of the work needed.</p>
+              <button class="btn btn--primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                New Estimate Request
+              </button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card__header"><div class="card__title">Loading State</div></div>
+            <div class="card__body">
+              <div class="flex items-center gap-3 mb-5">
+                <div class="skeleton skeleton--circle" style="width:44px;height:44px"></div>
+                <div style="flex:1">
+                  <div class="skeleton skeleton--title mb-2"></div>
+                  <div class="skeleton skeleton--text" style="width:60%"></div>
+                </div>
+              </div>
+              <div class="skeleton skeleton--text mb-2"></div>
+              <div class="skeleton skeleton--text mb-2" style="width:92%"></div>
+              <div class="skeleton skeleton--text mb-5" style="width:76%"></div>
+              <div class="flex items-center gap-3">
+                <div class="spinner"></div>
+                <span class="text-sm text-muted">Loading estimate…</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================
+           ICONS
+           ========================================================== -->
+      <section id="icons" class="mb-16">
+        <div class="card">
+          <div class="card__header">
+            <div>
+              <div class="card__title">Icons</div>
+              <div class="card__subtitle">Stroke-based 24px system icons · currentColor</div>
+            </div>
+          </div>
+          <div class="card__body">
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:var(--s-4);">
+              <div class="text-center"><div class="flex items-center justify-center" style="height:48px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="text-xs text-muted">Home</div></div>
+              <div class="text-center"><div class="flex items-center justify-center" style="height:48px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="text-xs text-muted">Photo</div></div>
+              <div class="text-center"><div class="flex items-center justify-center" style="height:48px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="text-xs text-muted">Document</div></div>
+              <div class="text-center"><div class="flex items-center justify-center" style="height:48px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.5 2.3 7.1-6.3-4.6L5.7 21 8 14 2 9.5h7.6z"/></svg></div><div class="text-xs text-muted">AI</div></div>
+              <div class="text-center"><div class="flex items-center justify-center" style="height:48px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="text-xs text-muted">Verified</div></div>
+              <div class="text-center"><div class="flex items-center justify-center" style="height:48px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="text-xs text-muted">Clock</div></div>
+              <div class="text-center"><div class="flex items-center justify-center" style="height:48px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div><div class="text-xs text-muted">Download</div></div>
+              <div class="text-center"><div class="flex items-center justify-center" style="height:48px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg></div><div class="text-xs text-muted">Revision</div></div>
+              <div class="text-center"><div class="flex items-center justify-center" style="height:48px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="text-xs text-muted">User</div></div>
+              <div class="text-center"><div class="flex items-center justify-center" style="height:48px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg></div><div class="text-xs text-muted">Org</div></div>
+              <div class="text-center"><div class="flex items-center justify-center" style="height:48px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="text-xs text-muted">Pricing</div></div>
+              <div class="text-center"><div class="flex items-center justify-center" style="height:48px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="text-xs text-muted">Activity</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     MODALS
+     ============================================================ -->
+
+<!-- Approve -->
+<div class="modal-overlay" id="modal-approve" onclick="if(event.target===this)this.classList.remove('is-open')">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="ma-title">
+    <div class="modal__header">
+      <div>
+        <div class="modal__title" id="ma-title">Approve this estimate?</div>
+        <div class="modal__subtitle">By approving you accept the scope and total amount shown.</div>
+      </div>
+      <button class="modal__close" onclick="document.getElementById('modal-approve').classList.remove('is-open')" aria-label="Close">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal__body">
+      <div class="panel-verified mb-4">
+        <div class="flex items-center justify-between">
+          <span class="text-sm text-muted">Final estimate</span>
+          <span class="text-mono" style="font-size:var(--fs-xl);font-weight:var(--fw-bold);color:var(--text-strong)">$1,482.50</span>
+        </div>
+      </div>
+      <label class="check">
+        <input type="checkbox">
+        <span class="check__box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </span>
+        <span class="check__label">
+          <strong>I agree to the terms and conditions</strong>
+          <span class="check__desc">Your typed name below serves as a legally binding electronic signature.</span>
+        </span>
+      </label>
+      <div class="form-group mt-4" style="margin-bottom:0">
+        <label class="label" for="ma-sign">Type your full name to sign <span class="req">*</span></label>
+        <input class="input" id="ma-sign" type="text" placeholder="Jane Doe">
+      </div>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn--ghost" onclick="document.getElementById('modal-approve').classList.remove('is-open')">Cancel</button>
+      <button class="btn btn--success">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Approve Estimate
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Request Revision -->
+<div class="modal-overlay" id="modal-revision" onclick="if(event.target===this)this.classList.remove('is-open')">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mr-title">
+    <div class="modal__header">
+      <div>
+        <div class="modal__title" id="mr-title">Request a revision</div>
+        <div class="modal__subtitle">The estimate will return to a BidFreq estimator for review.</div>
+      </div>
+      <button class="modal__close" onclick="document.getElementById('modal-revision').classList.remove('is-open')" aria-label="Close">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal__body">
+      <div class="form-group">
+        <label class="label" for="mr-reason">Reason for revision <span class="req">*</span></label>
+        <select class="select" id="mr-reason">
+          <option>Scope is incorrect</option>
+          <option>Pricing seems off</option>
+          <option>Missing line item</option>
+          <option>Additional damage discovered</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="label" for="mr-notes">Additional notes <span class="req">*</span></label>
+        <textarea class="textarea" id="mr-notes" placeholder="Explain what needs to change so the estimator can revise accurately…"></textarea>
+      </div>
+      <label class="check mt-4">
+        <input type="checkbox">
+        <span class="check__box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </span>
+        <span class="check__label">
+          <strong>Upload additional photos</strong>
+          <span class="check__desc">Optional — helps the estimator revise more accurately.</span>
+        </span>
+      </label>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn--ghost" onclick="document.getElementById('modal-revision').classList.remove('is-open')">Cancel</button>
+      <button class="btn btn--primary">Send Revision Request</button>
+    </div>
+  </div>
+</div>
+
+<!-- Decline -->
+<div class="modal-overlay" id="modal-decline" onclick="if(event.target===this)this.classList.remove('is-open')">
+  <div class="modal modal--sm" role="dialog" aria-modal="true" aria-labelledby="md-title">
+    <div class="modal__header">
+      <div>
+        <div class="modal__title" id="md-title">Decline this estimate?</div>
+        <div class="modal__subtitle">This action will mark the estimate as declined.</div>
+      </div>
+      <button class="modal__close" onclick="document.getElementById('modal-decline').classList.remove('is-open')" aria-label="Close">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal__body">
+      <div class="alert alert--danger mb-0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <div class="alert__body">This cannot be undone. You can always submit a new request later.</div>
+      </div>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn--ghost" onclick="document.getElementById('modal-decline').classList.remove('is-open')">Cancel</button>
+      <button class="btn btn--danger">Decline Estimate</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Sidebar / mobile nav toggle
+  document.getElementById('navToggle').addEventListener('click', function () {
+    var app = document.getElementById('app');
+    if (window.matchMedia('(max-width: 860px)').matches) {
+      app.classList.toggle('is-nav-open');
+    } else {
+      app.classList.toggle('is-collapsed');
+    }
+  });
+
+  // Smooth-scroll active nav
+  document.querySelectorAll('.sidebar__nav .nav-item').forEach(function (item) {
+    item.addEventListener('click', function () {
+      document.querySelectorAll('.sidebar__nav .nav-item').forEach(function (i) { i.classList.remove('is-active'); });
+      item.classList.add('is-active');
+      if (window.matchMedia('(max-width: 860px)').matches) {
+        document.getElementById('app').classList.remove('is-nav-open');
+      }
+    });
+  });
+
+  // Escape closes modals
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-overlay.is-open').forEach(function (m) { m.classList.remove('is-open'); });
+    }
+  });
+
+  // Demo dropzone
+  document.getElementById('dropzone').addEventListener('click', function () {
+    this.classList.toggle('is-dragover');
+    setTimeout(function () { document.getElementById('dropzone').classList.remove('is-dragover'); }, 300);
+  });
+</script>
+
+</body>
+</html>
