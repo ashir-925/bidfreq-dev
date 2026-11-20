@@ -3,6 +3,8 @@
 use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Middleware\EnsureActive;
+use App\Http\Controllers\LibraryController;
+use App\Models\LibraryTask;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -20,6 +22,21 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/reports', 'reports')->name('reports');
             Route::get('/notifications', 'notifications')->name('notifications');
             Route::get('/profile', 'profile')->name('profile');
+        });
+        Route::prefix('library')->name('library.')->controller(LibraryController::class)->group(function () {
+            Route::get('/', 'index')->middleware('can:viewAny,'.LibraryTask::class)->name('index');
+            Route::view('/export', 'admin.library.export')->middleware('can:viewAny,'.LibraryTask::class)->name('export-options');
+            Route::get('/export/{format}', 'export')->whereIn('format', ['csv', 'json'])->middleware('can:viewAny,'.LibraryTask::class)->name('export');
+            Route::middleware('can:manage,'.LibraryTask::class)->group(function () {
+                Route::view('/import', 'admin.library.import')->name('import');
+                Route::post('/import', 'upload')->name('upload');
+                Route::get('/import/{preview}', 'preview')->whereUuid('preview')->name('preview');
+                Route::post('/import/{preview}', 'apply')->whereUuid('preview')->name('apply');
+                Route::get('/tasks/{task}/edit', 'edit')->name('edit');
+                Route::patch('/tasks/{task}', 'update')->name('update');
+            });
+            Route::get('/tasks/{task}/history', 'history')->middleware('can:viewAny,'.LibraryTask::class)->name('history');
+            Route::get('/tasks/{task}', 'show')->middleware('can:viewAny,'.LibraryTask::class)->name('show');
         });
         Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
         Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');

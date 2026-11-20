@@ -30,6 +30,11 @@
 
       <div class="sidebar__section">
         <div class="sidebar__section-title">Management</div>
+        <a href="{{ route('admin.library.index') }}" class="nav-item @if (request()->routeIs('admin.library.*')) is-active @endif" @if (request()->routeIs('admin.library.*')) aria-current="page" @endif>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 5h16v14H4zM4 10h16M9 10v9"/></svg>
+          <span>Pricing Library</span>
+        </a>
+
         <a href="{{ route('admin.users.index') }}" class="nav-item @if (request()->routeIs('admin.users.*')) is-active @endif">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v2"/></svg>
           <span>Users</span>
