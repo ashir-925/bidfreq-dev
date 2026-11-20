@@ -3301,3 +3301,70 @@ hr, .divider {
   .admin-hero__eyebrow .live-dot { animation: none; }
   .spinner { animation-duration: 2s !important; }
 }
+
+img.photo-tile__img { display: block; object-fit: cover; }
+
+/* Admin estimate evidence and review controls */
+#submitted-evidence { scroll-margin-top: 5rem; }
+.review-evidence-chips { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+.review-evidence-chip { gap: var(--s-2); cursor: pointer; max-width: 100%; }
+.review-evidence-chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.review-evidence-chip img { width: 24px; height: 24px; object-fit: cover; border-radius: 4px; }
+.review-evidence-chip[hidden], .review-preview [hidden], .review-picker__results[hidden] { display: none; }
+.review-evidence-options summary { width: fit-content; cursor: pointer; }
+.review-check { display: flex; align-items: center; gap: var(--s-2); white-space: nowrap; }
+.review-check input { flex-shrink: 0; margin: 0; }
+.review-photo { padding: 0; cursor: pointer; }
+.review-details { margin-top: var(--s-3); overflow-wrap: anywhere; }
+.review-details .label { margin-top: var(--s-3); }
+.review-details .status-row { gap: var(--s-2); }
+.review-details .status-row__value { text-align: right; }
+.review-preview { margin: auto; border: 1px solid var(--border); max-width: min(92vw, 760px); }
+.review-preview::backdrop { background: rgb(15 23 42 / 65%); }
+.review-preview img { display: block; max-width: 100%; max-height: 65vh; margin: auto; object-fit: contain; }
+.review-picker { margin-top: var(--s-2); }
+.review-picker__results { max-height: 13rem; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--r-md); background: white; }
+.review-picker__results button { width: 100%; padding: var(--s-2); text-align: left; background: none; border: 0; cursor: pointer; }
+.review-picker__results button:is(:hover, :focus-visible) { background: var(--n-100); }
+.review-line-flag { display: flex; align-items: center; gap: var(--s-2); color: var(--amber-700); }
+
+.review-reference { overflow-wrap: anywhere; min-width: 0; }
+.review-grid .rev-header__property { flex-wrap: wrap; }
+.review-grid .line-items td { vertical-align: top; }
+.review-grid .form-row { margin-top: var(--s-4); }
+
+
+.review-preview:not([open]) { display: none; }
+.rev-header .chip--danger { background: rgb(239 68 68 / 15%); color: #fca5a5; border-color: transparent; }
+.review-details .status-row__label { flex-shrink: 0; }
+.review-line-items { table-layout: fixed; }
+.review-line-items th:first-child { width: 40%; }
+.review-line-items th:nth-child(2), .review-line-items th:nth-child(3) { width: 17%; }
+.review-line-items th:nth-child(4) { width: 12%; }
+.review-line-items .input { box-sizing: border-box; width: 100%; min-width: 0; }
+.review-line-items .desc { overflow-wrap: anywhere; }
+.review-line-items .review-check { white-space: normal; }
+.review-rate-options { margin-top: var(--s-2); }
+.review-rate-options .input + .input { margin-top: var(--s-2); }
+@media (max-width: 850px) { .review-line-items { min-width: 570px; } }
+
+/* Estimate review line editing */
+.review-line-items .qty-cell { flex-wrap: wrap; }
+.review-line-items .item-action { width: auto; gap: var(--s-1); padding-inline: var(--s-2); }
+.review-line-details[hidden] { display: none; }
+.review-line-details > td { background: var(--n-50); }
+.review-line-fields { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: var(--s-3); }
+.review-line-fields .form-group { min-width: 0; margin: 0; }
+.review-line-fields .review-picker { margin-top: 0; }
+.review-line-help, .review-line-checks { grid-column: 1 / -1; }
+.review-line-help:empty { display: none; }
+.review-line-checks { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3); }
+.review-analysis-heading { margin-top: var(--s-5); border-top: 1px solid var(--border); padding-top: var(--s-4); }
+.review-grid .review-analysis-fields { margin-top: var(--s-3); }
+@media (max-width: 600px) { .review-grid .review-analysis-fields { grid-template-columns: 1fr; } }
+
+.estimate-list-page .status-tile__label { white-space: normal; overflow-wrap: anywhere; }
+.estimate-list-page .filter-chips:empty { display: none; }
+.estimate-list-page .est-id-cell__id a { display: block; max-inline-size: 13ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.estimate-list-page .property-cell { min-width: 10rem; }
+.review-line-items .review-row-action .item-action { display: inline-flex; align-items: center; color: var(--text-strong); }

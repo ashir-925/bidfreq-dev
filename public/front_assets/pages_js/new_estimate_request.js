@@ -45,9 +45,9 @@
   function validateStep(n) {
     if (n === 1) {
       var ok = true;
-      ['streetAddress', 'city', 'state', 'zipCode'].forEach(function (id) {
+      ['streetAddress', 'city', 'state', 'zipCode', 'homeSqft', 'stories'].forEach(function (id) {
         var el = document.getElementById(id);
-        if (!el.value.trim()) {
+        if (!el.value.trim() || !el.checkValidity()) {
           el.classList.add(el.tagName === 'SELECT' ? 'select--error' : 'input--error');
           ok = false;
         }
@@ -183,7 +183,7 @@
     var f = document.createElement('div');
     f.className = 'form-group';
     f.innerHTML =
-      '<label class="label">Repair-area photos — ' + escapeHtml(trade) + ' <span class="req">*</span></label>' +
+      '<label class="label">Repair-area photos — ' + escapeHtml(trade) + '</label>' +
       '<div class="photo-gate" role="status">' +
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>' +
         '<div class="photo-gate__body">' +
@@ -192,13 +192,13 @@
         '</div>' +
       '</div>' +
       '<div class="dropzone" role="button" tabindex="0">' +
-        '<input type="file" accept="image/*" multiple hidden>' +
+        '<input type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>' +
         '<div class="dropzone__icon">' +
           '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>' +
         '</div>' +
         '<div class="dropzone__title">Drag &amp; drop ' + escapeHtml(trade) + ' repair-area photos</div>' +
         '<div class="dropzone__hint">' +
-          'or <span style="color:var(--blue-600);font-weight:600">click to browse</span> · JPG, PNG, HEIC · Max 25 MB each' +
+          'or <span style="color:var(--blue-600);font-weight:600">click to browse</span> · JPEG, PNG, WebP · Up to 5 MB each' +
         '</div>' +
       '</div>' +
       '<div class="uploader" aria-live="polite"></div>';
@@ -248,23 +248,28 @@
 
   function handlePhotos(trade, files) {
     Array.prototype.forEach.call(files, function (file) {
-      if (!file.type.startsWith('image/')) return;
-      var reader = new FileReader();
-      reader.onload = function (ev) {
-        state.tradePhotos[trade].push({
-          id: 'p_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
-          name: file.name,
-          size: file.size,
-          dataUrl: ev.target.result
-        });
-        renderPhotos(trade);
-      };
-      reader.readAsDataURL(file);
+      if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 5 * 1024 * 1024) {
+        window.bidFreqFeedback.toast('danger', 'Photo could not be added', 'Use JPEG, PNG or WebP files up to 5 MB each.');
+        return;
+      }
+
+      state.tradePhotos[trade].push({
+        id: 'p_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+        name: file.name,
+        size: file.size,
+        file: file,
+        dataUrl: URL.createObjectURL(file)
+      });
+      renderPhotos(trade);
     });
   }
 
   function removePhoto(trade, id) {
-    state.tradePhotos[trade] = state.tradePhotos[trade].filter(function (p) { return p.id !== id; });
+    state.tradePhotos[trade] = state.tradePhotos[trade].filter(function (photo) {
+      if (photo.id !== id) return true;
+      URL.revokeObjectURL(photo.dataUrl);
+      return false;
+    });
     renderPhotos(trade);
   }
 
@@ -277,7 +282,7 @@
 
   function photosSatisfied() {
     var groups = getSelectedTradePhotos();
-    return groups.length > 0 && groups.every(function (g) { return g.photos.length >= MIN_PHOTOS; });
+    return groups.reduce(function (total, group) { return total + group.photos.length; }, 0) >= MIN_PHOTOS;
   }
 
   function updatePhotosNext() {
@@ -308,22 +313,10 @@
       grid.appendChild(tile);
     });
 
-    // Gate state
     var count = photos.length;
-    var ok = count >= MIN_PHOTOS;
-    f.querySelector('.photo-gate').classList.toggle('is-satisfied', ok);
-    var title = f.querySelector('.photo-gate__title');
-    var text  = f.querySelector('.photo-gate__text');
-    if (ok) {
-      title.textContent = 'Photo requirement met ✓';
-      text.innerHTML =
-        'You\'ve uploaded <span class="photo-gate__count">' + count + '</span> photo' + (count === 1 ? '' : 's') +
-        '. You can continue or add more.';
-    } else {
-      title.textContent = 'Minimum ' + MIN_PHOTOS + ' photos required to continue';
-      text.innerHTML =
-        'You\'ve uploaded <span class="photo-gate__count">' + count + ' of ' + MIN_PHOTOS + '</span> required photos.';
-    }
+    f.querySelector('.photo-gate').classList.toggle('is-satisfied', count > 0);
+    f.querySelector('.photo-gate__title').textContent = count + (count === 1 ? ' photo added' : ' photos added');
+    f.querySelector('.photo-gate__text').textContent = 'At least two photos are required across the entire request.';
 
     updatePhotosNext();
   }
@@ -361,6 +354,7 @@
         id: 'f_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
         name: f.name,
         size: f.size,
+        file: f,
         kind: kind
       });
     });
@@ -410,13 +404,22 @@
     var addr = [v('streetAddress'), v('city'), v('state')].filter(Boolean).join(', ');
     setText('rv-address', addr || '—');
     setText('rv-zip', v('zipCode') || '—');
+    setText('rv-home', v('homeSqft') + ' sq ft / ' + v('stories') + ' stories');
+    setText('rv-nte', v('nte') === '' ? 'Not specified' : '$' + v('nte'));
+    setText('rv-dimensions', Array.from(dimensions.children).map(function (row) {
+      return Array.from(row.querySelectorAll('[data-dimension]')).filter(function (input) {
+        return input.value !== '';
+      }).map(function (input) {
+        return input.dataset.dimension === 'label' ? input.value : input.dataset.dimension + ': ' + input.value;
+      }).join(' · ');
+    }).filter(Boolean).join('; ') || 'Not specified');
     var ptSel = document.getElementById('propertyType');
     setText('rv-propertyType', ptSel.options[ptSel.selectedIndex] ? ptSel.options[ptSel.selectedIndex].text : '—');
 
     // Description
     setText('rv-trade', getSelectedTrades().join(', ') || '—');
     var urgencyEl = document.querySelector('input[name="urgency"]:checked');
-    setText('rv-urgency', urgencyEl && urgencyEl.value === 'urgent' ? 'Urgent' : 'Normal');
+    setText('rv-urgency', priority.options[priority.selectedIndex].text);
     setText('rv-description', getTradeDescriptions().map(function (d) {
       return d.trade + ':\n' + d.description;
     }).join('\n\n') || '—');
@@ -474,47 +477,115 @@
     submitBtn.disabled = !this.checked;
   });
 
-  document.getElementById('wizardForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    if (!consent.checked) return;
-    if (!validateStep(2)) {
-      showStep(2);
-      window.bidFreqFeedback.toast('danger', 'Check the request', 'Review the highlighted fields before submitting.');
-      return;
-    }
-    if (!photosSatisfied()) {
-      showStep(3);
-      window.bidFreqFeedback.toast('danger', 'More photos needed', 'Add the required photos before submitting.');
-      return;
-    }
-
-    // Each selected trade is submitted with its own description and photos
-    state.tradeDescriptions = getTradeDescriptions();
-    state.tradeSubmission = getTradeDescriptions().map(function (d) {
-      d.photos = (state.tradePhotos[d.trade] || []).slice();
-      return d;
+  var dimensions = document.getElementById('dimensions');
+  var addDimension = document.getElementById('addDimension');
+  var dimensionSequence = 0;
+  addDimension.addEventListener('click', function () {
+    var row = document.createElement('fieldset');
+    row.className = 'form-group';
+    var id = ++dimensionSequence;
+    row.innerHTML = '<legend class="label">Damaged area</legend><div class="form-row">' +
+      [['label', 'Area label'], ['length', 'Length (ft)'], ['width', 'Width (ft)'],
+        ['height', 'Height (ft)'], ['area', 'Area (sq ft)']].map(function (pair) {
+        var key = pair[0];
+        var controlId = 'dimension-' + id + '-' + key;
+        return '<div class="form-group"><label class="label" for="' + controlId + '">' + pair[1] +
+          '</label><input class="input" id="' + controlId + '" data-dimension="' + key + '" ' +
+          (key === 'label' ? 'type="text" maxlength="100"' : 'type="number" min="0.01" step="any"') + '></div>';
+      }).join('') + '</div><button type="button" class="btn btn--ghost btn--sm">Remove area</button>';
+    row.querySelector('button').addEventListener('click', function () {
+      row.remove();
+      addDimension.focus();
+      addDimension.disabled = false;
     });
+    dimensions.append(row);
+    addDimension.disabled = dimensions.children.length >= 20;
+    row.querySelector('input').focus();
+  });
 
+  var form = document.getElementById('wizardForm');
+  var errors = document.getElementById('requestErrors');
+
+  function displayErrors(messages, fields) {
+    var list = document.createElement('ul');
+    messages.forEach(function (message) {
+      var li = document.createElement('li');
+      li.textContent = message;
+      list.append(li);
+    });
+    errors.replaceChildren(list);
+    errors.classList.remove('hidden');
+    Object.keys(fields || {}).forEach(function (name) {
+      var field = form.elements.namedItem(name);
+      if (field instanceof HTMLElement) {
+        field.setAttribute('aria-invalid', 'true');
+        field.setAttribute('aria-describedby', errors.id);
+      }
+    });
+    errors.focus();
+    window.bidFreqFeedback.toast('danger', 'Check your request', messages[0]);
+  }
+
+  form.addEventListener('submit', async function (event) {
+    event.preventDefault();
+    if (!consent.checked || submitBtn.disabled) return;
+    for (var step = 1; step <= 3; step++) {
+      if (!validateStep(step)) {
+        showStep(step);
+        displayErrors([step === 3 ? 'Add at least two repair photos.' : 'Complete the required fields.']);
+        return;
+      }
+    }
+
+    var data = new FormData(form);
+    data.delete('trade');
+    getTradeDescriptions().forEach(function (item, index) {
+      data.append('descriptions[' + index + '][trade]', item.trade);
+      data.append('descriptions[' + index + '][description]', item.description);
+    });
+    Array.from(dimensions.children).forEach(function (row, index) {
+      row.querySelectorAll('[data-dimension]').forEach(function (input) {
+        data.append('dimensions[' + index + '][' + input.dataset.dimension + ']', input.value);
+      });
+    });
+    var photoCount = 0;
+    var bytes = 0;
+    getSelectedTradePhotos().forEach(function (group) {
+      group.photos.forEach(function (photo) {
+        photoCount++;
+        bytes += photo.file.size;
+        data.append('photos[]', photo.file, photo.name);
+        data.append('photo_trades[]', group.trade);
+      });
+    });
+    state.files.forEach(function (attachment) {
+      bytes += attachment.file.size;
+      data.append('documents[]', attachment.file, attachment.name);
+    });
+    if (photoCount > 14 || state.files.length > 6 || bytes > 12 * 1024 * 1024) {
+      displayErrors(['Use up to 14 photos and six supporting files, with a combined size of 12 MB or less.']);
+      return;
+    }
+
+    errors.classList.add('hidden');
     if (!window.bidFreqFeedback.start(submitBtn, 'Submitting request…')) return;
-
-    setTimeout(function () {
+    try {
+      var response = await fetch(form.action, {
+        method: 'POST', body: data, headers: { Accept: 'application/json' }
+      });
+      var payload = await response.json();
+      if (!response.ok) {
+        var messages = Object.values(payload.errors || {}).flat();
+        displayErrors(messages.length ? messages : [payload.message || 'We could not submit your request.'], payload.errors);
+        return;
+      }
+      if (!payload.redirect) throw new Error('Missing confirmation page');
+      window.location.assign(payload.redirect);
+    } catch (error) {
+      displayErrors(['We could not confirm submission. Please try again.']);
+    } finally {
       window.bidFreqFeedback.stop(submitBtn);
-      document.getElementById('wizardHead').classList.add('hidden');
-      document.getElementById('stepIndicator').classList.add('hidden');
-      document.querySelectorAll('.step-panel').forEach(function (p) { p.classList.add('hidden'); });
-      document.getElementById('successState').classList.remove('hidden');
-
-      // Animate progress
-      var prog = document.getElementById('successProgress');
-      var pct = 8;
-      var t = setInterval(function () {
-        pct = Math.min(pct + Math.random() * 8, 94);
-        prog.style.width = pct + '%';
-        if (pct >= 94) clearInterval(t);
-      }, 400);
-
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 900);
+    }
   });
 
   // ================================================================

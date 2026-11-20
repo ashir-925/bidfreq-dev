@@ -67,7 +67,14 @@
           </div>
         </nav>
 
-        <form id="wizardForm" novalidate>
+        <form id="wizardForm" method="POST" action="{{ route('repair-requests.store') }}" enctype="multipart/form-data" novalidate>
+          @csrf
+          <input type="hidden" name="submission_key" value="{{ (string) \Illuminate\Support\Str::uuid() }}">
+          <div class="alert alert--danger hidden mb-4" id="requestErrors" role="alert" tabindex="-1"></div>
+          <noscript><p class="alert alert--warning">Enable JavaScript to use the estimate request wizard.</p></noscript>
+          @env('local')
+              <p class="alert alert--info">Development uses Gemini Free. Submit sample repair evidence without personal or confidential information.</p>
+          @endenv
 
           <!-- ============================================================
                STEP 1 — PROPERTY
@@ -90,7 +97,7 @@
                     Property name / reference
                     <span class="label__hint">optional</span>
                   </label>
-                  <input class="input" id="propertyName" type="text" placeholder="e.g. Oak Ridge Unit 4B">
+                  <input class="input" id="propertyName" name="property_name" type="text" placeholder="e.g. Oak Ridge Unit 4B">
                   <div class="form-hint">A short internal label to help you identify this property later.</div>
                 </div>
 
@@ -98,18 +105,18 @@
                   <label class="label" for="streetAddress">
                     Street address <span class="req">*</span>
                   </label>
-                  <input class="input" id="streetAddress" type="text"
+                  <input class="input" id="streetAddress" name="street_address" type="text"
                          placeholder="421 Oak Ridge Dr" autocomplete="street-address" required>
                 </div>
 
                 <div class="form-row">
                   <div class="form-group">
                     <label class="label" for="city">City <span class="req">*</span></label>
-                    <input class="input" id="city" type="text" placeholder="Austin" autocomplete="address-level2" required>
+                    <input class="input" id="city" name="city" type="text" placeholder="Austin" autocomplete="address-level2" required>
                   </div>
                   <div class="form-group">
                     <label class="label" for="state">State <span class="req">*</span></label>
-                    <select class="select" id="state" required>
+                    <select class="select" id="state" name="state" required>
                       <option value="">Select state</option>
                       <option value="TX" selected>Texas</option>
                       <option value="CA">California</option>
@@ -128,17 +135,17 @@
                     <label class="label" for="zipCode">
                       ZIP code <span class="req">*</span>
                     </label>
-                    <input class="input" id="zipCode" type="text" inputmode="numeric"
+                    <input class="input" id="zipCode" name="zip" type="text" inputmode="numeric"
                            pattern="[0-9]{5}(-[0-9]{4})?" maxlength="10"
                            placeholder="78745" autocomplete="postal-code" required>
                     <div class="form-hint">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-1px;margin-right:2px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                      Used for localized pricing (SOW §3.4).
+                      Used to identify the property.
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="label" for="propertyType">Property type</label>
-                    <select class="select" id="propertyType">
+                    <select class="select" id="propertyType" name="property_type">
                       <option value="single-family">Single-family home</option>
                       <option value="multi-family">Multi-family / apartment</option>
                       <option value="condo">Condo / townhome</option>
@@ -147,6 +154,25 @@
                       <option value="other">Other</option>
                     </select>
                   </div>
+                </div>
+              </div>
+
+              <div class="panel__body">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="label" for="homeSqft">Total home area (sq ft) <span class="req">*</span></label>
+                    <input class="input" id="homeSqft" name="home_sqft" type="number" min="0.01" step="0.01" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="label" for="stories">Stories <span class="req">*</span></label>
+                    <input class="input" id="stories" name="stories" type="number" min="1" max="255" step="1" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <span class="label">Damaged-area measurements (optional)</span>
+                  <p class="form-hint">Enter an area in square feet or dimensions in feet for each affected area.</p>
+                  <div id="dimensions"></div>
+                  <button type="button" class="btn btn--secondary btn--sm" id="addDimension">Add area</button>
                 </div>
               </div>
 
@@ -191,19 +217,17 @@
                 <div id="tradeDescriptions"></div>
 
                 <div class="form-group">
-                  <label class="label">Is the repair urgent?</label>
-                  <div class="flex flex-wrap gap-5">
-                    <label class="check check--radio">
-                      <input type="radio" name="urgency" value="normal" checked>
-                      <span class="check__box"></span>
-                      <span class="check__label">Normal — standard turnaround</span>
-                    </label>
-                    <label class="check check--radio">
-                      <input type="radio" name="urgency" value="urgent">
-                      <span class="check__box"></span>
-                      <span class="check__label">Urgent — safety or habitability concern</span>
-                    </label>
-                  </div>
+                  <label class="label" for="priority">Priority</label>
+                  <select id="priority" name="priority" class="select">
+                    <option value="low">Low</option>
+                    <option value="normal" selected>Normal</option>
+                    <option value="high">High</option>
+                    <option value="urgent">Urgent</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="label" for="nte">Not-to-Exceed amount (USD, optional)</label>
+                  <input class="input" id="nte" name="nte" type="number" min="0" step="0.01">
                 </div>
               </div>
 
@@ -233,7 +257,7 @@
                 </div>
                 <div>
                   <div class="panel__head-title" id="s3-title">Repair-area photos <span class="req" style="color:var(--danger-600)">*</span></div>
-                  <div class="panel__head-sub">Required — the request cannot proceed without photos (SOW §3.2).</div>
+                  <div class="panel__head-sub">Add at least two repair photos across the request.</div>
                 </div>
               </div>
 
@@ -301,12 +325,12 @@
               <div class="panel__body">
 
                 <div class="dropzone" id="docDropzone" role="button" tabindex="0" style="padding:var(--s-6) var(--s-4)">
-                  <input type="file" id="docInput" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,image/*" multiple hidden>
+                  <input type="file" id="docInput" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.jpg,.jpeg,.png,.webp,.mp3,.m4a,.wav,.ogg,.mp4,.webm" multiple hidden>
                   <div class="dropzone__icon" style="width:40px;height:40px;margin-bottom:var(--s-3)">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                   </div>
                   <div class="dropzone__title" style="font-size:var(--fs-md)">Reports & measurements</div>
-                  <div class="dropzone__hint" style="font-size:var(--fs-xs)">PDF, DOC, XLS, TXT · Max 50 MB</div>
+                  <div class="dropzone__hint" style="font-size:var(--fs-xs)">PDF, Office, text, images, audio, or video · 12 MB total across uploads</div>
                 </div>
 
                 <div class="file-list" id="supportingList" aria-live="polite"></div>
@@ -379,6 +403,9 @@
                     <dt>Address</dt>         <dd id="rv-address">—</dd>
                     <dt>ZIP code</dt>        <dd id="rv-zip" class="text-mono">—</dd>
                     <dt>Property type</dt>   <dd id="rv-propertyType">—</dd>
+                    <dt>Home size</dt>       <dd id="rv-home">—</dd>
+                    <dt>Damaged areas</dt>   <dd id="rv-dimensions">—</dd>
+                    <dt>Not-to-Exceed</dt>   <dd id="rv-nte">—</dd>
                   </dl>
                 </div>
 
@@ -390,7 +417,7 @@
                   </div>
                   <dl class="review-grid">
                     <dt>Primary trade</dt><dd id="rv-trade">—</dd>
-                    <dt>Urgency</dt>      <dd id="rv-urgency">—</dd>
+                    <dt>Priority</dt>      <dd id="rv-urgency">—</dd>
                     <dt>Details</dt>      <dd id="rv-description" style="white-space:pre-wrap">—</dd>
                   </dl>
                 </div>
@@ -417,7 +444,7 @@
                 <!-- Consent -->
                 <div class="review-block" style="margin-top:var(--s-4)">
                   <label class="check">
-                    <input type="checkbox" id="consentCheck">
+                    <input type="checkbox" id="consentCheck" name="consent" value="1">
                     <span class="check__box">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </span>
@@ -449,44 +476,7 @@
 
         </form>
 
-        <!-- ============================================================
-             SUCCESS STATE (shown after submit)
-             ============================================================ -->
-        <section id="successState" class="success-card hidden" aria-live="polite">
-          <div class="success-card__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          </div>
-          <h2 class="success-card__title">Request submitted</h2>
-          <p class="success-card__text">
-            Your estimate request <strong id="successEstId" class="text-mono">EST-2026-0043</strong> has been received.
-            BidFreq AI is now analyzing your photos and description. You'll be notified once a human-verified estimate is ready.
-          </p>
-
-          <div class="card mb-6" style="text-align:left;max-width:440px;margin-left:auto;margin-right:auto">
-            <div class="card__body">
-              <div class="flex items-center justify-between mb-3">
-                <span class="chip chip--violet"><span class="chip__dot"></span>AI Processing</span>
-                <span class="text-xs text-muted">Just now</span>
-              </div>
-              <div class="progress progress--sm mb-2">
-                <div class="progress__fill" id="successProgress" style="width:8%;background:var(--violet-600)"></div>
-              </div>
-              <div class="text-xs text-muted">Estimated draft ready in ~2 minutes</div>
-            </div>
-          </div>
-
-          <div class="success-card__actions">
-            <a href="{{ route('estimate-request') }}" class="btn btn--primary">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-              View my requests
-            </a>
-            <a href="{{ route('dashboard') }}" class="btn btn--secondary">
-              Back to dashboard
-            </a>
-          </div>
-        </section>
-
-      </div>
+        </div>
 
     </main>
 @endsection

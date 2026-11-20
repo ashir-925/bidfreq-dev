@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\StaffRepairRequestController;
+use App\Http\Controllers\RepairRequestController;
 use App\Http\Middleware\EnsureActive;
 use App\Http\Controllers\LibraryController;
 use App\Models\LibraryTask;
@@ -14,8 +16,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware(['auth', EnsureActive::class, 'can:access-panel,"admin"', 'verified'])->group(function () {
         Route::controller(AdminController::class)->group(function () {
             Route::get('/dashboard', 'dashboard')->name('dashboard');
-            Route::get('/estimates', 'estimates')->name('estimates');
-            Route::get('/estimates/review/{id?}', 'estimates_review')->name('estimate-review');
+
+
             Route::get('/projects', 'projects')->name('projects');
             Route::get('/customers', 'customers')->name('customers');
             Route::get('/estimators', 'estimators')->name('estimators');
@@ -38,6 +40,18 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/tasks/{task}/history', 'history')->middleware('can:viewAny,'.LibraryTask::class)->name('history');
             Route::get('/tasks/{task}', 'show')->middleware('can:viewAny,'.LibraryTask::class)->name('show');
         });
+        Route::get('/estimates', [StaffRepairRequestController::class, 'index'])->name('estimates');
+        Route::get('/estimates/review/{repair?}', [StaffRepairRequestController::class, 'show'])->whereUuid('repair')->name('estimate-review');
+        Route::patch('/request-inbox/{repair}/review', [StaffRepairRequestController::class, 'save'])->whereUuid('repair')->name('repair-requests.save');
+        Route::post('/request-inbox/{repair}/release', [StaffRepairRequestController::class, 'release'])->whereUuid('repair')->name('repair-requests.release');
+        Route::get('/request-inbox', [StaffRepairRequestController::class, 'index'])->name('repair-requests.index');
+        Route::get('/request-inbox/{repair}', [StaffRepairRequestController::class, 'show'])->whereUuid('repair')->name('repair-requests.show');
+        Route::patch('/request-inbox/{repair}/nte', [StaffRepairRequestController::class, 'nte'])->whereUuid('repair')->name('repair-requests.nte');
+        Route::post('/request-inbox/{repair}/disposition', [StaffRepairRequestController::class, 'disposition'])->whereUuid('repair')->name('repair-requests.disposition');
+        Route::get('/request-inbox/{repair}/files/{file}/image', [RepairRequestController::class, 'image'])->whereUuid('repair')->name('repair-requests.image');
+        Route::post('/request-inbox/{repair}/manual', [StaffRepairRequestController::class, 'manual'])->whereUuid('repair')->name('repair-requests.manual');
+        Route::post('/request-inbox/{repair}/retry', [StaffRepairRequestController::class, 'retry'])->whereUuid('repair')->name('repair-requests.retry');
+        Route::get('/request-inbox/{repair}/files/{file}', [RepairRequestController::class, 'download'])->whereUuid('repair')->name('repair-requests.download');
         Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
         Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
         Route::patch('/users/{user}', [AdminUserController::class, 'update'])->name('users.update');

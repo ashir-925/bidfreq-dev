@@ -202,7 +202,7 @@ class AuthenticationTest extends TestCase
 
         $this->actingAs(User::factory()->create());
         $this->get(route('estimate_request_detail'))->assertOk()
-            ->assertSee('id="approveModal"', false)->assertSee('id="toastRegion"', false);
+            ->assertSee('Select a request to see its details.')->assertSee('id="toastRegion"', false);
         $this->get(route('admin.estimates'))->assertForbidden();
         $this->get(route('admin.customers'))->assertForbidden();
     }

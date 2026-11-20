@@ -17,7 +17,7 @@
                         </svg>
                         <span>Dashboard</span>
                     </a>
-                    <a href="{{ route('estimate-request') }}" class="nav-item @if (request()->routeIs('estimate-request', 'estimate_request_detail', 'new-estimate-request')) is-active @endif" @if (request()->routeIs('estimate-request', 'estimate_request_detail', 'new-estimate-request')) aria-current="page" @endif>
+                    <a href="{{ route('estimate-request') }}" class="nav-item @if (request()->routeIs('estimate-request', 'estimate_request_detail', 'new-estimate-request', 'repair-requests.*')) is-active @endif" @if (request()->routeIs('estimate-request', 'estimate_request_detail', 'new-estimate-request', 'repair-requests.*')) aria-current="page" @endif>
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
                             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />

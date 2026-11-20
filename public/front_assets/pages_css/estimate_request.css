@@ -277,3 +277,7 @@
 @media (max-width: 480px) {
   .status-strip { grid-template-columns: 1fr; }
 }
+.estimate-list-page .status-tile__label { white-space: normal; overflow-wrap: anywhere; }
+.estimate-list-page .filter-chips:empty { display: none; }
+.estimate-list-page .est-id-cell__id a { display: block; max-inline-size: 13ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.estimate-list-page .property-cell { min-width: 10rem; }
