@@ -9,103 +9,103 @@
     { id:'n1', day:'Today', time:'2 min ago', kind:'ai', unread:true, category:'estimates',
       title:'AI analysis started',
       text:'BidFreq AI is analyzing 6 photos and your description for <strong>EST-2026-0042</strong> (421 Oak Ridge Dr).',
-      ref:'EST-2026-0042', refUrl:'estimate-detail.html',
-      actions:[{ label:'View request', href:'estimate-detail.html' }] },
+      ref:'EST-2026-0042', refUrl:window.bidFreqRoutes['estimate_request_detail'],
+      actions:[{ label:'View request', href:window.bidFreqRoutes['estimate_request_detail'] }] },
 
     { id:'n2', day:'Today', time:'2 hours ago', kind:'emerald', unread:true, category:'estimates',
       title:'Human-verified estimate ready for approval',
       text:'A BidFreq estimator verified the estimate for <strong>EST-2026-0040</strong> at <strong>$1,482.50</strong>. Awaiting your review.',
-      ref:'EST-2026-0040', refUrl:'estimate-detail.html',
-      actions:[{ label:'Review & approve', href:'estimate-detail.html', primary:true }] },
+      ref:'EST-2026-0040', refUrl:window.bidFreqRoutes['estimate_request_detail'],
+      actions:[{ label:'Review & approve', href:window.bidFreqRoutes['estimate_request_detail'], primary:true }] },
 
     { id:'n3', day:'Today', time:'2 hours ago', kind:'blue', unread:false, category:'estimates',
       title:'Final PDF emailed',
       text:'The final PDF for <strong>EST-2026-0040</strong> was delivered to jane@oakridge.com.',
-      ref:'EST-2026-0040', refUrl:'estimate-detail.html' },
+      ref:'EST-2026-0040', refUrl:window.bidFreqRoutes['estimate_request_detail'] },
 
     // Yesterday
     { id:'n4', day:'Yesterday', time:'Yesterday · 4:15 PM', kind:'warning', unread:true, category:'estimates',
       title:'Updated estimate issued after your revision',
       text:'The estimator revised <strong>EST-2026-0037</strong> in response to your feedback. New total: <strong>$3,140.00</strong>.',
-      ref:'EST-2026-0037', refUrl:'estimate-detail.html',
-      actions:[{ label:'Review updated estimate', href:'estimate-detail.html', primary:true }] },
+      ref:'EST-2026-0037', refUrl:window.bidFreqRoutes['estimate_request_detail'],
+      actions:[{ label:'Review updated estimate', href:window.bidFreqRoutes['estimate_request_detail'], primary:true }] },
 
     { id:'n5', day:'Yesterday', time:'Yesterday · 10:02 AM', kind:'emerald', unread:false, category:'projects',
       title:'Project progressed to 60%',
       text:'HVAC installation for <strong>PRJ-2026-0021</strong> at 305 Meadow Rd is now 60% complete.',
-      ref:'PRJ-2026-0021', refUrl:'project-detail.html',
-      actions:[{ label:'View project', href:'project-detail.html' }] },
+      ref:'PRJ-2026-0021', refUrl:window.bidFreqRoutes['project-detail'],
+      actions:[{ label:'View project', href:window.bidFreqRoutes['project-detail'] }] },
 
     { id:'n6', day:'Yesterday', time:'Yesterday · 9:14 AM', kind:'neutral', unread:false, category:'system',
       title:'Pricing source updated',
       text:'Localized pricing for ZIP <strong>78704</strong> was refreshed. New rates apply to future estimates only.',
-      ref:'Pricing', refUrl:'estimate-requests.html' },
+      ref:'Pricing', refUrl:window.bidFreqRoutes['estimate-request'] },
 
     // 2 days ago
     { id:'n7', day:'Aug 9, 2026', time:'2 days ago', kind:'warning', unread:false, category:'estimates',
       title:'Revision requested',
       text:'You requested a revision on <strong>EST-2026-0039</strong> (Electrical · 77 Birch St). It has returned to the estimator.',
-      ref:'EST-2026-0039', refUrl:'estimate-detail.html' },
+      ref:'EST-2026-0039', refUrl:window.bidFreqRoutes['estimate_request_detail'] },
 
     { id:'n8', day:'Aug 9, 2026', time:'2 days ago', kind:'emerald', unread:false, category:'projects',
       title:'Project approved',
       text:'Your approval of <strong>EST-2026-0038</strong> created project <strong>PRJ-2026-0021</strong> at 305 Meadow Rd.',
-      ref:'PRJ-2026-0021', refUrl:'project-detail.html',
-      actions:[{ label:'View project', href:'project-detail.html' }] },
+      ref:'PRJ-2026-0021', refUrl:window.bidFreqRoutes['project-detail'],
+      actions:[{ label:'View project', href:window.bidFreqRoutes['project-detail'] }] },
 
     { id:'n9', day:'Aug 9, 2026', time:'2 days ago', kind:'violet', unread:false, category:'estimates',
       title:'Draft estimate ready for estimator review',
       text:'AI drafted a $8,420.00 estimate for <strong>EST-2026-0041</strong> (Roofing · 88 Cypress Ln). A human estimator will verify it shortly.',
-      ref:'EST-2026-0041', refUrl:'estimate-detail.html' },
+      ref:'EST-2026-0041', refUrl:window.bidFreqRoutes['estimate_request_detail'] },
 
     // 3 days ago
     { id:'n10', day:'Aug 8, 2026', time:'3 days ago', kind:'emerald', unread:false, category:'projects',
       title:'Project completed',
       text:'<strong>PRJ-2026-0020</strong> at 78 Lakeline Dr has been completed and closed.',
-      ref:'PRJ-2026-0020', refUrl:'project-detail.html' },
+      ref:'PRJ-2026-0020', refUrl:window.bidFreqRoutes['project-detail'] },
 
     { id:'n11', day:'Aug 8, 2026', time:'3 days ago', kind:'blue', unread:false, category:'estimates',
       title:'New estimate request submitted',
       text:'You submitted <strong>EST-2026-0042</strong> for 421 Oak Ridge Dr with 6 photos.',
-      ref:'EST-2026-0042', refUrl:'estimate-detail.html' },
+      ref:'EST-2026-0042', refUrl:window.bidFreqRoutes['estimate_request_detail'] },
 
     // Last week
     { id:'n12', day:'Aug 5, 2026', time:'6 days ago', kind:'neutral', unread:false, category:'system',
       title:'Security: new sign-in',
       text:'New sign-in from Chrome on macOS · Austin, TX. If this wasn\'t you, reset your password.',
-      ref:'Security', refUrl:'profile.html',
-      actions:[{ label:'Review activity', href:'profile.html' }] },
+      ref:'Security', refUrl:window.bidFreqRoutes['profile'],
+      actions:[{ label:'Review activity', href:window.bidFreqRoutes['profile'] }] },
 
     { id:'n13', day:'Aug 5, 2026', time:'6 days ago', kind:'danger', unread:false, category:'estimates',
       title:'Estimate declined',
       text:'<strong>EST-2026-0037</strong> was declined by your organization. Reason: pricing above budget.',
-      ref:'EST-2026-0037', refUrl:'estimate-detail.html' },
+      ref:'EST-2026-0037', refUrl:window.bidFreqRoutes['estimate_request_detail'] },
 
     { id:'n14', day:'Aug 5, 2026', time:'6 days ago', kind:'violet', unread:false, category:'estimates',
       title:'AI draft revised by estimator',
       text:'Estimator B. Hayes adjusted 3 line items on <strong>EST-2026-0038</strong> before approval. Final confidence: 94%.',
-      ref:'EST-2026-0038', refUrl:'estimate-detail.html' },
+      ref:'EST-2026-0038', refUrl:window.bidFreqRoutes['estimate_request_detail'] },
 
     { id:'n15', day:'Aug 4, 2026', time:'7 days ago', kind:'emerald', unread:false, category:'projects',
       title:'Project scheduled',
       text:'<strong>PRJ-2026-0021</strong> is scheduled to begin Aug 15, 2026. Estimated completion Aug 22.',
-      ref:'PRJ-2026-0021', refUrl:'project-detail.html' },
+      ref:'PRJ-2026-0021', refUrl:window.bidFreqRoutes['project-detail'] },
 
     { id:'n16', day:'Aug 4, 2026', time:'7 days ago', kind:'neutral', unread:false, category:'system',
       title:'Team member invited',
       text:'You invited <strong>marcus@oakridge.com</strong> to your organization as a Submitter.',
-      ref:'Team', refUrl:'organization-settings.html' },
+      ref:'Team', refUrl:window.bidFreqRoutes['profile'] },
 
     { id:'n17', day:'Aug 4, 2026', time:'7 days ago', kind:'emerald', unread:false, category:'estimates',
       title:'Estimate approved & e-signed',
       text:'You approved <strong>EST-2026-0038</strong> ($4,950.00) with electronic signature. Project created.',
-      ref:'EST-2026-0038', refUrl:'estimate-detail.html' },
+      ref:'EST-2026-0038', refUrl:window.bidFreqRoutes['estimate_request_detail'] },
 
     { id:'n18', day:'Aug 4, 2026', time:'7 days ago', kind:'blue', unread:false, category:'estimates',
       title:'Welcome to BidFreq',
       text:'Your account is ready. Start a new estimate request by uploading photos of the repair area.',
-      ref:'Welcome', refUrl:'new-estimate-request.html',
-      actions:[{ label:'Start a request', href:'new-estimate-request.html', primary:true }] }
+      ref:'Welcome', refUrl:window.bidFreqRoutes['new-estimate-request'],
+      actions:[{ label:'Start a request', href:window.bidFreqRoutes['new-estimate-request'], primary:true }] }
   ];
 
   // ================================================================
@@ -347,23 +347,7 @@
   // TOASTS
   // ================================================================
   function toast(kind, title, msg) {
-    var icons = {
-      success: '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
-      info: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>'
-    };
-    var el = document.createElement('div');
-    el.className = 'toast toast--' + kind;
-    el.innerHTML =
-      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
-        (icons[kind] || icons.info) + '</svg>' +
-      '<div><div class="toast__title">' + title + '</div><div class="toast__msg">' + msg + '</div></div>';
-    document.getElementById('toastRegion').appendChild(el);
-    setTimeout(function () {
-      el.style.transition = 'opacity .3s, transform .3s';
-      el.style.opacity = '0';
-      el.style.transform = 'translateX(20px)';
-      setTimeout(function () { el.remove(); }, 320);
-    }, 3000);
+    window.bidFreqFeedback.toast(kind, title, msg);
   }
 
   // ================================================================

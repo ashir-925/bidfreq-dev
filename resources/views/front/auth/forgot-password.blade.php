@@ -353,7 +353,9 @@ img.img-fluid.logo-img {
        ============================================================ -->
   <section class="auth-panel" aria-label="Forgot password">
 
-    <form class="auth-form" id="resetForm" novalidate>
+    <form class="auth-form" id="resetForm" method="POST" action="{{ route('password.email') }}" novalidate>
+      @csrf
+      @php($sent = session()->has('status') && ! $errors->any())
 
       <header class="auth-form__head">
         <h2 class="auth-form__title">Reset your password</h2>
@@ -362,12 +364,13 @@ img.img-fluid.logo-img {
         </p>
       </header>
 
+      @include('shared.flash')
       <!-- ---------- Request state ---------- -->
-      <div id="resetFields">
+      <div id="resetFields" @if ($sent) hidden @endif>
 
         <div class="auth-note">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-          <div>Reset links expire 30 minutes after they're sent and can only be used once.</div>
+          <div>Reset links expire {{ config('auth.passwords.users.expire') }} minutes after they're sent and can only be used once.</div>
         </div>
 
         <!-- Email -->
@@ -375,18 +378,19 @@ img.img-fluid.logo-img {
           <label class="label" for="email">Work email <span class="req">*</span></label>
           <div class="input-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22 6 12 13 2 6"/></svg>
-            <input class="input" id="email" name="email" type="email" autocomplete="email"
+            <input class="input" id="email" name="email" value="{{ is_string(old('email')) ? old('email') : '' }}" type="email" autocomplete="email"
                    placeholder="you@company.com" required>
           </div>
         </div>
 
+        @include('shared.auth-field-error', ['name' => 'email'])
         <!-- Submit -->
-        <button class="btn btn--primary btn--lg btn--block" type="submit" id="submitBtn">
-          Send reset link
+        <button class="btn btn--primary btn--lg btn--block" type="submit" id="submitBtn" data-loading-text="Sending reset email…">
+          {{ session('error') ? 'Resend reset email' : 'Send reset link' }}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </button>
 
-        <a href="index.html" class="auth-back">
+        <a href="{{ route('login') }}" class="auth-back">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
           Back to sign in
         </a>
@@ -394,28 +398,28 @@ img.img-fluid.logo-img {
       </div>
 
       <!-- ---------- Success state ---------- -->
-      <div class="auth-success" id="resetSuccess" role="status" aria-live="polite">
+      <div class="auth-success {{ $sent ? 'is-visible' : '' }}" id="resetSuccess" role="status" aria-live="polite">
         <div class="auth-success__icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>
         </div>
         <h2 class="auth-success__title">Check your inbox</h2>
         <p class="auth-success__text">
-          We sent a password reset link to <strong id="sentEmail">your email</strong>.
-          It expires in 30 minutes.<br>
+          If an account matches <strong id="sentEmail">{{ is_string(old('email')) ? old('email') : '' }}</strong>, a password reset link will be sent.
+          It expires in {{ config('auth.passwords.users.expire') }} minutes.<br>
           Don't see it? Check your spam folder.
         </p>
         <div class="auth-success__actions">
-          <button type="button" class="btn btn--secondary btn--block" id="resendBtn">
+          <button type="submit" class="btn btn--secondary btn--block" id="resendBtn" data-loading-text="Resending email…">
             Resend email
           </button>
-          <a href="index.html" class="auth-form__link">Back to sign in</a>
+          <a href="{{ route('login') }}" class="auth-form__link">Back to sign in</a>
         </div>
       </div>
 
       <!-- Register CTA -->
       <div class="auth-form__foot" id="resetFoot">
         Don't have an account?
-        <a href="register.html">Create one</a>
+        <a href="{{ route('register') }}">Create one</a>
       </div>
 
       <p class="auth-form__legal">
@@ -428,65 +432,8 @@ img.img-fluid.logo-img {
   </section>
 </main>
 
-<script>
-  (function () {
-    var form     = document.getElementById('resetForm');
-    var btn      = document.getElementById('submitBtn');
-    var fields   = document.getElementById('resetFields');
-    var success  = document.getElementById('resetSuccess');
-    var foot     = document.getElementById('resetFoot');
-    var emailIn  = document.getElementById('email');
-    var sentTo   = document.getElementById('sentEmail');
-    var resend   = document.getElementById('resendBtn');
 
-    var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      var email = emailIn.value.trim();
-
-      if (!email || !EMAIL_RE.test(email)) {
-        emailIn.classList.add('input--error');
-        emailIn.focus();
-        return;
-      }
-
-      // Button loading state
-      var original = btn.innerHTML;
-      btn.disabled = true;
-      btn.innerHTML = '<span class="spinner spinner--sm spinner--white"></span> Sending…';
-
-      // Simulated request
-      setTimeout(function () {
-        btn.disabled = false;
-        btn.innerHTML = original;
-
-        sentTo.textContent = email;
-        fields.style.display = 'none';
-        foot.style.display = 'none';
-        success.classList.add('is-visible');
-      }, 800);
-    });
-
-    // Resend — simple confirmation pulse
-    resend.addEventListener('click', function () {
-      var original = resend.innerHTML;
-      resend.disabled = true;
-      resend.innerHTML = '<span class="spinner spinner--sm"></span> Resending…';
-      setTimeout(function () {
-        resend.disabled = false;
-        resend.innerHTML = 'Email sent ✓';
-        setTimeout(function () { resend.innerHTML = original; }, 1800);
-      }, 800);
-    });
-
-    // Clear error on input
-    emailIn.addEventListener('input', function () {
-      this.classList.remove('input--error');
-    });
-  })();
-</script>
-
+@include('shared.feedback')
 </body>
 </html>

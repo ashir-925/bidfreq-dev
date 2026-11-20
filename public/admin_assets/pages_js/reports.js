@@ -27,16 +27,7 @@
   });
 
   function toast(kind, title, msg) {
-    var icons = { info:'<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>' };
-    var el = document.createElement('div');
-    el.className = 'toast toast--' + kind;
-    el.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (icons[kind]||icons.info) + '</svg><div><div class="toast__title">' + title + '</div><div class="toast__msg">' + msg + '</div></div>';
-    document.getElementById('toastRegion').appendChild(el);
-    setTimeout(function () {
-      el.style.transition = 'opacity .3s, transform .3s';
-      el.style.opacity = '0'; el.style.transform = 'translateX(20px)';
-      setTimeout(function () { el.remove(); }, 320);
-    }, 3000);
+    window.bidFreqFeedback.toast(kind, title, msg);
   }
 
   document.getElementById('navToggle').addEventListener('click', function () {

@@ -10,7 +10,7 @@
     <main class="app-content">
 
         <nav class="breadcrumbs" aria-label="Breadcrumb">
-            <a href="customer-dashboard.html">Home</a>
+            <a href="{{ route('dashboard') }}">Home</a>
             <span class="breadcrumbs__sep">/</span>
             <span class="breadcrumbs__current">Notifications</span>
         </nav>
@@ -24,7 +24,7 @@
                 </p>
             </div>
             <div class="page-header__actions">
-                <a href="profile.html" class="btn btn--secondary">
+                <a href="{{ route('profile') }}" class="btn btn--secondary">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round">
                         <circle cx="12" cy="12" r="3" />

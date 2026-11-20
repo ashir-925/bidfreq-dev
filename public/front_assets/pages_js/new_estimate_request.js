@@ -477,8 +477,16 @@
   document.getElementById('wizardForm').addEventListener('submit', function (e) {
     e.preventDefault();
     if (!consent.checked) return;
-    if (!validateStep(2)) { showStep(2); return; }
-    if (!photosSatisfied()) { showStep(3); return; }
+    if (!validateStep(2)) {
+      showStep(2);
+      window.bidFreqFeedback.toast('danger', 'Check the request', 'Review the highlighted fields before submitting.');
+      return;
+    }
+    if (!photosSatisfied()) {
+      showStep(3);
+      window.bidFreqFeedback.toast('danger', 'More photos needed', 'Add the required photos before submitting.');
+      return;
+    }
 
     // Each selected trade is submitted with its own description and photos
     state.tradeDescriptions = getTradeDescriptions();
@@ -487,11 +495,10 @@
       return d;
     });
 
-    var original = submitBtn.innerHTML;
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<span class="spinner spinner--sm spinner--white"></span> Submitting…';
+    if (!window.bidFreqFeedback.start(submitBtn, 'Submitting request…')) return;
 
     setTimeout(function () {
+      window.bidFreqFeedback.stop(submitBtn);
       document.getElementById('wizardHead').classList.add('hidden');
       document.getElementById('stepIndicator').classList.add('hidden');
       document.querySelectorAll('.step-panel').forEach(function (p) { p.classList.add('hidden'); });

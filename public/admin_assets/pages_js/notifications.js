@@ -5,48 +5,48 @@
     { id:'n1', day:'Today', time:'2 min ago', kind:'danger', unread:true, category:'sla',
       title:'SLA critical: EST-2026-0051 due in 22 minutes',
       text:'High-priority estimate from <strong>Gulf Coast Realty</strong> will breach SLA. Verify now or reassign.',
-      ref:'EST-2026-0051', refUrl:'estimate-review.html',
-      actions:[{ label:'Review now', href:'estimate-review.html' }] },
+      ref:'EST-2026-0051', refUrl:window.bidFreqRoutes['admin.estimate-review'],
+      actions:[{ label:'Review now', href:window.bidFreqRoutes['admin.estimate-review'] }] },
     { id:'n2', day:'Today', time:'8 min ago', kind:'emerald', unread:true, category:'queue',
       title:'M. Alvarez verified EST-2026-0039',
       text:'Final verified total: <strong>$2,310.00</strong>. Sent to customer for approval.',
-      ref:'EST-2026-0039', refUrl:'estimate-review.html' },
+      ref:'EST-2026-0039', refUrl:window.bidFreqRoutes['admin.estimate-review'] },
     { id:'n3', day:'Today', time:'23 min ago', kind:'violet', unread:true, category:'queue',
       title:'AI draft ready for EST-2026-0045',
       text:'Confidence 88% · Plumbing · 245 Sundial Blvd, San Antonio. Awaiting assignment.',
-      ref:'EST-2026-0045', refUrl:'estimates.html',
-      actions:[{ label:'Assign to me', href:'estimate-review.html' }] },
+      ref:'EST-2026-0045', refUrl:window.bidFreqRoutes['admin.estimates'],
+      actions:[{ label:'Assign to me', href:window.bidFreqRoutes['admin.estimate-review'] }] },
     { id:'n4', day:'Today', time:'1 hour ago', kind:'warning', unread:true, category:'sla',
       title:'SLA warning: EST-2026-0042 due in 1h 42m',
       text:'High-priority general repair from Oak Ridge Property Mgmt. Unassigned.',
-      ref:'EST-2026-0042', refUrl:'estimate-review.html',
-      actions:[{ label:'Assign now', href:'estimate-review.html' }] },
+      ref:'EST-2026-0042', refUrl:window.bidFreqRoutes['admin.estimate-review'],
+      actions:[{ label:'Assign now', href:window.bidFreqRoutes['admin.estimate-review'] }] },
     { id:'n5', day:'Today', time:'2 hours ago', kind:'blue', unread:true, category:'customer',
       title:'New request from Oak Ridge Property Mgmt',
       text:'<strong>EST-2026-0044</strong> submitted with 6 photos. Roofing · Austin, TX.',
-      ref:'EST-2026-0044', refUrl:'estimates.html' },
+      ref:'EST-2026-0044', refUrl:window.bidFreqRoutes['admin.estimates'] },
     { id:'n6', day:'Today', time:'3 hours ago', kind:'violet', unread:false, category:'queue',
       title:'Estimator note added to EST-2026-0038',
       text:'B. Hayes added a note about client communication preference.',
-      ref:'EST-2026-0038', refUrl:'estimate-review.html' },
+      ref:'EST-2026-0038', refUrl:window.bidFreqRoutes['admin.estimate-review'] },
     { id:'n7', day:'Today', time:'5 hours ago', kind:'emerald', unread:false, category:'queue',
       title:'14 estimates verified today',
       text:'Team is on track. Avg. turnaround: <strong>1.7 days</strong> (target 2.0).', ref:'', refUrl:'' },
     { id:'n8', day:'Yesterday', time:'Yesterday · 6:12 PM', kind:'warning', unread:false, category:'customer',
       title:'Customer requested revision',
       text:'Downtown Lofts LLC requested revision on <strong>EST-2026-0048</strong>. Reason: pricing above budget.',
-      ref:'EST-2026-0048', refUrl:'estimate-review.html' },
+      ref:'EST-2026-0048', refUrl:window.bidFreqRoutes['admin.estimate-review'] },
     { id:'n9', day:'Yesterday', time:'Yesterday · 4:00 PM', kind:'danger', unread:false, category:'sla',
       title:'SLA breach: EST-2026-0034',
       text:'Estimate went 45 minutes past SLA. Auto-escalated to team lead.',
-      ref:'EST-2026-0034', refUrl:'estimates.html' },
+      ref:'EST-2026-0034', refUrl:window.bidFreqRoutes['admin.estimates'] },
     { id:'n10', day:'Yesterday', time:'Yesterday · 11:30 AM', kind:'blue', unread:false, category:'customer',
       title:'Bluebonnet Homes invited a teammate',
       text:'Alicia Reyes added <strong>dana@bluebonnet.com</strong> as a Submitter.',
-      ref:'ORG-003', refUrl:'customers.html' },
+      ref:'ORG-003', refUrl:window.bidFreqRoutes['admin.customers'] },
     { id:'n11', day:'Aug 9, 2026', time:'2 days ago', kind:'emerald', unread:false, category:'queue',
       title:'Project completed: PRJ-2026-0020',
-      text:'78 Lakeline Dr plumbing project closed. Invoice auto-sent.', ref:'PRJ-2026-0020', refUrl:'projects.html' },
+      text:'78 Lakeline Dr plumbing project closed. Invoice auto-sent.', ref:'PRJ-2026-0020', refUrl:window.bidFreqRoutes['admin.projects'] },
     { id:'n12', day:'Aug 9, 2026', time:'2 days ago', kind:'neutral', unread:false, category:'system',
       title:'Pricing feed updated',
       text:'Localized pricing for ZIP 78745 refreshed. New rates apply to future drafts only.', ref:'', refUrl:'' },
@@ -55,13 +55,13 @@
       text:'Model v3.2 deployed. Estimated 4% improvement in confidence calibration.', ref:'', refUrl:'' },
     { id:'n14', day:'Aug 8, 2026', time:'3 days ago', kind:'emerald', unread:false, category:'queue',
       title:'T. Nakamura verified first estimate',
-      text:'Onboarding milestone: <strong>EST-2026-0029</strong> verified in 2.4 days.', ref:'EST-2026-0029', refUrl:'estimate-review.html' },
+      text:'Onboarding milestone: <strong>EST-2026-0029</strong> verified in 2.4 days.', ref:'EST-2026-0029', refUrl:window.bidFreqRoutes['admin.estimate-review'] },
     { id:'n15', day:'Aug 8, 2026', time:'3 days ago', kind:'warning', unread:false, category:'customer',
       title:'Customer flag raised',
-      text:'Southside Property has not submitted in 32 days. Health score dropped to 42.', ref:'ORG-009', refUrl:'customers.html' },
+      text:'Southside Property has not submitted in 32 days. Health score dropped to 42.', ref:'ORG-009', refUrl:window.bidFreqRoutes['admin.customers'] },
     { id:'n16', day:'Aug 8, 2026', time:'3 days ago', kind:'neutral', unread:false, category:'system',
       title:'Security: new team member signed in',
-      text:'L. Petrov signed in from Chrome on Windows · Round Rock, TX.', ref:'u6', refUrl:'estimators.html' }
+      text:'L. Petrov signed in from Chrome on Windows · Round Rock, TX.', ref:'u6', refUrl:window.bidFreqRoutes['admin.estimators'] }
   ];
 
   var state = { filter:'all', selected:new Set(), data: NOTIFS.map(function (n) { return Object.assign({}, n); }) };
@@ -188,12 +188,7 @@
   });
 
   function toast(kind, title, msg) {
-    var icons = { success:'<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>', info:'<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>' };
-    var el = document.createElement('div');
-    el.className = 'toast toast--' + kind;
-    el.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' + (icons[kind]||icons.info) + '</svg><div><div class="toast__title">' + title + '</div><div class="toast__msg">' + msg + '</div></div>';
-    document.getElementById('toastRegion').appendChild(el);
-    setTimeout(function () { el.style.transition='opacity .3s, transform .3s'; el.style.opacity='0'; el.style.transform='translateX(20px)'; setTimeout(function(){ el.remove(); }, 320); }, 3000);
+    window.bidFreqFeedback.toast(kind, title, msg);
   }
 
   document.getElementById('navToggle').addEventListener('click', function () {

@@ -10,9 +10,9 @@
   <main class="app-content">
 
       <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="customer-dashboard.html">Home</a>
+        <a href="{{ route('dashboard') }}">Home</a>
         <span class="breadcrumbs__sep">/</span>
-        <a href="projects.html">Approved Projects</a>
+        <a href="{{ route('projects') }}">Approved Projects</a>
         <span class="breadcrumbs__sep">/</span>
         <span class="breadcrumbs__current">PRJ-2026-0021</span>
       </nav>
@@ -170,7 +170,7 @@
                   <div class="sec__sub">Frozen snapshot of the estimate as approved</div>
                 </div>
               </div>
-              <a href="estimate-detail.html" class="btn btn--ghost btn--sm">
+              <a href="{{ route('estimate_request_detail') }}" class="btn btn--ghost btn--sm">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                 View full estimate
               </a>
@@ -239,7 +239,7 @@
             </div>
             <div class="sec__body" style="padding:0">
 
-              <div class="link-row" onclick="location.href='estimate-detail.html'">
+              <div class="link-row" onclick="location.href=this.dataset.href" data-href="{{ route('estimate_request_detail') }}">
                 <div class="link-row__icon link-row__icon--violet">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                 </div>
@@ -251,7 +251,7 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-faint)"><line x1="9" y1="18" x2="15" y2="12"/><line x1="15" y1="6" x2="9" y2="12"/></svg>
               </div>
 
-              <div class="link-row" onclick="location.href='estimate-requests.html'">
+              <div class="link-row" onclick="location.href=this.dataset.href" data-href="{{ route('estimate-request') }}">
                 <div class="link-row__icon link-row__icon--blue">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
                 </div>
@@ -263,7 +263,7 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-faint)"><line x1="9" y1="18" x2="15" y2="12"/><line x1="15" y1="6" x2="9" y2="12"/></svg>
               </div>
 
-              <div class="link-row" onclick="location.href='organization-settings.html'">
+              <div class="link-row" onclick="location.href=this.dataset.href" data-href="{{ route('profile') }}">
                 <div class="link-row__icon link-row__icon--emerald">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg>
                 </div>

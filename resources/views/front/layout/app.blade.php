@@ -14,6 +14,7 @@
 
     @stack('styles')
 </head>
+<body>
 
 <div class="app" id="app">
     <!-- ============================================================
@@ -28,10 +29,24 @@
 
     <div class="app-main">
          @include('front.includes.header')
+        @if (session('status') || session('error') || $errors->any())
+            <div class="app-content" style="padding-bottom: 0" data-feedback-fallback>@include('shared.flash')</div>
+        @endif
         @yield('content')
     </div>
 </div>
 
+<script>
+window.bidFreqRoutes = {{ Illuminate\Support\Js::from([
+    'estimate_request_detail' => route('estimate_request_detail'),
+    'estimate-request' => route('estimate-request'),
+    'new-estimate-request' => route('new-estimate-request'),
+    'profile' => route('profile'),
+    'project-detail' => route('project-detail'),
+    'projects' => route('projects'),
+]) }};
+</script>
+@include('shared.feedback')
 @stack('scripts')
 
 </body>

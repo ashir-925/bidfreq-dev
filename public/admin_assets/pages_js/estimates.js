@@ -21,11 +21,12 @@
     { id:'EST-2026-0054', address:'68 Elm Creek Dr', city:'Round Rock, TX', zip:'78664', customer:'Northgate Partners', trade:'Flooring', status:'revision', statusLabel:'Revision Requested', priority:'low', amount:1340.00, estimator:'T. Nakamura', sla:'1d 22h', slaMin:2760, icon:'warning' }
   ];
 
+  var query = new URLSearchParams(window.location.search);
   var state = {
-    status: 'queue',
+    status: query.get('view') === 'all' ? 'all' : 'queue',
     search: '',
     trade: '',
-    priority: '',
+    priority: query.get('filter') === 'high' ? 'high' : '',
     estimator: '',
     sort: 'sla',
     selected: new Set(),
@@ -347,5 +348,9 @@
     }
   });
 
+  document.getElementById('priorityFilter').value = state.priority;
+  document.querySelectorAll('.status-tile').forEach(function (tile) {
+    tile.classList.toggle('is-active', tile.dataset.status === state.status);
+  });
   render();
 })();

@@ -11,9 +11,9 @@
    <main class="app-content">
 
       <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="customer-dashboard.html">Home</a>
+        <a href="{{ route('dashboard') }}">Home</a>
         <span class="breadcrumbs__sep">/</span>
-        <a href="estimate-requests.html">Estimate Requests</a>
+        <a href="{{ route('estimate-request') }}">Estimate Requests</a>
         <span class="breadcrumbs__sep">/</span>
         <span class="breadcrumbs__current">EST-2026-0040</span>
       </nav>
@@ -637,6 +637,129 @@
       </div>
 
     </main>
+<div class="modal-overlay" id="approveModal" onclick="if(event.target===this)this.classList.remove('is-open')">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="ap-title">
+    <div class="modal__header">
+      <div>
+        <div class="modal__title" id="ap-title">Approve this estimate?</div>
+        <div class="modal__subtitle">By approving you accept the scope and total amount shown.</div>
+      </div>
+      <button class="modal__close" aria-label="Close" onclick="document.getElementById('approveModal').classList.remove('is-open')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal__body">
+      <div class="panel-verified mb-5">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="text-xs" style="color:var(--emerald-700);text-transform:uppercase;letter-spacing:.08em;font-weight:600">Final Estimate</div>
+            <div class="text-sm text-muted mt-1">EST-2026-0040 · 1502 Palm Ave</div>
+          </div>
+          <span class="text-mono" style="font-size:var(--fs-2xl);font-weight:var(--fw-bold);color:var(--text-strong)">$1,482.50</span>
+        </div>
+      </div>
+
+      <label class="check mb-4">
+        <input type="checkbox" id="approveConsent">
+        <span class="check__box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </span>
+        <span class="check__label">
+          <strong>I agree to the scope, price, and terms above</strong>
+          <span class="check__desc">Your typed name below acts as a legally binding electronic signature.</span>
+        </span>
+      </label>
+
+      <div class="form-group" style="margin-bottom:0">
+        <label class="label" for="approveSign">Type your full name to sign <span class="req">*</span></label>
+        <input class="input" id="approveSign" type="text" placeholder="e.g. Jane Doe">
+      </div>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn--ghost" onclick="document.getElementById('approveModal').classList.remove('is-open')">Cancel</button>
+      <button class="btn btn--success" id="approveConfirm" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Approve &amp; Move to Project
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- REQUEST REVISION -->
+<div class="modal-overlay" id="revisionModal" onclick="if(event.target===this)this.classList.remove('is-open')">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="rv-title">
+    <div class="modal__header">
+      <div>
+        <div class="modal__title" id="rv-title">Request a revision</div>
+        <div class="modal__subtitle">The estimate will return to a BidFreq estimator for review.</div>
+      </div>
+      <button class="modal__close" aria-label="Close" onclick="document.getElementById('revisionModal').classList.remove('is-open')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal__body">
+      <div class="form-group">
+        <label class="label" for="revReason">Reason for revision <span class="req">*</span></label>
+        <select class="select" id="revReason">
+          <option value="">Select a reason…</option>
+          <option>Scope is incorrect</option>
+          <option>Pricing seems off</option>
+          <option>Missing line item</option>
+          <option>Additional damage discovered</option>
+          <option>I want to change the scope of work</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="label" for="revNotes">Additional notes <span class="req">*</span></label>
+        <textarea class="textarea" id="revNotes" placeholder="Explain what needs to change so the estimator can revise accurately…"></textarea>
+      </div>
+      <label class="check mt-4">
+        <input type="checkbox">
+        <span class="check__box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </span>
+        <span class="check__label">
+          <strong>Upload additional photos</strong>
+          <span class="check__desc">Optional — helps the estimator revise more accurately.</span>
+        </span>
+      </label>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn--ghost" onclick="document.getElementById('revisionModal').classList.remove('is-open')">Cancel</button>
+      <button class="btn btn--primary" id="revisionConfirm" disabled>Send Revision Request</button>
+    </div>
+  </div>
+</div>
+
+<!-- DECLINE -->
+<div class="modal-overlay" id="declineModal" onclick="if(event.target===this)this.classList.remove('is-open')">
+  <div class="modal modal--sm" role="dialog" aria-modal="true" aria-labelledby="dc-title">
+    <div class="modal__header">
+      <div>
+        <div class="modal__title" id="dc-title">Decline this estimate?</div>
+        <div class="modal__subtitle">This action will mark the estimate as declined.</div>
+      </div>
+      <button class="modal__close" aria-label="Close" onclick="document.getElementById('declineModal').classList.remove('is-open')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal__body">
+      <div class="form-group" style="margin-bottom:0">
+        <label class="label" for="declineReason">Why are you declining? <span class="label__hint">optional</span></label>
+        <textarea class="textarea" id="declineReason" placeholder="Share feedback to help us improve (optional)…" style="min-height:80px"></textarea>
+      </div>
+      <div class="alert alert--danger mt-4 mb-0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <div class="alert__body">This cannot be undone. You can submit a new request later.</div>
+      </div>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn--ghost" onclick="document.getElementById('declineModal').classList.remove('is-open')">Cancel</button>
+      <button class="btn btn--danger" id="declineConfirm">Decline Estimate</button>
+    </div>
+  </div>
+</div>
 @endsection
 @push('scripts')
 

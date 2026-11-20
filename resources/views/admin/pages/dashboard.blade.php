@@ -10,7 +10,7 @@
       <main class="app-content">
 
       <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="dashboard.html">Console</a>
+        <a href="{{ route('admin.dashboard') }}">Console</a>
         <span class="breadcrumbs__sep">/</span>
         <span class="breadcrumbs__current">Dashboard</span>
       </nav>
@@ -29,11 +29,11 @@
           </p>
         </div>
         <div class="admin-hero__actions">
-          <a href="estimates.html" class="btn btn--secondary">
+          <a href="{{ route('admin.estimates') }}" class="btn btn--secondary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
             Open Queue
           </a>
-          <a href="estimates.html?filter=high" class="btn btn--primary">
+          <a href="{{ route('admin.estimates', ['filter' => 'high']) }}" class="btn btn--primary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             Review High Priority
           </a>
@@ -140,14 +140,14 @@
                 <div class="card__title" id="queue-heading">Review queue</div>
                 <div class="card__subtitle">Estimates awaiting human verification — sorted by priority</div>
               </div>
-              <a href="estimates.html" class="btn btn--ghost btn--sm">
+              <a href="{{ route('admin.estimates') }}" class="btn btn--ghost btn--sm">
                 View all
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               </a>
             </div>
             <div class="card__body" style="padding:0">
 
-              <div class="queue-item" onclick="location.href='estimate-review.html'">
+              <div class="queue-item" onclick="location.href=this.dataset.href" data-href="{{ route('admin.estimate-review') }}">
                 <div class="queue-item__priority queue-item__priority--high"></div>
                 <div class="queue-item__body">
                   <div class="queue-item__top">
@@ -173,7 +173,7 @@
                 </div>
               </div>
 
-              <div class="queue-item" onclick="location.href='estimate-review.html'">
+              <div class="queue-item" onclick="location.href=this.dataset.href" data-href="{{ route('admin.estimate-review') }}">
                 <div class="queue-item__priority queue-item__priority--high"></div>
                 <div class="queue-item__body">
                   <div class="queue-item__top">
@@ -199,7 +199,7 @@
                 </div>
               </div>
 
-              <div class="queue-item" onclick="location.href='estimate-review.html'">
+              <div class="queue-item" onclick="location.href=this.dataset.href" data-href="{{ route('admin.estimate-review') }}">
                 <div class="queue-item__priority queue-item__priority--med"></div>
                 <div class="queue-item__body">
                   <div class="queue-item__top">
@@ -225,7 +225,7 @@
                 </div>
               </div>
 
-              <div class="queue-item" onclick="location.href='estimate-review.html'">
+              <div class="queue-item" onclick="location.href=this.dataset.href" data-href="{{ route('admin.estimate-review') }}">
                 <div class="queue-item__priority queue-item__priority--med"></div>
                 <div class="queue-item__body">
                   <div class="queue-item__top">
@@ -251,7 +251,7 @@
                 </div>
               </div>
 
-              <div class="queue-item" onclick="location.href='estimate-review.html'">
+              <div class="queue-item" onclick="location.href=this.dataset.href" data-href="{{ route('admin.estimate-review') }}">
                 <div class="queue-item__priority queue-item__priority--low"></div>
                 <div class="queue-item__body">
                   <div class="queue-item__top">
@@ -286,7 +286,7 @@
               <div>
                 <div class="card__title" id="activity-heading">Recent team activity</div>
               </div>
-              <a href="notifications.html" class="btn btn--ghost btn--sm">All</a>
+              <a href="{{ route('admin.notifications') }}" class="btn btn--ghost btn--sm">All</a>
             </div>
             <div class="card__body" style="padding:0">
               <div class="activity">

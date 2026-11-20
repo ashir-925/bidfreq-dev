@@ -45,8 +45,7 @@
      the video is suppressed (reduced motion, data saver, small screens) */
   background-image:
     radial-gradient(circle at 15% 20%, rgba(124,58,237,.28), transparent 45%),
-    radial-gradient(circle at 85% 75%, rgba(59,130,246,.30), transparent 50%),
-    url("{{ asset('front_assets/video/estimating-workflow-poster.jpg') }}");
+    radial-gradient(circle at 85% 75%, rgba(59,130,246,.30), transparent 50%);
   background-size: cover, cover, cover;
   background-position: center;
 }
@@ -364,10 +363,9 @@ img.img-fluid.logo-img {
         playsinline
         preload="metadata"
         disablepictureinpicture
-        tabindex="-1"
-        poster="img/138962-770800093.mp4">
-        <source src="img/138962-770800093.mp4" type="video/webm">
-        <source src="img/138962-770800093.mp4"  type="video/mp4">
+        tabindex="-1">
+
+        <source src="{{ asset('front_assets/img/138962-770800093.mp4') }}"  type="video/mp4">
       </video>
     </div>
 
@@ -442,12 +440,14 @@ img.img-fluid.logo-img {
        ============================================================ -->
   <section class="auth-panel" aria-label="Sign in">
 
-    <form class="auth-form" id="loginForm" novalidate>
+    <form class="auth-form" id="loginForm" method="POST" action="{{ route('login.store') }}" novalidate>
+      @csrf
 
       <header class="auth-form__head">
         <h2 class="auth-form__title">Welcome back</h2>
         <p class="auth-form__sub">Sign in to your BidFreq account.</p>
       </header>
+      @include('shared.flash')
 
       <!-- Demo note -->
       <!--<div class="auth-note">-->
@@ -459,10 +459,12 @@ img.img-fluid.logo-img {
         <label class="label" for="email">Work email <span class="req">*</span></label>
         <div class="input-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22 6 12 13 2 6"/></svg>
-          <input class="input" id="email" name="email" type="email" autocomplete="email"
+          <input class="input" id="email" name="email" value="{{ is_string(old('email')) ? old('email') : '' }}" type="email" autocomplete="email"
                  placeholder="you@company.com" required>
         </div>
       </div>
+
+      @include('shared.auth-field-error', ['name' => 'email'])
 
       <!-- Password -->
       <div class="form-group">
@@ -479,20 +481,22 @@ img.img-fluid.logo-img {
         </div>
       </div>
 
+      @include('shared.auth-field-error', ['name' => 'password'])
+
       <!-- Remember + Forgot -->
       <div class="auth-form__row">
         <label class="check">
-          <input type="checkbox" name="remember" checked>
+          <input type="checkbox" name="remember" @checked(old('remember', ! $errors->any()))>
           <span class="check__box">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           </span>
           <span class="check__label">Keep me signed in</span>
         </label>
-        <a href="forgot-password.html" class="auth-form__link">Forgot password?</a>
+        <a href="{{ route('password.request') }}" class="auth-form__link">Forgot password?</a>
       </div>
 
       <!-- Submit -->
-      <button class="btn btn--primary btn--lg btn--block" type="submit" id="submitBtn">
+      <button class="btn btn--primary btn--lg btn--block" type="submit" id="submitBtn" data-loading-text="Signing in…">
         Sign in
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
       </button>
@@ -500,7 +504,7 @@ img.img-fluid.logo-img {
       <!-- Register CTA -->
       <div class="auth-form__foot">
         Don't have an account?
-        <a href="register.html">Create one</a>
+        <a href="{{ route('register') }}">Create one</a>
       </div>
 
       <p class="auth-form__legal">
@@ -581,48 +585,8 @@ img.img-fluid.logo-img {
     });
   })();
 
-  // ------------------------------------------------------------------
-  // Role-aware submit
-  // ------------------------------------------------------------------
-  (function () {
-    var form = document.getElementById('loginForm');
-    var btn  = document.getElementById('submitBtn');
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      var role  = (form.querySelector('input[name="role"]:checked') || {}).value || 'customer';
-      var email = document.getElementById('email').value.trim();
-      var pass  = document.getElementById('password').value;
-
-      if (!email || !pass) {
-        if (!email) document.getElementById('email').classList.add('input--error');
-        if (!pass)  document.getElementById('password').classList.add('input--error');
-        return;
-      }
-
-      var original = btn.innerHTML;
-      btn.disabled = true;
-      btn.innerHTML = '<span class="spinner spinner--sm spinner--white"></span> Signing in…';
-
-      var routes = {
-        customer:  'customer-dashboard.html',
-        estimator: 'estimator-dashboard.html',
-        admin:     'admin-dashboard.html'
-      };
-
-      setTimeout(function () {
-        window.location.href = routes[role] || routes.customer;
-      }, 700);
-    });
-
-    ['email', 'password'].forEach(function (id) {
-      document.getElementById(id).addEventListener('input', function () {
-        this.classList.remove('input--error');
-      });
-    });
-  })();
 </script>
 
+@include('shared.feedback')
 </body>
 </html>

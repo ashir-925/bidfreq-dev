@@ -51,6 +51,12 @@ return [
     */
 
     'channels' => [
+        'mail_log' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/mail.log'),
+            'level' => 'debug',
+            'tap' => [App\Logging\RedactMail::class],
+        ],
 
         'stack' => [
             'driver' => 'stack',

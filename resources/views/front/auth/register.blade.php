@@ -447,12 +447,14 @@ img.img-fluid.logo-img {
        ============================================================ -->
   <section class="auth-panel" aria-label="Create account">
 
-    <form class="auth-form" id="registerForm" novalidate>
+    <form class="auth-form" id="registerForm" method="POST" action="{{ route('register') }}" novalidate>
+      @csrf
 
       <header class="auth-form__head">
         <h2 class="auth-form__title">Create your account</h2>
         <p class="auth-form__sub">Join BidFreq and start submitting repairs.</p>
       </header>
+      @include('shared.flash')
 
       <!-- Role selector -->
       <!-- <div class="role-select" role="radiogroup" aria-label="Account type">
@@ -485,18 +487,20 @@ img.img-fluid.logo-img {
           <label class="label" for="firstName">First name <span class="req">*</span></label>
           <div class="input-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            <input class="input" id="firstName" name="firstName" type="text"
+            <input class="input" id="firstName" name="first_name" value="{{ is_string(old('first_name')) ? old('first_name') : '' }}" type="text"
                    autocomplete="given-name" placeholder="Jane" required>
           </div>
+          @include('shared.auth-field-error', ['name' => 'first_name'])
         </div>
 
         <div class="form-group">
           <label class="label" for="lastName">Last name <span class="req">*</span></label>
           <div class="input-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            <input class="input" id="lastName" name="lastName" type="text"
+            <input class="input" id="lastName" name="last_name" value="{{ is_string(old('last_name')) ? old('last_name') : '' }}" type="text"
                    autocomplete="family-name" placeholder="Doe" required>
           </div>
+          @include('shared.auth-field-error', ['name' => 'last_name'])
         </div>
       </div>
 
@@ -505,10 +509,18 @@ img.img-fluid.logo-img {
         <label class="label" for="email">Work email <span class="req">*</span></label>
         <div class="input-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22 6 12 13 2 6"/></svg>
-          <input class="input" id="email" name="email" type="email" autocomplete="email"
+          <input class="input" id="email" name="email" value="{{ is_string(old('email')) ? old('email') : '' }}" type="email" autocomplete="email"
                  placeholder="you@company.com" required>
         </div>
         <div class="field-error" id="emailError">Enter a valid email address.</div>
+      </div>
+
+      @include('shared.auth-field-error', ['name' => 'email'])
+
+      <div class="form-group">
+        <label class="label" for="phone">Phone <span class="req">*</span></label>
+        <input class="input" id="phone" name="phone" type="tel" autocomplete="tel" value="{{ is_string(old('')) ? old('') : '' }}" required>
+        @include('shared.auth-field-error', ['name' => 'phone'])
       </div>
 
       <!-- Company (optional) -->
@@ -516,11 +528,12 @@ img.img-fluid.logo-img {
         <label class="label" for="company">Company <span class="label__opt">Optional</span></label>
         <div class="input-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-          <input class="input" id="company" name="company" type="text"
+          <input class="input" id="company" name="company_name" value="{{ is_string(old('company_name')) ? old('company_name') : '' }}" type="text"
                  autocomplete="organization" placeholder="Acme Property Group">
         </div>
       </div>
 
+      @include('shared.auth-field-error', ['name' => 'company_name'])
       <!-- Password -->
       <div class="form-group">
         <label class="label" for="password">Password <span class="req">*</span></label>
@@ -551,12 +564,13 @@ img.img-fluid.logo-img {
         <div class="field-error" id="passwordError">Password must be at least 8 characters.</div>
       </div>
 
+      @include('shared.auth-field-error', ['name' => 'password'])
       <!-- Confirm password -->
       <div class="form-group">
         <label class="label" for="confirmPassword">Confirm password <span class="req">*</span></label>
         <div class="input-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          <input class="input" id="confirmPassword" name="confirmPassword" type="password"
+          <input class="input" id="confirmPassword" name="password_confirmation" type="password"
                  autocomplete="new-password" placeholder="Re-enter your password"
                  required style="padding-right:44px;">
           <button type="button" class="pw-toggle" data-target="confirmPassword" aria-label="Show password">
@@ -567,10 +581,11 @@ img.img-fluid.logo-img {
         <div class="field-error" id="confirmError">Passwords do not match.</div>
       </div>
 
+      @include('shared.auth-field-error', ['name' => 'password_confirmation'])
       <!-- Terms -->
       <div class="terms">
         <label class="check">
-          <input type="checkbox" name="terms" id="terms">
+          <input type="checkbox" name="terms" id="terms" value="1" @checked(old('terms'))>
           <span class="check__box">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           </span>
@@ -583,8 +598,9 @@ img.img-fluid.logo-img {
         <div class="field-error" id="termsError">You must accept the terms to continue.</div>
       </div>
 
+      @include('shared.auth-field-error', ['name' => 'terms'])
       <!-- Submit -->
-      <button class="btn btn--primary btn--lg btn--block" type="submit" id="submitBtn">
+      <button class="btn btn--primary btn--lg btn--block" type="submit" id="submitBtn" data-loading-text="Creating account…">
         Create account
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
       </button>
@@ -607,7 +623,7 @@ img.img-fluid.logo-img {
       <!-- Sign in CTA -->
       <div class="auth-form__foot">
         Already have an account?
-        <a href="index.html">Sign in</a>
+        <a href="{{ route('login') }}">Sign in</a>
       </div>
 
       <p class="auth-form__legal">
@@ -670,7 +686,7 @@ img.img-fluid.logo-img {
   })();
 
   // ------------------------------------------------------------------
-  // Validation + simulated submit
+  // Registration validation
   // ------------------------------------------------------------------
   (function () {
     var form    = document.getElementById('registerForm');
@@ -731,29 +747,11 @@ img.img-fluid.logo-img {
     }
 
     form.addEventListener('submit', function (e) {
-      e.preventDefault();
-
       if (!validate()) {
-        // focus first invalid field
-        var firstBad = form.querySelector('.input--error');
-        if (firstBad) firstBad.focus();
-        return;
+        e.preventDefault();
+        var firstBad = form.querySelector('.input--error') || fields.terms;
+        firstBad.focus();
       }
-
-      var role = (form.querySelector('input[name="role"]:checked') || {}).value || 'customer';
-
-      var original = btn.innerHTML;
-      btn.disabled = true;
-      btn.innerHTML = '<span class="spinner spinner--sm spinner--white"></span> Creating account…';
-
-      var routes = {
-        customer:  'customer-dashboard.html',
-        estimator: 'estimator-dashboard.html'
-      };
-
-      setTimeout(function () {
-        window.location.href = routes[role] || routes.customer;
-      }, 900);
     });
 
     // Clear errors as the user corrects them
@@ -789,5 +787,6 @@ img.img-fluid.logo-img {
   })();
 </script>
 
+@include('shared.feedback')
 </body>
 </html>

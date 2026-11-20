@@ -29,10 +29,23 @@
     @include('admin.includes.header')
 
     <!-- Content -->
-    @yield('content')
+    @if (session('status') || session('error') || $errors->any())
+            <div class="app-content" style="padding-bottom: 0" data-feedback-fallback>@include('shared.flash')</div>
+        @endif
+        @yield('content')
   </div>
 </div>
 
+<script>
+window.bidFreqRoutes = {{ Illuminate\Support\Js::from([
+    'admin.customers' => route('admin.customers'),
+    'admin.estimate-review' => route('admin.estimate-review'),
+    'admin.estimates' => route('admin.estimates'),
+    'admin.estimators' => route('admin.estimators'),
+    'admin.projects' => route('admin.projects'),
+]) }};
+</script>
+@include('shared.feedback')
 @stack('scripts')
 
 

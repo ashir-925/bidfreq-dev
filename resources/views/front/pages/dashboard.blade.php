@@ -10,7 +10,7 @@
     <main class="app-content">
 
         <nav class="breadcrumbs" aria-label="Breadcrumb">
-            <a href="customer-dashboard.html">Home</a>
+            <a href="{{ route('dashboard') }}">Home</a>
             <span class="breadcrumbs__sep">/</span>
             <span class="breadcrumbs__current">Dashboard</span>
         </nav>
@@ -194,7 +194,7 @@
                                     <span>Sent 2 hours ago</span>
                                 </div>
                             </div>
-                            <a href="estimate-detail.html" class="btn btn--primary btn--sm">
+                            <a href="{{ route('estimate_request_detail') }}" class="btn btn--primary btn--sm">
                                 Review
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round">
@@ -223,7 +223,7 @@
                                     <span>Yesterday</span>
                                 </div>
                             </div>
-                            <a href="estimate-detail.html" class="btn btn--secondary btn--sm">
+                            <a href="{{ route('estimate_request_detail') }}" class="btn btn--secondary btn--sm">
                                 Review
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round">
@@ -243,7 +243,7 @@
                             <div class="card__title" id="recent-heading">Recent estimates</div>
                             <div class="card__subtitle">Latest activity across your portfolio</div>
                         </div>
-                        <a href="estimate-requests.html" class="btn btn--ghost btn--sm">
+                        <a href="{{ route('estimate-request') }}" class="btn btn--ghost btn--sm">
                             View all
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round">
@@ -420,7 +420,7 @@
                         <div>
                             <div class="card__title" id="activity-heading">Recent activity</div>
                         </div>
-                        <a href="notifications.html" class="btn btn--ghost btn--sm">All</a>
+                        <a href="{{ route('notifications') }}" class="btn btn--ghost btn--sm">All</a>
                     </div>
                     <div class="card__body" style="padding:0">
 

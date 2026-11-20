@@ -10,7 +10,7 @@
     <main class="app-content">
 
         <nav class="breadcrumbs" aria-label="Breadcrumb">
-            <a href="dashboard.html">Console</a>
+            <a href="{{ route('admin.dashboard') }}">Console</a>
             <span class="breadcrumbs__sep">/</span>
             <span class="breadcrumbs__current">Customers</span>
         </nav>
@@ -353,8 +353,6 @@
             </div>
         </div>
     </div>
-
-    <div class="toast-region" id="toastRegion"></div>
 
 
     <script src="{{ asset('admin_assets/pages_js/customers.js') }}"></script>

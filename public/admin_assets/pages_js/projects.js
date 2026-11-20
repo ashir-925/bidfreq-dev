@@ -84,7 +84,7 @@
 
   document.getElementById('projBody').addEventListener('click', function (e) {
     var row = e.target.closest('tr[data-id]');
-    if (row) window.location.href = 'estimate-review.html';
+    if (row) window.location.href = window.bidFreqRoutes['admin.estimate-review'];
   });
 
   document.getElementById('navToggle').addEventListener('click', function () {

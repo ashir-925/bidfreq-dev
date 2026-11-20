@@ -12,7 +12,7 @@
   document.querySelectorAll('.est-row, .action-item').forEach(function (row) {
     row.addEventListener('click', function (e) {
       if (e.target.closest('a, button')) return;
-      window.location.href = 'estimate-detail.html';
+      window.location.href = window.bidFreqRoutes['estimate_request_detail'];
     });
   });
 

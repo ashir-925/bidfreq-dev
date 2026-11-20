@@ -10,7 +10,7 @@
      <main class="app-content">
 
       <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="dashboard.html">Console</a>
+        <a href="{{ route('admin.dashboard') }}">Console</a>
         <span class="breadcrumbs__sep">/</span>
         <span class="breadcrumbs__current">Projects</span>
       </nav>

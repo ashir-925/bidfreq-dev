@@ -11,9 +11,9 @@
    <main class="app-content">
 
       <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="customer-dashboard.html">Home</a>
+        <a href="{{ route('dashboard') }}">Home</a>
         <span class="breadcrumbs__sep">/</span>
-        <a href="estimate-requests.html">Estimate Requests</a>
+        <a href="{{ route('estimate-request') }}">Estimate Requests</a>
         <span class="breadcrumbs__sep">/</span>
         <span class="breadcrumbs__current">New Request</span>
       </nav>
@@ -32,7 +32,7 @@
             </p>
           </div>
           <div class="page-header__actions">
-            <a href="estimate-requests.html" class="btn btn--ghost">
+            <a href="{{ route('estimate-request') }}" class="btn btn--ghost">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
               Save & exit
             </a>
@@ -476,11 +476,11 @@
           </div>
 
           <div class="success-card__actions">
-            <a href="estimate-requests.html" class="btn btn--primary">
+            <a href="{{ route('estimate-request') }}" class="btn btn--primary">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
               View my requests
             </a>
-            <a href="customer-dashboard.html" class="btn btn--secondary">
+            <a href="{{ route('dashboard') }}" class="btn btn--secondary">
               Back to dashboard
             </a>
           </div>

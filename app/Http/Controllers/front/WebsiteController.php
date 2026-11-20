@@ -32,7 +32,7 @@ class WebsiteController extends Controller
     {
         return view('front.pages.estimate_request');
     }
-    public function estimate_request_detail($id)
+    public function estimate_request_detail($id = null)
     {
         return view('front.pages.estimate_request_detail', compact('id'));
     }
@@ -40,7 +40,7 @@ class WebsiteController extends Controller
     {
         return view('front.pages.projects');
     }
-    public function project_detail($id)
+    public function project_detail($id = null)
     {
         return view('front.pages.project_detail', compact('id'));
     }

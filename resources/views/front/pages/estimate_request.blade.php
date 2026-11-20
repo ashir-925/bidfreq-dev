@@ -11,7 +11,7 @@
   <main class="app-content">
 
       <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="customer-dashboard.html">Home</a>
+        <a href="{{ route('dashboard') }}">Home</a>
         <span class="breadcrumbs__sep">/</span>
         <span class="breadcrumbs__current">Estimate Requests</span>
       </nav>

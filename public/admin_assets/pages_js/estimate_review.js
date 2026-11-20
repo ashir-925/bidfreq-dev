@@ -16,12 +16,9 @@
   // Buttons
   document.getElementById('verifyBtn').addEventListener('click', function () {
     var btn = this;
-    var orig = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner spinner--sm spinner--white"></span> Verifying…';
+    if (!window.bidFreqFeedback.start(btn, 'Verifying estimate…')) return;
     setTimeout(function () {
-      btn.disabled = false;
-      btn.innerHTML = orig;
+      window.bidFreqFeedback.stop(btn);
       toast('success', 'Estimate verified', 'EST-2026-0042 is now awaiting customer approval.');
     }, 900);
   });
@@ -50,24 +47,7 @@
 
   // Toast helper
   function toast(kind, title, msg) {
-    var icons = {
-      success: '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
-      info: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>',
-      warning: '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>'
-    };
-    var el = document.createElement('div');
-    el.className = 'toast toast--' + kind;
-    el.innerHTML =
-      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
-        (icons[kind] || icons.info) + '</svg>' +
-      '<div><div class="toast__title">' + title + '</div><div class="toast__msg">' + msg + '</div></div>';
-    document.getElementById('toastRegion').appendChild(el);
-    setTimeout(function () {
-      el.style.transition = 'opacity .3s, transform .3s';
-      el.style.opacity = '0';
-      el.style.transform = 'translateX(20px)';
-      setTimeout(function () { el.remove(); }, 320);
-    }, 3400);
+    window.bidFreqFeedback.toast(kind, title, msg);
   }
 
   // Nav toggle
