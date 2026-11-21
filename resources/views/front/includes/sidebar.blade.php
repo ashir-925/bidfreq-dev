@@ -26,7 +26,7 @@
                             <line x1="9" y1="17" x2="13" y2="17" />
                         </svg>
                         <span>Estimate Requests</span>
-                        <span class="nav-item__badge">12</span>
+
                     </a>
                     <a href="{{ route('projects') }}" class="nav-item @if (request()->routeIs('projects', 'project-detail')) is-active @endif" @if (request()->routeIs('projects', 'project-detail')) aria-current="page" @endif>
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -47,7 +47,8 @@
                             <path d="M13.73 21a2 2 0 0 1-3.46 0" />
                         </svg>
                         <span>Notifications</span>
-                        <span class="nav-item__badge is-danger">3</span>
+                        @include('shared.account_notice_count')
+
                     </a>
 
                     <a href="{{ route('profile') }}" class="nav-item @if (request()->routeIs('profile')) is-active @endif" @if (request()->routeIs('profile')) aria-current="page" @endif>

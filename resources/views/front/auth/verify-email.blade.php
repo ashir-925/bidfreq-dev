@@ -9,7 +9,7 @@
         <p class="auth-form__sub">Open the verification link sent to {{ auth()->user()->email }} to continue.</p>
     </header>
     @include('shared.flash')
-    <form method="POST" action="{{ route('verification.send') }}">
+    <form method="POST" action="{{ route('verification.send') }}" style="margin-bottom: 10px">
         @csrf
         <button type="submit" data-loading-text="Sending verification email…" class="btn btn--primary btn--lg btn--block">Resend verification email</button>
     </form>

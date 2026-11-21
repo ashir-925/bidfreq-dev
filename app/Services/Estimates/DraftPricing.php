@@ -47,6 +47,11 @@ class DraftPricing
         return [$analysis, $data->items];
     }
 
+    public static function lineTotal(string $quantity, string $rate): BigDecimal
+    {
+        return BigDecimal::of($quantity)->multipliedBy($rate)->toScale(2, RoundingMode::HalfUp);
+    }
+
     public function calculate(RepairRequest $repair, array $analysis, array $items, ?array $allowedTaskIds = null): array
     {
         $ids = collect($items)->map(fn ($item) => $item->task_id ?? null)
@@ -85,7 +90,7 @@ class DraftPricing
                 $flags[] = 'Quote by scope: Admin rate required';
             }
             $rate = $flags === [] ? $task->bidfreq_standard_rate : null;
-            $lineTotal = $rate === null ? null : BigDecimal::of($quantity)->multipliedBy($rate)->toScale(2, RoundingMode::HalfUp);
+            $lineTotal = $rate === null ? null : self::lineTotal($quantity, $rate);
             if ($lineTotal !== null) {
                 $total = $total->plus($lineTotal);
             }
@@ -127,7 +132,7 @@ class DraftPricing
                 ]);
             }
 
-            $lineTotal = BigDecimal::of($item['quantity'])->multipliedBy($rate)->toScale(2, RoundingMode::HalfUp);
+            $lineTotal = self::lineTotal($item['quantity'], $rate);
             $total = $total->plus($lineTotal);
             $lines[] = [
                 'task_id' => $task->task_id, 'library_version_id' => $task->library_version_id,

@@ -43,7 +43,8 @@ class SendRepairRequestNotice implements ShouldQueue
         }
         [$subject, $body] = match ($this->kind) {
             'received' => ['Request received', 'Your request '.$repair->number().' has been received and is now under review. We will email you as soon as your estimate is ready.'],
-            'ready', 'revised' => ['Estimate ready', 'Your BidFreq estimate for '.$repair->number().' is ready. Sign in to review it and record your decision.'],
+            'revised' => ['Revised estimate ready', 'A revised estimate for '.$repair->number().' is ready. Sign in to review the new version.'],
+            'ready' => ['Estimate ready', 'Your BidFreq estimate for '.$repair->number().' is ready. Sign in to review it and record your decision.'],
             'needs_info' => ['More information needed', 'Please sign in to respond to the information request for '.$repair->number().'.'],
             'declined' => ['Request declined', 'Please sign in for the decision and reason for '.$repair->number().'.'],
             'failed' => ['Estimate request needs manual review', 'AI analysis reached its retry limit for '.$repair->number().'. Open the Admin request inbox to review it.'],

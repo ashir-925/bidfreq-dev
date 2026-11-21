@@ -100,7 +100,9 @@ class RepairRequestTest extends TestCase
         Http::assertSentCount(1);
         Http::assertSent(function ($request) {
             $submitted = json_decode($request['contents'][0]['parts'][0]['text'], true);
-            return $request->hasHeader('x-goog-api-key', 'test-key')
+            $basis = $request['generationConfig']['responseJsonSchema']['properties']['items']['items']['properties']['quantity_basis']['enum'];
+            return $basis === DraftPricing::BASES
+                && $request->hasHeader('x-goog-api-key', 'test-key')
                 && count($submitted['library']) === 162
                 && array_keys($submitted['library'][0]) === ['task_id', 'task_name', 'unit']
                 && ! str_contains(json_encode($submitted), '123 Sample Lane')
@@ -247,6 +249,14 @@ class RepairRequestTest extends TestCase
         $this->assertSame(2, $second->version);
         $this->assertSame('900.00', $second->snapshot['total']);
         $this->assertSame('1200.00', $first->fresh()->snapshot['total']);
+        Queue::assertPushed(SendRepairRequestNotice::class, fn ($job) => $job->kind === 'revised' && $job->releaseId === $second->id);
+        $this->get(route('admin.estimates'))->assertOk()->assertDontSee($repair->number());
+        $this->get(route('admin.estimates', ['view' => 'all']))->assertOk()->assertSee($repair->number());
+        $this->get(route('admin.dashboard'))->assertOk()->assertDontSee($repair->number());
+        $this->actingAs($customer)->get(route('dashboard'))->assertOk()->assertSee($repair->number())->assertSee('Review estimate');
+        $this->get(route('repair-requests.show', $repair))->assertOk()->assertSee('Superseded');
+        $this->postJson($decision, ['release_id' => $second->id, 'decision' => 'cancel'])->assertUnprocessable()->assertJsonValidationErrors('decision');
+        $this->assertSame('approved', $repair->fresh()->status);
 
         $this->actingAs($customer);
         $signature = ['decision' => 'approve', 'signature' => 'Sample Customer', 'acceptance' => '1'];
@@ -316,12 +326,12 @@ class RepairRequestTest extends TestCase
         $foreignFile = RepairRequest::where('user_id', $other->id)->firstOrFail()->files()->firstOrFail();
         $this->actingAs($customer)->postJson(route('repair-requests.store'), $this->payload())->assertCreated();
         $repair = RepairRequest::where('user_id', $customer->id)->firstOrFail();
-        [$first, $second] = $repair->files;
+        [$first, $second, $document] = $repair->files;
         $analysis = $this->sampleAnalysis([[
             'task_id' => 'BF-T-001', 'unit' => 'per sq ft of floor', 'quantity' => '20',
             'quantity_basis' => 'customer_measurement', 'evidence' => ['Attachment #2 shows the repair.'],
         ]]);
-        $analysis['evidence_links'] = ['complaint' => [2, 999], 'cause' => [1], 'correction' => [], 'complications' => []];
+        $analysis['evidence_links'] = ['complaint' => [2, 999], 'cause' => [1], 'correction' => [3], 'complications' => [3]];
         $analysis['unmatched'] = [];
         Http::fake(['generativelanguage.googleapis.com/*' => Http::response([
             'candidates' => [['content' => ['parts' => [['text' => json_encode($analysis)]]]]],
@@ -332,13 +342,15 @@ class RepairRequestTest extends TestCase
         $this->assertSame([$first->id], $draft->analysis['evidence_links']['cause']);
         $this->get(route('repair-requests.image', [RepairRequest::where('user_id', $other->id)->firstOrFail(), $foreignFile]))->assertForbidden();
         $this->actingAs($admin)->get(route('admin.repair-requests.image', [$repair, $foreignFile]))->assertNotFound();
-        $this->get(route('admin.estimate-review', $repair))->assertOk()
+        $page = $this->get(route('admin.estimate-review', $repair))->assertOk()
             ->assertSee('id="submitted-evidence"', false)->assertSee('href="#submitted-evidence"', false)
             ->assertSee('id="review-evidence-preview"', false)->assertSee('Preview attachment #1: first.jpg')
             ->assertSee('Preview attachment #2: second.jpg')->assertSee('Attachment #2 shows the repair.')
             ->assertSee('Data v3 · Library import #')->assertSee('$1.25')->assertSee('value="20"', false)
             ->assertSee('id="review-tasks"', false)->assertSee('data-task-id="BF-T-001"', false)
-            ->assertDontSee('multiple', false);
+            ->assertDontSee('multiple', false)->assertSee('Findings supported by document #3');
+        $this->assertSame(1, substr_count($page->getContent(), 'note.txt'));
+        $this->assertSame([$document->id], $draft->analysis['evidence_links']['correction']);
         $change = [
             'review_version' => 0, 'complaint' => 'Damaged wall', 'cause' => 'Impact', 'correction' => 'Patch',
             'complications' => 'Confirm paint match', 'review_note' => 'Checked submitted attachments',
@@ -347,10 +359,58 @@ class RepairRequestTest extends TestCase
         ];
         $this->patchJson(route('admin.repair-requests.save', $repair), $change)
             ->assertUnprocessable()->assertJsonValidationErrors('evidence_links.correction.0');
-        $change['evidence_links'] = ['correction' => [$first->id, $second->id]];
+        $change['evidence_links'] = ['correction' => [$first->id, $second->id, $document->id]];
         $this->patchJson(route('admin.repair-requests.save', $repair), $change)->assertRedirect();
         $this->assertSame($change['evidence_links'], $draft->fresh()->analysis['evidence_links']);
         $this->assertSame('25.00', $draft->fresh()->total);
+    }
+
+    public function test_customer_can_reject_only_their_current_released_estimate(): void
+    {
+        $staff = $this->importLibrary();
+        $owner = User::factory()->create();
+        $this->actingAs($owner)->postJson(route('repair-requests.store'), $this->payload())->assertCreated();
+        $repair = RepairRequest::sole();
+        $touchUp = ['task_id' => 'BF-T-006', 'unit' => 'per home (flat)', 'quantity' => '1',
+            'quantity_basis' => 'counted_from_photo', 'evidence' => ['Attachment #1 shows localized paint damage.']];
+        $analysis = array_replace($this->sampleAnalysis([$touchUp]), ['unmatched' => []]);
+        Http::fake(['generativelanguage.googleapis.com/*' => Http::response([
+            'candidates' => [['content' => ['parts' => [['text' => json_encode($analysis)]]]]],
+        ])]);
+        (new AnalyzeRepairRequest($repair->id, 1))->withFakeQueueInteractions()->handle(app(EstimateAiProvider::class), app(DraftPricing::class));
+        $this->assertSame([], $repair->draft()->sole()->lines()->sole()->flags);
+        $this->actingAs($staff)->get(route('admin.estimates'))->assertOk()->assertSee($repair->number());
+        $this->get(route('admin.dashboard'))->assertOk()->assertSee($repair->number());
+        $this->post(route('admin.repair-requests.release', $repair), ['review_version' => 0])->assertRedirect()->assertSessionHasNoErrors();
+        $release = $repair->fresh()->currentRelease;
+        $this->assertSame('100.00', $release->snapshot['total']);
+        $decision = route('repair-requests.decision', $repair);
+        $payload = ['release_id' => $release->id, 'decision' => 'reject', 'comment' => 'Scope changed'];
+        $this->actingAs(User::factory()->create())->postJson($decision, $payload)->assertForbidden();
+        $this->get(route('dashboard'))->assertOk()->assertDontSee($repair->number());
+        $this->actingAs($owner)->post($decision, $payload)->assertRedirect()->assertSessionHasNoErrors();
+        $this->assertSame('customer_rejected', $repair->fresh()->status);
+        $this->assertSame('reject', $release->fresh()->decision);
+        $this->postJson($decision, $payload)->assertUnprocessable();
+        $this->get(route('dashboard'))->assertOk()->assertSee('Rejected')->assertDontSee('Review estimate');
+    }
+
+    public function test_gemini_uses_the_previous_model_when_the_primary_is_unavailable(): void
+    {
+        config([
+            'estimate_requests.gemini_model' => 'gemini-3.8-flash',
+            'estimate_requests.gemini_fallback_model' => 'gemini-3.1-flash-lite',
+        ]);
+        Http::fake([
+            '*gemini-3.8-flash:generateContent' => Http::response([], 404),
+            '*gemini-3.1-flash-lite:generateContent' => Http::response([
+                'candidates' => [['content' => ['parts' => [['text' => json_encode($this->sampleAnalysis([]))]]]]],
+            ]),
+        ]);
+        $result = app(EstimateAiProvider::class)->analyze(['instruction' => 'Fixture', 'evidence' => [], 'files' => []]);
+        $this->assertNull($result['error']);
+        $this->assertSame('gemini-3.1-flash-lite', $result['model']);
+        Http::assertSentCount(2);
     }
 
     public function test_estimate_display_formats_decimal_values_without_changing_them(): void

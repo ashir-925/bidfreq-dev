@@ -1,54 +1,19 @@
 @extends('admin.layout.app')
-@section('title', 'Estimator Console · BidFreq™')
-
-
-@push('styles')
-    {{-- <link rel="stylesheet" href="{{ asset('admin_assets/pages_css/dashboard.css') }}"> --}}
-@endpush
-
+@section('title', 'Estimators · BidFreq')
 @section('content')
-      <main class="app-content">
+<main class="app-content">
+    <header class="page-header"><div class="page-header__text"><h1 class="page-header__title">Estimators</h1></div></header>
+<form class="filter-bar" method="GET">
+<label class="label">Search <input class="input" name="search" type="search" value="{{ request('search') }}"></label>
+<label class="label">Status <select class="select" name="status"><option value="">All statuses</option>@foreach (['active', 'inactive'] as $status)<option value="{{ $status }}" @selected(request('status') === $status)>{{ Str::headline($status) }}</option>@endforeach</select></label>
+<label class="label">Sort <select class="select" name="sort"><option value="">Default</option><option value="newest" @selected(request('sort') === 'newest')>Newest first</option><option value="name" @selected(request('sort') === 'name')>Name</option></select></label>
 
-      <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="{{ route('admin.dashboard') }}">Console</a>
-        <span class="breadcrumbs__sep">/</span>
-        <span class="breadcrumbs__current">Estimators</span>
-      </nav>
-
-      <header class="page-header">
-        <div class="page-header__text">
-          <h1 class="page-header__title">Estimator Team</h1>
-          <p class="page-header__subtitle">
-            Manage your estimating team, monitor workload balance, and review verification quality.
-          </p>
-        </div>
-        <div class="page-header__actions">
-          <button class="btn btn--secondary">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Export
-          </button>
-          <button class="btn btn--primary" id="inviteEstimatorBtn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Invite estimator
-          </button>
-        </div>
-      </header>
-
-      <!-- KPIs -->
-      <section class="quick-stats" aria-label="Team metrics">
-        <div class="quick-stat"><span class="quick-stat__label">Team Size</span><span class="quick-stat__value">6</span></div>
-        <div class="quick-stat"><span class="quick-stat__label">Online Now</span><span class="quick-stat__value quick-stat__value--emerald">4</span></div>
-        <div class="quick-stat"><span class="quick-stat__label">Open Assignments</span><span class="quick-stat__value quick-stat__value--violet">17</span></div>
-        <div class="quick-stat"><span class="quick-stat__label">Avg. Turnaround</span><span class="quick-stat__value">1.8<span style="font-size:12px;color:var(--text-muted);font-weight:500"> days</span></span></div>
-        <div class="quick-stat"><span class="quick-stat__label">Verified Today</span><span class="quick-stat__value quick-stat__value--emerald">14</span></div>
-        <div class="quick-stat"><span class="quick-stat__label">Team Quality</span><span class="quick-stat__value">94%</span></div>
-      </section>
-
-      <!-- Estimator cards -->
-      <section class="est-grid" id="estimatorGrid"></section>
-
-    </main>
+<button class="btn btn--primary btn--sm">Apply filters</button>
+</form>
+<details class="sec"><summary class="sec__head">Add estimator</summary><div class="sec__body">@include('admin.pages.estimator_form', ['estimator' => null])</div></details>
+<div class="table-wrap"><div class="table-scroll"><table class="table">
+<thead><tr><th scope="col">Name</th><th scope="col">Email</th><th scope="col">Projects</th><th scope="col">Status</th></tr></thead>
+<tbody>@forelse ($estimators as $person)<tr><td><a href="{{ route('admin.estimators.show', $person) }}">{{ $person->name }}</a></td><td>{{ $person->email }}</td><td>{{ $person->projects_count }}</td><td>{{ $person->active ? 'Active' : 'Inactive' }}</td></tr>@empty<tr><td colspan="4">No estimators found.</td></tr>@endforelse</tbody></table></div></div>
+{{ $estimators->links() }}
+</main>
 @endsection
-@push('scripts')
-    <script src="{{ asset('admin_assets/pages_js/estimators.js') }}"></script>
-@endpush

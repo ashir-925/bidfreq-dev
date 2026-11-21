@@ -13,6 +13,9 @@
     </header>
     @if ($repair)
         @php($draft = $repair->draft)
+        @php($photoEvidence = $repair->files->where('kind', 'photo'))
+        @php($supportingDocuments = $repair->files->where('kind', 'document'))
+        @php($linkedEvidence = session()->hasOldInput('review_version') ? old('evidence_links', []) : ($draft->analysis['evidence_links'] ?? []))
         @php($attachmentNumbers = $repair->files->values()->mapWithKeys(fn ($file, $index) => [$file->id => $index + 1]))
         @php($editable = $draft && in_array($repair->status, ['draft', 'under_review', 'revision_requested'], true))
         <div class="review-grid">
@@ -161,7 +164,7 @@
                                 </tr></template>
                                 <button type="button" class="btn btn--secondary btn--sm btn--block" id="add-review-line" data-next-index="{{ $draft->lines->count() }}">Add Library item</button>
                             @endif
-                            <div class="review-analysis-heading"><div class="sec__title">Assessment and supporting evidence</div><div class="sec__sub">Review the four findings and the evidence for each.</div></div>
+                            <div class="review-analysis-heading"><div class="sec__title">Assessment and supporting evidence</div><div class="sec__sub">Review the four findings and link their supporting photos. Link documents in Submitted Evidence.</div></div>
                             <div class="form-row review-analysis-fields">
                                 @foreach (['complaint', 'cause', 'correction', 'complications', 'assumptions', 'exclusions'] as $field)
                                     @php($value = $draft->analysis[$field] ?? '')
@@ -176,20 +179,20 @@
                                             <p>{{ is_array($value) ? implode(' · ', $value) : $value }}</p>
                                         @endif
                                         @if (in_array($field, ['complaint','cause','correction','complications'], true) && $repair->files->isNotEmpty())
-                                            @php($selected = array_map('strval', (array) (session()->hasOldInput('review_version') ? old('evidence_links.'.$field, []) : ($draft->analysis['evidence_links'][$field] ?? []))))
+                                            @php($selected = array_map('strval', (array) data_get($linkedEvidence, $field, [])))
                                             <div data-evidence-links>
                                                 <div class="review-evidence-chips">
-                                                    @foreach ($repair->files as $file)
+                                                    @foreach ($photoEvidence as $file)
                                                         <button type="button" class="chip review-evidence-chip" data-preview-file="{{ $file->id }}" data-evidence-chip="{{ $file->id }}" title="{{ $file->name }}" @if (!in_array((string) $file->id, $selected, true)) hidden @endif>
                                                             @if (in_array($file->mime, \App\Models\RepairRequest::PHOTO_MIMES, true))<img src="{{ route('admin.repair-requests.image', [$repair, $file]) }}" alt="" loading="lazy">@endif
                                                             #{{ $attachmentNumbers[$file->id] }} <span>{{ $file->name }}</span>
                                                         </button>
                                                     @endforeach
                                                 </div>
-                                                @if ($editable)
+                                                @if ($editable && $photoEvidence->isNotEmpty())
                                                     <details class="review-evidence-options">
-                                                        <summary class="btn btn--ghost btn--sm">Edit linked evidence</summary>
-                                                        @foreach ($repair->files as $file)
+                                                        <summary class="btn btn--ghost btn--sm">Edit linked photos</summary>
+                                                        @foreach ($photoEvidence as $file)
                                                             <label class="review-check"><input type="checkbox" name="evidence_links[{{ $field }}][]" value="{{ $file->id }}" data-link-file @checked(in_array((string) $file->id, $selected, true))> #{{ $attachmentNumbers[$file->id] }} · {{ $file->name }}</label>
                                                         @endforeach
                                                     </details>
@@ -281,9 +284,9 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
                     </div><div><div class="sec__title">Submitted Evidence</div><div class="sec__sub">{{ $repair->files->count() }} {{ Str::plural('attachment', $repair->files->count()) }} from customer</div></div></div></div>
                     <div class="sec__body">
-                        @if ($repair->files->isNotEmpty())
+                        @if ($photoEvidence->isNotEmpty())
                             <div class="photo-grid">
-                                @foreach ($repair->files as $file)
+                                @foreach ($photoEvidence as $file)
                                     <button type="button" class="photo-tile review-photo" data-preview-file="{{ $file->id }}" data-file-name="{{ $file->name }}" data-file-number="{{ $attachmentNumbers[$file->id] }}" data-file-download="{{ route('admin.repair-requests.download', [$repair, $file]) }}" aria-label="Preview attachment #{{ $attachmentNumbers[$file->id] }}: {{ $file->name }}">
                                         @if (in_array($file->mime, \App\Models\RepairRequest::PHOTO_MIMES, true))
                                             <img class="photo-tile__img" src="{{ route('admin.repair-requests.image', [$repair, $file]) }}" alt="" loading="lazy">
@@ -295,9 +298,29 @@
                                     </button>
                                 @endforeach
                             </div>
-                        @else
-                            <p class="text-muted">No attachments were submitted.</p>
                         @endif
+                        @if ($supportingDocuments->isNotEmpty())
+                            <div class="review-details">
+                                <div class="label">Supporting documents</div>
+                                @foreach ($supportingDocuments as $file)
+                                    <div class="status-row"><a class="status-row__value" href="{{ route('admin.repair-requests.download', [$repair, $file]) }}">#{{ $attachmentNumbers[$file->id] }} · {{ $file->name }}</a></div>
+                                    @if ($draft)
+                                        @php($fields = ['complaint', 'cause', 'correction', 'complications'])
+                                        @if ($editable)
+                                            <fieldset class="review-document-fields">
+                                                <legend class="label">Findings supported by document #{{ $attachmentNumbers[$file->id] }}</legend>
+                                                @foreach ($fields as $field)
+                                                    <label class="review-check"><input type="checkbox" form="estimate-review-form" name="evidence_links[{{ $field }}][]" value="{{ $file->id }}" @checked(in_array((string) $file->id, array_map('strval', (array) data_get($linkedEvidence, $field, [])), true))> {{ ucfirst($field) }}</label>
+                                                @endforeach
+                                            </fieldset>
+                                        @else
+                                            <p class="text-muted">{{ collect($fields)->filter(fn ($field) => in_array((string) $file->id, array_map('strval', (array) data_get($linkedEvidence, $field, [])), true))->map(fn ($field) => ucfirst($field))->implode(', ') ?: 'No linked findings' }}</p>
+                                        @endif
+                                    @endif
+                                @endforeach
+                            </div>
+                        @endif
+                        @if ($repair->files->isEmpty())<p class="text-muted">No attachments were submitted.</p>@endif
                         <div class="review-details">
                             <div class="status-row"><span class="status-row__label">Property</span><span class="status-row__value">
                                 @if (filled($repair->property_name)){{ trim($repair->property_name) }}<br>@endif

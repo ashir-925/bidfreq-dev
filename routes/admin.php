@@ -7,6 +7,10 @@ use App\Http\Controllers\RepairRequestController;
 use App\Http\Middleware\EnsureActive;
 use App\Http\Controllers\LibraryController;
 use App\Models\LibraryTask;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProjectOperationsController;
+use App\Http\Controllers\BusinessDirectoryController;
+use App\Http\Controllers\ProjectChangeOrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -18,12 +22,18 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/dashboard', 'dashboard')->name('dashboard');
 
 
-            Route::get('/projects', 'projects')->name('projects');
-            Route::get('/customers', 'customers')->name('customers');
-            Route::get('/estimators', 'estimators')->name('estimators');
-            Route::get('/reports', 'reports')->name('reports');
-            Route::get('/notifications', 'notifications')->name('notifications');
-            Route::get('/profile', 'profile')->name('profile');
+            Route::get('/projects', [ProjectController::class, 'index'])->name('projects');
+            Route::get('/customers', [BusinessDirectoryController::class, 'customers'])->name('customers');
+            Route::get('/estimators', [BusinessDirectoryController::class, 'estimators'])->name('estimators');
+            Route::get('/reports', [BusinessDirectoryController::class, 'reports'])->name('reports');
+            Route::get('/notifications', [\App\Http\Controllers\AccountNoticeController::class, 'index'])->name('notifications');
+            Route::patch('/notifications/read', [\App\Http\Controllers\AccountNoticeController::class, 'readAll'])->name('notifications.read-all');
+            Route::patch('/notifications/{notice}', [\App\Http\Controllers\AccountNoticeController::class, 'read'])->whereNumber('notice')->name('notifications.read');
+            Route::delete('/notifications/{notice}', [\App\Http\Controllers\AccountNoticeController::class, 'destroy'])->whereNumber('notice')->name('notifications.delete');
+            Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile');
+            Route::patch('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->middleware('throttle:10,1')->name('profile.update');
+            Route::put('/profile/password', [\App\Http\Controllers\ProfileController::class, 'password'])->middleware('throttle:6,1')->name('profile.password');
+            Route::delete('/profile/sessions/{session}', [\App\Http\Controllers\ProfileController::class, 'revoke'])->name('profile.sessions.revoke');
         });
         Route::prefix('library')->name('library.')->controller(LibraryController::class)->group(function () {
             Route::get('/', 'index')->middleware('can:viewAny,'.LibraryTask::class)->name('index');
@@ -53,6 +63,25 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/request-inbox/{repair}/retry', [StaffRepairRequestController::class, 'retry'])->whereUuid('repair')->name('repair-requests.retry');
         Route::get('/request-inbox/{repair}/files/{file}', [RepairRequestController::class, 'download'])->whereUuid('repair')->name('repair-requests.download');
         Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+        Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('users.show');
+        Route::get('/customers/{user}', [BusinessDirectoryController::class, 'customer'])->name('customers.show');
+        Route::post('/estimators', [BusinessDirectoryController::class, 'saveEstimator'])->name('estimators.store');
+        Route::get('/estimators/{estimator}', [BusinessDirectoryController::class, 'estimator'])->name('estimators.show');
+        Route::patch('/estimators/{estimator}', [BusinessDirectoryController::class, 'saveEstimator'])->name('estimators.update');
+        Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
+        Route::get('/projects/{project}/files/{file}', [ProjectController::class, 'file'])->name('projects.file');
+        Route::delete('/projects/{project}/files/{file}', [ProjectOperationsController::class, 'removeFile'])->name('projects.files.remove');
+        Route::patch('/projects/{project}', [ProjectOperationsController::class, 'update'])->name('projects.update');
+        Route::post('/projects/{project}/daily-reports', [ProjectOperationsController::class, 'report'])->name('projects.report');
+        Route::post('/projects/{project}/documents', [ProjectOperationsController::class, 'document'])->name('projects.document');
+        Route::post('/projects/{project}/walkthrough', [ProjectOperationsController::class, 'walkthrough'])->name('projects.walkthrough');
+        Route::post('/projects/{project}/change-orders/{order?}', [ProjectChangeOrderController::class, 'save'])->name('projects.orders.save');
+        Route::patch('/projects/{project}/change-orders/{order}', [ProjectChangeOrderController::class, 'status'])->name('projects.orders.status');
+        Route::post('/projects/{project}/invoices/{invoice?}', [\App\Http\Controllers\ProjectBillingController::class, 'invoice'])->name('projects.invoice');
+        Route::post('/projects/{project}/invoices/{invoice}/payments', [\App\Http\Controllers\ProjectBillingController::class, 'record'])->name('projects.payment');
+        Route::patch('/projects/{project}/invoices/{invoice}/refunds/{payment}', [\App\Http\Controllers\ProjectBillingController::class, 'refundDetails'])->name('projects.refund');
+        Route::post('/projects/{project}/invoices/{invoice}/cancel-payment', [\App\Http\Controllers\ProjectPaymentController::class, 'cancel'])->name('projects.payment.cancel');
+        Route::post('/projects/{project}/invoices/{invoice}/verify-payment', [\App\Http\Controllers\ProjectPaymentController::class, 'verify'])->middleware('throttle:12,1')->name('projects.payment.verify');
         Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
         Route::patch('/users/{user}', [AdminUserController::class, 'update'])->name('users.update');
     });

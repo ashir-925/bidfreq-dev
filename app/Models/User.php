@@ -13,6 +13,10 @@ use Illuminate\Notifications\Notifiable;
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements MustVerifyEmail
 {
+    public function projects() { return $this->hasMany(Project::class); }
+
+    public function repairRequests() { return $this->hasMany(RepairRequest::class); }
+
     use HasFactory, Notifiable;
 
     protected $attributes = [

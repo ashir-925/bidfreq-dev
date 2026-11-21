@@ -8,7 +8,7 @@
     <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="{{ route('estimate-request') }}">Estimate Requests</a><span class="breadcrumbs__sep">/</span><span>Estimate Details</span></nav>
     <header class="page-header">
         <div class="page-header__text"><h1 class="page-header__title">Estimate Details</h1>
-            @if ($repair?->currentRelease)<p class="page-header__subtitle">Human-verified estimate ready for your review.</p>@endif
+            @if ($repair)<p class="page-header__subtitle">{{ $repair->status === 'approved' ? 'Human-verified estimate ready for your review.' : $repair->customerStatus() }}</p>@endif
         </div>
         @if ($release = $repair?->currentRelease)
             <div class="page-header__actions"><a class="btn btn--secondary" href="{{ route('repair-requests.pdf', [$repair, $release]) }}">Download PDF</a><button type="button" class="btn btn--ghost" data-estimate-print>Print</button></div>
@@ -134,6 +134,9 @@
                             <div class="action-card__sub">Human-verified · Version {{ $release->version }}</div>
                         </div>
                         <div class="action-card__body">
+                            @if ($project = $repair->project)
+                                <a class="btn btn--secondary btn--block" href="{{ route('project-detail', $project) }}">View project</a>
+                            @endif
                             @if ($repair->status === 'approved' && ! $release->decided_at)
                                 <button type="button" class="btn btn--success btn--lg btn--block" data-open-estimate-modal="approveModal" @if ($errors->any() && old('decision') === 'approve') data-open-on-load @endif>
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Approve Estimate
@@ -141,7 +144,7 @@
                                 <button type="button" class="btn btn--secondary btn--block" data-open-estimate-modal="revisionModal" @if ($errors->any() && old('decision') === 'revise') data-open-on-load @endif>
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.3 2.5L3 8"/><path d="M3 3v5h5"/></svg> Request Revision
                                 </button>
-                                <button type="button" class="btn btn--danger-outline btn--block" data-open-estimate-modal="declineModal">
+                                <button type="button" class="btn btn--danger-outline btn--block" data-open-estimate-modal="declineModal" @if ($errors->any() && old('decision') === 'reject') data-open-on-load @endif>
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg> Decline
                                 </button>
                             @endif
@@ -162,6 +165,7 @@
                                     <span class="mini-tl-dot" aria-hidden="true"></span><div class="mini-tl-body">
                                         <a class="mini-tl-title" href="{{ route('repair-requests.pdf', [$repair, $version]) }}">Version {{ $version->version }} PDF</a>
                                         <div class="mini-tl-meta">{{ $version->created_at->format('M j, Y') }}
+                                            @unless ($version->is($release)) · Superseded @endunless
                                             @if ($version->decision) · {{ ['approve' => 'Approved', 'reject' => 'Declined', 'revise' => 'Revision requested'][$version->decision] }} @endif
                                         </div>
                                         @if ($version->customer_comment)<p>{{ $version->customer_comment }}</p>@endif

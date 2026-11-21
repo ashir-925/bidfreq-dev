@@ -58,6 +58,9 @@ class AnalyzeRepairRequest implements ShouldQueue
         $response = ['raw' => null];
         try {
             $response = $provider->analyze($input);
+            if (isset($response['model'])) {
+                $attempt->update(['model' => $response['model']]);
+            }
             if ($response['error'] !== null) {
                 throw new UnexpectedValueException($response['error']);
             }

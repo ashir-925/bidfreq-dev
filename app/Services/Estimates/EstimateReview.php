@@ -9,7 +9,7 @@ use App\Models\RepairEstimateRelease;
 use App\Models\RepairRequest;
 use App\Models\User;
 use Brick\Math\BigDecimal;
-use Brick\Math\RoundingMode;
+
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -62,7 +62,7 @@ class EstimateReview
                     $this->invalid("lines.{$i}.override_reason", 'Enter a written reason for the rate override.');
                 }
 
-                $lineTotal = BigDecimal::of($row['quantity'])->multipliedBy($rate)->toScale(2, RoundingMode::HalfUp);
+                $lineTotal = DraftPricing::lineTotal($row['quantity'], $rate);
                 $total = $total->plus($lineTotal);
                 $lines[] = [
                     'task_id' => $task->task_id, 'library_version_id' => $sameTask && $previous->rate !== null ? $previous->library_version_id : $task->library_version_id,
@@ -149,6 +149,20 @@ class EstimateReview
                 'customer_comment' => $input['comment'] ?? null,
             ]);
             $repair->update(['status' => $status]);
+            if ($status === 'customer_approved') {
+                $project = \App\Models\Project::create([
+                    'reference' => (string) \Illuminate\Support\Str::uuid(),
+                    'user_id' => $repair->user_id,
+                    'repair_request_id' => $repair->id,
+                    'repair_estimate_release_id' => $release->id,
+                    'address' => $release->snapshot['address'],
+                    'status' => 'scheduled',
+                ]);
+                $project->events()->create([
+                    'user_id' => $customer->id, 'action' => 'project_created',
+                    'details' => ['after' => ['status' => 'scheduled', 'release_id' => $release->id]],
+                ]);
+            }
             $repair->events()->create(['user_id' => $customer->id, 'action' => $status, 'details' => ['version' => $release->version, 'signature' => $input['decision'] === 'approve' ? $input['signature'] : null]]);
         });
     }

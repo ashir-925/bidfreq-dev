@@ -23,24 +23,30 @@ class StaffRepairRequestController extends Controller
     {
         Gate::authorize('manage', RepairRequest::class);
         $filters = $request->validate([
+            'view' => ['nullable', 'in:all,queue'],
             'priority' => ['nullable', 'in:low,normal,high,urgent'],
             'filter' => ['nullable', 'in:high'],
-            'status' => ['nullable', 'in:ai_pending,ai_retrying,ai_failed,draft,under_review,needs_info,declined,approved,revision_requested,customer_approved,customer_rejected'],
+            'status' => ['nullable', 'in:ai_pending,ai_retrying,ai_failed,draft,under_review,needs_info,declined,approved,revision_requested,customer_approved,customer_rejected,in_progress,completed,cancelled'],
             'property' => ['nullable', 'string', 'max:100'],
             'date' => ['nullable', 'date_format:Y-m-d'],
             'trade' => ['nullable', \Illuminate\Validation\Rule::in(RepairRequest::TRADES)],
             'sort' => ['nullable', 'in:sla,newest,oldest,amount-high'],
         ]);
 
+        $allEstimates = ($filters['view'] ?? null) === 'all'
+            || (! isset($filters['view']) && $request->routeIs('admin.repair-requests.index'));
+        unset($filters['view']);
+
         if (! isset($filters['priority']) && ($filters['filter'] ?? '') === 'high') {
             $filters['priority'] = 'high';
         }
         unset($filters['filter']);
 
-        $query = RepairRequest::query()->with(['draft.lines', 'customer', 'currentRelease'])->orderByRaw(
-            "CASE priority WHEN 'urgent' THEN 1 WHEN 'high' THEN 2 WHEN 'normal' THEN 3 ELSE 4 END"
-        );
-        $counts = RepairRequest::query()->selectRaw('status, COUNT(*) AS aggregate')->groupBy('status')->pluck('aggregate', 'status');
+        $query = RepairRequest::query()->with(['draft.lines', 'customer', 'currentRelease']);
+        if (! $allEstimates) {
+            $query->whereIn('status', RepairRequest::ADMIN_ACTION_STATUSES);
+        }
+        $counts = (clone $query)->reorder()->selectRaw('status, COUNT(*) AS aggregate')->groupBy('status')->pluck('aggregate', 'status');
         foreach (['priority', 'status'] as $field) {
             if (! empty($filters[$field])) {
                 $query->where($field, $filters[$field]);
@@ -56,6 +62,9 @@ class StaffRepairRequestController extends Controller
             $query->forTrade($trade);
         }
         $sort = $filters['sort'] ?? 'sla';
+        if ($sort === 'sla') {
+            $query->orderByRaw("CASE priority WHEN 'urgent' THEN 1 WHEN 'high' THEN 2 WHEN 'normal' THEN 3 ELSE 4 END");
+        }
         if ($sort === 'amount-high') {
             $query->orderByDesc(\App\Models\RepairDraft::select('total')->whereColumn('repair_request_id', 'repair_requests.id'));
         }
@@ -65,7 +74,7 @@ class StaffRepairRequestController extends Controller
             $query->whereDate('created_at', $date);
         }
 
-        return view('admin.pages.estimates', ['requests' => $query->paginate(10)->withQueryString(), 'filters' => $filters, 'counts' => $counts]);
+        return view('admin.pages.estimates', ['requests' => $query->paginate(10)->withQueryString(), 'filters' => $filters, 'counts' => $counts, 'allEstimates' => $allEstimates]);
     }
 
     public function show(?RepairRequest $repair = null)

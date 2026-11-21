@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class RepairRequest extends Model
 {
+    public const ADMIN_ACTION_STATUSES = ['draft', 'under_review', 'revision_requested', 'ai_failed'];
+
     public const PRIORITIES = ['low', 'normal', 'high', 'urgent'];
 
     public const TRADES = ['General Repair', 'Electrical', 'Plumbing', 'HVAC', 'Roofing', 'Flooring', 'Drywall / Paint', 'Foundation', 'Other'];
@@ -26,6 +28,11 @@ class RepairRequest extends Model
     public function getRouteKeyName(): string
     {
         return 'reference';
+    }
+
+    public function project()
+    {
+        return $this->hasOne(Project::class);
     }
 
     public function files()
@@ -69,7 +76,7 @@ class RepairRequest extends Model
             'approved' => 'status--awaiting-customer',
             'revision_requested', 'needs_info' => 'status--revision',
             'customer_approved', 'completed' => 'status--approved',
-            'customer_rejected', 'declined' => 'status--declined',
+            'customer_rejected', 'declined', 'cancelled' => 'status--declined',
             default => 'status--in-review',
         };
     }
@@ -82,6 +89,7 @@ class RepairRequest extends Model
             'declined' => 'Declined',
             'in_progress' => 'In Progress',
             'completed' => 'Completed',
+            'cancelled' => 'Cancelled',
             'customer_approved' => 'Approved',
             'customer_rejected' => 'Rejected',
             'revision_requested' => 'Revision Requested',

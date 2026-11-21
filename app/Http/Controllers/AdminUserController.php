@@ -12,12 +12,31 @@ use Throwable;
 
 class AdminUserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         Gate::authorize('viewAny', User::class);
 
-        return view('admin.pages.users', [
-            'users' => User::where('role', '!=', 'super_admin')->orderBy('email')->paginate(25),
+        $filters = $request->validate(['search' => 'nullable|string|max:100', 'status' => 'nullable|in:active,inactive', 'sort' => 'nullable|in:email,newest']);
+        $query = User::where('role', '!=', 'super_admin')->withCount(['projects', 'repairRequests']);
+        if ($status = $filters['status'] ?? null) {
+            $query->where('status', $status);
+        }
+        if (filled($filters['search'] ?? null)) {
+            $match = '%'.$filters['search'].'%';
+            $query->where(fn ($q) => $q->whereLike('email', $match)->orWhereLike('first_name', $match)->orWhereLike('last_name', $match)->orWhereLike('company_name', $match));
+        }
+        ($filters['sort'] ?? null) === 'newest' ? $query->orderByDesc('id') : $query->orderBy('email');
+        return view('admin.pages.users', ['users' => $query->paginate(25)->withQueryString()]);
+    }
+
+    public function show(User $user)
+    {
+        Gate::authorize('viewAny', User::class);
+        abort_if($user->role === 'super_admin', 404);
+
+        return view('admin.pages.account_detail', ['account' => $user,
+            'estimates' => $user->repairRequests()->latest('id')->paginate(15, ['*'], 'estimate_page'),
+            'projects' => $user->projects()->latest('id')->paginate(15),
         ]);
     }
 

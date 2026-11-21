@@ -21,14 +21,18 @@
 
 <section class="card" style="padding: 20px; overflow-x: auto">
     <h2>Accounts</h2>
+    <form method="GET" class="filter-bar"><label class="label">Search accounts <input class="input" type="search" name="search" value="{{ request('search') }}"></label>
+    <label class="label">Status <select class="select" name="status"><option value="">Any</option>@foreach (['active','inactive'] as $status)<option @selected(request('status') === $status) value="{{ $status }}">{{ ucfirst($status) }}</option>@endforeach</select></label>
+    <label class="label">Sort <select class="select" name="sort"><option value="email">Email</option><option value="newest" @selected(request('sort') === 'newest')>Newest first</option></select></label>
+    <button class="btn btn--primary btn--sm">Apply filters</button></form>
     <table class="table">
         <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Action</th></tr></thead>
         <tbody>
             @forelse ($users as $user)
                 <tr>
-                    <td>{{ $user->name }}</td>
+                    <td><a href="{{ route('admin.users.show', $user) }}">{{ $user->name }}</a> @if ($user->projects_count)<span class="chip">Customer</span>@endif <span class="text-muted">{{ $user->repair_requests_count }} requests</span></td>
                     <td>{{ $user->email }}</td>
-                    <td>{{ ucfirst($user->role) }}</td>
+                    <td>{{ $user->role === 'customer' && !$user->projects_count ? 'Registered user' : ucfirst($user->role) }}</td>
                     <td>{{ ucfirst($user->status) }}</td>
                     <td>
                         @unless (auth()->user()->is($user))

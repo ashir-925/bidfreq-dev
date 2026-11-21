@@ -16,7 +16,7 @@
         <a href="{{ route('admin.estimates') }}" class="nav-item @if (request()->routeIs('admin.estimates', 'admin.estimate-review') && request('view') !== 'all') is-active @endif">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
           <span>Estimate Queue</span>
-          <span class="nav-item__badge is-danger">8</span>
+          @isset($estimateQueueCount)<span class="nav-item__badge is-danger">{{ $estimateQueueCount }}</span>@endisset
         </a>
         <a href="{{ route('admin.estimates', ['view' => 'all']) }}" class="nav-item @if (request()->routeIs('admin.estimates') && request('view') === 'all') is-active @endif">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
@@ -62,7 +62,8 @@
         <a href="{{ route('admin.notifications') }}" class="nav-item @if (request()->routeIs('admin.notifications')) is-active @endif" @if (request()->routeIs('admin.notifications')) aria-current="page" @endif>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
           <span>Notifications</span>
-          <span class="nav-item__badge is-danger">5</span>
+          @include('shared.account_notice_count')
+
         </a>
         <a href="{{ route('admin.profile') }}" class="nav-item @if (request()->routeIs('admin.profile')) is-active @endif" @if (request()->routeIs('admin.profile')) aria-current="page" @endif>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>

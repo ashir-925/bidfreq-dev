@@ -1366,7 +1366,7 @@ hr, .divider {
    -------------------------------------------------------------------------- */
 .status-strip {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: var(--s-3);
   margin-bottom: var(--s-5);
 }
@@ -3368,3 +3368,7 @@ img.photo-tile__img { display: block; object-fit: cover; }
 .estimate-list-page .est-id-cell__id a { display: block; max-inline-size: 13ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .estimate-list-page .property-cell { min-width: 10rem; }
 .review-line-items .review-row-action .item-action { display: inline-flex; align-items: center; color: var(--text-strong); }
+
+.review-document-fields { border: 0; margin: 0 0 var(--s-3); padding: 0; }
+.review-document-fields .label { margin-top: 0; }
+.review-document-fields .review-check { white-space: normal; }

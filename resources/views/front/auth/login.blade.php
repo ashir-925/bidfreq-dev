@@ -293,7 +293,7 @@
 
 /* Password visibility toggle */
 .pw-toggle {
-  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
   background: none; border: none; cursor: pointer; padding: 6px;
   color: var(--text-faint); border-radius: var(--r-sm);
   display: grid; place-items: center;

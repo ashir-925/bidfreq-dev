@@ -24,7 +24,7 @@ class RepairRequestController extends Controller
     public function index(Request $request)
     {
         $filters = $request->validate([
-            'status' => ['nullable', 'in:under_review,needs_info,declined,approved,revision_requested,customer_approved,customer_rejected,in_progress,completed'],
+            'status' => ['nullable', 'in:under_review,needs_info,declined,approved,revision_requested,customer_approved,customer_rejected,in_progress,completed,cancelled'],
             'search' => ['nullable', 'string', 'max:100'],
             'trade' => ['nullable', \Illuminate\Validation\Rule::in(RepairRequest::TRADES)],
             'date' => ['nullable', 'in:today,7,30,90'],
@@ -129,7 +129,7 @@ class RepairRequestController extends Controller
             abort_unless($repair->currentRelease, 404);
         }
 
-        return view('front.pages.estimate_request_detail', ['repair' => $repair->load(['files', 'currentRelease', 'events', 'releases' => fn ($q) => $q->latest('version')])]);
+        return view('front.pages.estimate_request_detail', ['repair' => $repair->load(['files', 'project', 'currentRelease', 'events', 'releases' => fn ($q) => $q->latest('version')])]);
     }
 
     public function decide(Request $request, RepairRequest $repair, EstimateReview $review)

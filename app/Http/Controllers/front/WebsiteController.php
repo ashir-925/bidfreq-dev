@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\front;
 
 use App\Http\Controllers\Controller;
+use App\Models\RepairRequest;
 use Illuminate\Http\Request;
 
 class WebsiteController extends Controller
@@ -22,7 +23,18 @@ class WebsiteController extends Controller
 
     public function dashboard()
     {
-        return view('front.pages.dashboard');
+        $estimates = RepairRequest::where('user_id', request()->user()->id);
+        $customerActions = (clone $estimates)->whereIn('status', ['approved', 'needs_info']);
+        return view('front.pages.dashboard', [
+            'openEstimateCount' => (clone $estimates)->whereIn('status', [...RepairRequest::ADMIN_ACTION_STATUSES, 'ai_pending', 'ai_retrying', 'needs_info', 'approved'])->count(),
+            'projectCounts' => request()->user()->projects()->selectRaw('status, COUNT(*) AS aggregate')->groupBy('status')->pluck('aggregate', 'status'),
+            'estimateCounts' => (clone $estimates)->selectRaw('status, COUNT(*) AS aggregate')->groupBy('status')->pluck('aggregate', 'status'),
+            'awaitingApprovalCount' => (clone $estimates)->where('status', 'approved')->count(),
+            'revisionCount' => (clone $estimates)->where('status', 'revision_requested')->count(),
+            'customerActionCount' => (clone $customerActions)->count(),
+            'customerActions' => $customerActions->latest('updated_at')->orderByDesc('id')->limit(5)->get(),
+            'recentEstimates' => $estimates->with('currentRelease')->latest('updated_at')->orderByDesc('id')->limit(5)->get(),
+        ]);
     }
     public function new_estimate_request()
     {
@@ -46,7 +58,8 @@ class WebsiteController extends Controller
     }
     public function notifications()
     {
-        return view('front.pages.notifications');
+        $completed = request()->user()->projects()->where('status', 'completed')->latest('updated_at')->paginate(20);
+        return view('front.pages.notifications', ['completed' => $completed]);
     }
     public function profile()
     {
