@@ -3,45 +3,47 @@
 
 
 @push('styles')
-    {{-- <link rel="stylesheet" href="{{ asset('admin_assets/pages_css/dashboard.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('admin_assets/css/dashboard.css') }}">
 @endpush
 
 @section('content')
-      <main class="app-content">
+      <main class="app-content admin-dashboard">
 
       <nav class="breadcrumbs" aria-label="Breadcrumb">
         <a href="{{ route('admin.dashboard') }}">Console</a>
-        <span class="breadcrumbs__sep">/</span>
-        <span class="breadcrumbs__current">Dashboard</span>
+        <span class="breadcrumbs__sep" aria-hidden="true">/</span>
+        <span class="breadcrumbs__current" aria-current="page">Dashboard</span>
       </nav>
 
       <!-- HERO -->
       <section class="admin-hero">
         <div class="admin-hero__text">
-          <div class="admin-hero__eyebrow">
-            <span class="live-dot"></span>
-            Live · Tuesday 11 Aug 2026 · 2:14 PM
-          </div>
-          <h1 class="admin-hero__title">Good morning, Admin</h1>
-          <p class="admin-hero__sub">You have <strong style="color:#fff">8 estimates awaiting verification</strong>,
-            <strong style="color:#fff">3 flagged as high priority</strong>, and
-            <strong style="color:#fff">1 SLA breach</strong> in the next 4 hours.
+          <h1 class="admin-hero__title" data-dashboard-greeting>Dashboard</h1>
+          <p class="admin-hero__sub">You have <strong>8 estimates awaiting verification</strong>,
+            <strong>3 flagged as high priority</strong>, and
+            <strong>1 SLA breach</strong> in the next 4 hours.
           </p>
+          <div class="admin-hero__actions">
+            <a href="{{ route('admin.estimates') }}" class="btn btn--secondary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+              Open Queue
+            </a>
+            <a href="{{ route('admin.estimates', ['filter' => 'high']) }}" class="btn btn--primary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Review High Priority
+            </a>
+          </div>
         </div>
-        <div class="admin-hero__actions">
-          <a href="{{ route('admin.estimates') }}" class="btn btn--secondary">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-            Open Queue
-          </a>
-          <a href="{{ route('admin.estimates', ['filter' => 'high']) }}" class="btn btn--primary">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            Review High Priority
-          </a>
+        <div class="admin-dashboard__clock" data-dashboard-clock>
+          <span class="admin-dashboard__clock-label">Local time</span>
+          <time class="admin-dashboard__clock-time" data-dashboard-time>—</time>
+          <span class="admin-dashboard__clock-date" data-dashboard-date></span>
+          <noscript><span class="admin-dashboard__clock-date">Enable JavaScript to see your local time.</span></noscript>
         </div>
       </section>
 
       <!-- KPI CARDS -->
-      <section class="grid grid--4 mb-6" aria-label="Key metrics">
+      <section class="grid grid--4 admin-dashboard__metrics" aria-label="Key metrics">
         <div class="stat-card">
           <div class="stat-card__top">
             <span class="stat-card__label">Awaiting Verification</span>
@@ -137,7 +139,7 @@
           <section class="card" aria-labelledby="queue-heading">
             <div class="card__header">
               <div>
-                <div class="card__title" id="queue-heading">Review queue</div>
+                <h2 class="card__title" id="queue-heading">Review queue</h2>
                 <div class="card__subtitle">Requests that need staff action, sorted by priority</div>
               </div>
               <a href="{{ route('admin.estimates') }}" class="btn btn--ghost btn--sm">
@@ -145,7 +147,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               </a>
             </div>
-            <div class="card__body" style="padding:0">
+            <div class="card__body admin-dashboard__flush">
               @forelse ($estimateQueue as $estimate)
                 <div class="queue-item">
                   <div class="queue-item__priority queue-item__priority--{{ $estimate->priority }}"></div>
@@ -170,11 +172,11 @@
           <section class="card" aria-labelledby="activity-heading">
             <div class="card__header">
               <div>
-                <div class="card__title" id="activity-heading">Recent team activity</div>
+                <h2 class="card__title" id="activity-heading">Recent team activity</h2>
               </div>
               <a href="{{ route('admin.notifications') }}" class="btn btn--ghost btn--sm">All</a>
             </div>
-            <div class="card__body" style="padding:0">
+            <div class="card__body admin-dashboard__flush">
               <p class="sec__body"><a href="{{ route('admin.estimates', ['view' => 'all']) }}">Open All Estimates to review individual audit histories.</a></p>
             </div>
           </section>
@@ -186,20 +188,50 @@
 
           <!-- QUALITY SNAPSHOT -->
           <section class="card" aria-labelledby="quality-heading">
-<div class="card__header"><div class="card__title" id="quality-heading">Project status</div><a class="btn btn--ghost btn--sm" href="{{ route('admin.projects') }}">View projects</a></div>
-<div class="card__body">@foreach (\App\Models\Project::STATUSES as $status)<div class="status-row"><span>{{ Str::headline($status) }}</span><strong>{{ $projectCounts->get($status, 0) }}</strong></div>@endforeach</div>
-</section>
+            <div class="card__header">
+              <h2 class="card__title" id="quality-heading">Project status</h2>
+              <a class="btn btn--ghost btn--sm" href="{{ route('admin.projects') }}">View projects</a>
+            </div>
+            <div class="card__body admin-dashboard__distribution">
+              @php($projectTotal = max(1, $projectCounts->sum()))
+              @foreach (\App\Models\Project::STATUSES as $status)
+                @php($count = $projectCounts->get($status, 0))
+                <div class="admin-dashboard__project-status">
+                  <div><span>{{ Str::headline($status) }}</span><strong>{{ $count }}</strong></div>
+                  <meter class="admin-dashboard__meter" data-status="{{ $status }}" min="0" max="{{ $projectTotal }}" value="{{ $count }}" aria-hidden="true"></meter>
+                </div>
+              @endforeach
+            </div>
+          </section>
 
           <!-- ESTIMATOR WORKLOAD -->
           <section class="card" aria-labelledby="workload-heading">
-<div class="card__header"><div class="card__title" id="workload-heading">Estimator workload</div><a class="btn btn--ghost btn--sm" href="{{ route('admin.estimators') }}">View estimators</a></div>
-<div class="card__body">@forelse ($estimatorWorkload as $contact)<div class="status-row"><a href="{{ route('admin.estimators.show', $contact) }}">{{ $contact->name }}</a><span>{{ $contact->projects_count }} open</span></div>@empty<p>No estimators added.</p>@endforelse</div>
-</section>
+            <div class="card__header">
+              <h2 class="card__title" id="workload-heading">Estimator workload</h2>
+              <a class="btn btn--ghost btn--sm" href="{{ route('admin.estimators') }}">View estimators</a>
+            </div>
+            <div class="card__body">
+              @forelse ($estimatorWorkload as $contact)
+                <div class="status-row admin-dashboard__workload-row">
+                  <a href="{{ route('admin.estimators.show', $contact) }}">{{ $contact->name }}</a>
+                  <span class="chip">{{ $contact->projects_count }} open</span>
+                </div>
+              @empty
+                <p class="text-muted">No estimators added.</p>
+              @endforelse
+            </div>
+          </section>
 
           <!-- SYSTEM HEALTH -->
           <section class="card" aria-labelledby="health-heading">
-<div class="card__header"><div class="card__title" id="health-heading">Daily reports</div><a class="btn btn--ghost btn--sm" href="{{ route('admin.reports') }}">View reports</a></div><div class="card__body">{{ $dailyReportCount }} reports recorded</div>
-</section>
+            <div class="card__header">
+              <h2 class="card__title" id="health-heading">Daily reports</h2>
+              <a class="btn btn--ghost btn--sm" href="{{ route('admin.reports') }}">View reports</a>
+            </div>
+            <div class="card__body admin-dashboard__report-total">
+              <strong>{{ $dailyReportCount }}</strong><span>reports recorded</span>
+            </div>
+          </section>
 
         </div>
       </div>
@@ -208,4 +240,5 @@
 @endsection
 @push('scripts')
     <script src="{{ asset('admin_assets/pages_js/dashboard.js') }}"></script>
+    <script src="{{ asset('admin_assets/pages_js/dashboard-clock.js') }}" defer></script>
 @endpush

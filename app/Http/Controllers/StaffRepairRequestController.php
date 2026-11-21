@@ -216,6 +216,7 @@ class StaffRepairRequestController extends Controller
 
     public function release(Request $request, RepairRequest $repair, EstimateReview $review)
     {
+        return redirect()->back()->with('error', 'Feature coming soon');
         Gate::authorize('manage', RepairRequest::class);
         $expected = $request->validate(['review_version' => ['required', 'integer', 'min:0']])['review_version'];
         try {
