@@ -30,19 +30,23 @@
 
       <div class="sidebar__section">
         <div class="sidebar__section-title">Management</div>
+        {{--
         <a href="{{ route('admin.repair-requests.index') }}" class="nav-item @if (request()->routeIs('admin.repair-requests.*')) is-active @endif">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16v16H4zM4 13h5l2 2h2l2-2h5"/></svg>
           <span>Request inbox</span>
         </a>
+        --}}
         <a href="{{ route('admin.library.index') }}" class="nav-item @if (request()->routeIs('admin.library.*')) is-active @endif" @if (request()->routeIs('admin.library.*')) aria-current="page" @endif>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 5h16v14H4zM4 10h16M9 10v9"/></svg>
           <span>Pricing Library</span>
         </a>
 
+        {{--
         <a href="{{ route('admin.users.index') }}" class="nav-item @if (request()->routeIs('admin.users.*')) is-active @endif">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v2"/></svg>
           <span>Users</span>
         </a>
+        --}}
         <a href="{{ route('admin.customers') }}" class="nav-item @if (request()->routeIs('admin.customers')) is-active @endif" @if (request()->routeIs('admin.customers')) aria-current="page" @endif>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg>
           <span>Customers</span>
@@ -51,10 +55,12 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           <span>Estimators</span>
         </a>
+        {{--
         <a href="{{ route('admin.reports') }}" class="nav-item @if (request()->routeIs('admin.reports')) is-active @endif" @if (request()->routeIs('admin.reports')) aria-current="page" @endif>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
           <span>Reports</span>
         </a>
+        --}}
       </div>
 
       <div class="sidebar__section">

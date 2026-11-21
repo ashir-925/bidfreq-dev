@@ -265,3 +265,32 @@
   .notif-toolbar__actions { justify-content: stretch; }
   .notif-toolbar__actions .btn { flex: 1; }
 }
+/* Shared inbox presentation for the customer and Admin panels. */
+.notifications-page__inbox {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-xs);
+  min-width: 0;
+  overflow: hidden;
+}
+.notifications-page .notif-tabs { padding-inline: var(--s-4); flex-wrap: wrap; }
+.notifications-page .notif-tabs .tab { text-decoration: none; white-space: nowrap; }
+.notifications-page__filter { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2); }
+.notifications-page__filter .label { margin: 0; }
+.notifications-page__filter .select { width: auto; }
+.notifications-page .notif-day { position: static; }
+.notifications-page .notif { cursor: default; }
+.notifications-page .notif__title, .notifications-page .notif__text { overflow-wrap: anywhere; }
+.notifications-page .notif__title a { color: inherit; }
+.notifications-page .notif__title a:hover { text-decoration: underline; }
+.notifications-page .notif__actions { opacity: 1; flex-wrap: wrap; }
+.notifications-page .notif__action-btn { min-height: 32px; }
+.notifications-page .notif__time { color: var(--text-muted); }
+.notifications-page__pagination { padding: var(--s-4); border-top: 1px solid var(--border); }
+@media (max-width: 560px) {
+  .notifications-page .page-header { align-items: flex-start; }
+  .notifications-page .notif__row { flex-wrap: wrap; gap: var(--s-1); }
+  .notifications-page .notif { gap: var(--s-3); }
+  .notifications-page .notif-tabs { padding-inline: var(--s-2); }
+}

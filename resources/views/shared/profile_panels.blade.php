@@ -2,6 +2,8 @@
 <nav class="settings-nav" aria-label="Profile sections">
     <div class="settings-nav__title">Profile Settings</div>
     @foreach (['general' => 'General', 'security' => 'Security', 'sessions' => 'Sessions'] as $key => $label)
+        {{-- Hide the Admin Sessions link in this shared navigation. --}}
+        @continue($baseRoute === 'admin.profile' && $key === 'sessions')
         <a href="{{ route($baseRoute, ['tab' => $key]) }}" @class(['settings-nav__item', 'is-active' => $tab === $key]) @if ($tab === $key) aria-current="page" @endif>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 @if ($key === 'general')<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
@@ -13,10 +15,16 @@
 </nav>
 <div class="panel-stack"><div class="panel-tab is-active" data-panel="{{ $tab }}">
 @if ($tab === 'general')
-<form id="profile-general" method="POST" action="{{ route($baseRoute.'.update') }}">@csrf @method('PATCH')
+<form id="profile-general" method="POST" action="{{ route($baseRoute.'.update') }}" @if ($baseRoute === 'admin.profile') enctype="multipart/form-data" @endif>@csrf @method('PATCH')
 <section class="profile-header">
     <div class="profile-header__cover"></div><div class="profile-header__inner"><div class="profile-header__row">
-        <div class="profile-header__avatar" aria-hidden="true">{{ Str::upper(Str::substr($account->first_name, 0, 1).Str::substr($account->last_name, 0, 1)) }}</div>
+        <div class="profile-header__avatar" aria-hidden="true">
+            @if ($baseRoute === 'admin.profile' && $account->profile_photo_path)
+                <img class="admin-profile__photo" src="{{ route('admin.profile.photo') }}" alt="">
+            @else
+                {{ Str::upper(Str::substr($account->first_name, 0, 1).Str::substr($account->last_name, 0, 1)) }}
+            @endif
+        </div>
         <div class="profile-header__text"><h2 class="profile-header__name">{{ $account->name }}</h2>
             <div class="profile-header__meta"><span>{{ $account->email }}</span>
             @if ($account->company_name)<span class="dot"></span><span>{{ $account->company_name }}</span>@endif
@@ -39,6 +47,14 @@
     <div class="form-group"><label class="label" for="profile-email-password">Current password (only when changing email)</label>
     <input class="input" id="profile-email-password" type="password" name="current_password" autocomplete="current-password">
     @include('shared.auth-field-error', ['name' => 'current_password'])</div>
+    @if ($baseRoute === 'admin.profile')
+        <div class="form-group admin-profile__photo-field">
+            <label for="admin-photo" class="label">Profile photo (optional)</label>
+            <input id="admin-photo" class="input" type="file" name="photo" accept="image/jpeg,image/png,image/webp" aria-describedby="admin-photo-help">
+            <p id="admin-photo-help" class="sec__sub">JPEG, PNG, or WebP, up to 2 MB and 4096 × 4096 pixels.</p>
+            @include('shared.auth-field-error', ['name' => 'photo'])
+        </div>
+    @endif
 </div></div></section>
 </form>
 @elseif ($tab === 'security')

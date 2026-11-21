@@ -1,7 +1,10 @@
 @extends('admin.layout.app')
 @section('title', 'Notifications · BidFreq')
+
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('front_assets/pages_css/notifications.css') }}">
+@endpush
+
 @section('content')
-<main class="app-content">
     @include('shared.account_notices')
-</main>
 @endsection

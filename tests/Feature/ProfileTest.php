@@ -40,6 +40,42 @@ class ProfileTest extends TestCase
         }
     }
 
+    public function test_admin_can_upload_view_and_replace_their_private_profile_photo(): void
+    {
+        $disk = \Illuminate\Support\Facades\Storage::fake('local');
+        $admin = User::factory()->create(['role' => 'admin']);
+        $otherAdmin = User::factory()->create(['role' => 'admin']);
+        $customer = User::factory()->create();
+        $upload = route('admin.profile.update');
+        $details = ['first_name' => 'Photo', 'last_name' => $admin->last_name, 'email' => $admin->email, 'phone' => $admin->phone];
+        $photo = route('admin.profile.photo');
+
+        $this->actingAs($admin)->patchJson($upload, $details + ['photo' => \Illuminate\Http\UploadedFile::fake()->create('notes.txt')])
+            ->assertUnprocessable()->assertJsonValidationErrors('photo');
+        $this->post($upload, $details + ['_method' => 'PATCH', 'photo' => \Illuminate\Http\UploadedFile::fake()->image('photo.jpg')])
+            ->assertRedirect(route('admin.profile'))->assertSessionHasNoErrors();
+        $first = $admin->fresh()->profile_photo_path;
+        $disk->assertExists($first);
+        $this->assertSame('Photo', $admin->fresh()->first_name);
+
+        $this->get(route('admin.profile'))->assertOk()
+            ->assertSee('class="admin-profile__photo"', false)
+            ->assertSee('class="topbar__account-photo"', false)
+            ->assertSee('title="Photo '.$admin->last_name.'"', false);
+        $this->get($photo)->assertOk()->assertHeader('Content-Type', 'image/jpeg');
+
+        $this->post($upload, $details + ['_method' => 'PATCH', 'photo' => \Illuminate\Http\UploadedFile::fake()->image('replacement.png')])
+            ->assertRedirect(route('admin.profile'))->assertSessionHasNoErrors();
+        $disk->assertMissing($first);
+        $disk->assertExists($admin->fresh()->profile_photo_path);
+
+        $this->flushSession();
+        $this->actingAs($otherAdmin)->get($photo)->assertNotFound();
+        $this->flushSession();
+        $this->actingAs($customer)->get($photo)->assertForbidden();
+        $this->patch($upload)->assertForbidden();
+    }
+
     public function test_customer_can_revoke_their_other_database_session_only(): void
     {
         config(['session.driver' => 'database']);
@@ -55,4 +91,3 @@ class ProfileTest extends TestCase
         $this->assertDatabaseMissing('sessions', ['id' => 'own-browser']);
     }
 }
-

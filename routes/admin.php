@@ -32,6 +32,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::delete('/notifications/{notice}', [\App\Http\Controllers\AccountNoticeController::class, 'destroy'])->whereNumber('notice')->name('notifications.delete');
             Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile');
             Route::patch('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->middleware('throttle:10,1')->name('profile.update');
+            Route::get('/profile/photo', [\App\Http\Controllers\ProfileController::class, 'photo'])->name('profile.photo');
+
             Route::put('/profile/password', [\App\Http\Controllers\ProfileController::class, 'password'])->middleware('throttle:6,1')->name('profile.password');
             Route::delete('/profile/sessions/{session}', [\App\Http\Controllers\ProfileController::class, 'revoke'])->name('profile.sessions.revoke');
         });

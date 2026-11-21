@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Support\ReportFailure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
@@ -44,23 +46,54 @@ class ProfileController extends Controller
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'company_name' => 'nullable|string|max:255',
             'current_password' => $changingEmail ? 'required|current_password' : 'nullable',
+            'photo' => $request->routeIs('admin.profile.update')
+                ? ['nullable', 'file', 'image', 'mimetypes:image/jpeg,image/png,image/webp', 'max:2048', 'dimensions:max_width=4096,max_height=4096']
+                : ['prohibited'],
         ]);
-        unset($data['current_password']);
+        $photo = $data['photo'] ?? null;
+        unset($data['current_password'], $data['photo']);
+        if (! $changingEmail) {
+            unset($data['email']);
+        }
         if ($user->role !== 'customer') {
             unset($data['company_name']);
         }
 
+        $path = null;
         try {
-            DB::transaction(function () use ($user, $data, $changingEmail) {
-                $user->fill($data);
-                if ($changingEmail) {
-                    $user->email_verified_at = null;
+            if ($photo) {
+                $path = $photo->store('admin-profile-photos/'.$user->id, 'local');
+                if (! $path) {
+                    throw new \RuntimeException('Could not write the profile photo.');
                 }
-                $user->save();
+            }
+
+            [$account, $previousPhoto, $changingEmail] = DB::transaction(function () use ($user, $data, $path) {
+                $account = User::lockForUpdate()->findOrFail($user->id);
+                $changingEmail = isset($data['email']) && $account->email !== $data['email'];
+                $previousPhoto = $path ? $account->profile_photo_path : null;
+                $account->fill($data);
+                if ($changingEmail) {
+                    $account->email_verified_at = null;
+                }
+                if ($path) {
+                    $account->profile_photo_path = $path;
+                }
+                $account->save();
+
+                return [$account, $previousPhoto, $changingEmail];
             });
         } catch (Throwable $exception) {
+            if ($path) {
+                $this->deletePhoto($path, $user->id);
+            }
             ReportFailure::log($exception, 'profile.update', $user->id);
-            return back()->withInput($request->except('current_password'))->with('error', 'Profile changes could not be saved.');
+            return back()->withInput($request->except('current_password', 'photo'))->with('error', 'Profile changes could not be saved.');
+        }
+
+        $user->setRawAttributes($account->getAttributes(), true);
+        if ($previousPhoto) {
+            $this->deletePhoto($previousPhoto, $user->id);
         }
 
         if ($changingEmail) {
@@ -74,6 +107,26 @@ class ProfileController extends Controller
         }
 
         return redirect()->route($this->profileRoute($request))->with('status', 'Profile saved.');
+    }
+
+    public function photo(Request $request)
+    {
+        $path = $request->user()->profile_photo_path;
+        $disk = Storage::disk('local');
+        abort_unless($path && $disk->exists($path), 404);
+
+        return $disk->response($path, null, ['Cache-Control' => 'private, no-store', 'X-Content-Type-Options' => 'nosniff']);
+    }
+
+    private function deletePhoto(string $path, int $userId): void
+    {
+        try {
+            if (! Storage::disk('local')->delete($path)) {
+                throw new \RuntimeException('Could not delete the previous profile photo.');
+            }
+        } catch (Throwable $exception) {
+            ReportFailure::log($exception, 'profile.photo.cleanup', $userId);
+        }
     }
 
     public function password(Request $request)
@@ -122,4 +175,3 @@ class ProfileController extends Controller
         return $request->routeIs('admin.*') ? 'admin.profile' : 'profile';
     }
 }
-

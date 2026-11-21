@@ -20,10 +20,17 @@
           <span class="icon-btn__dot"></span>
         </a>
         <div class="divider--vertical"></div>
-        <div class="user-chip">
-          <div class="avatar avatar--sm">BH</div>
+        @php($adminAccount = auth()->user())
+        <div class="user-chip topbar__account">
+          <div class="avatar avatar--sm" aria-hidden="true">
+            @if ($adminAccount->profile_photo_path)
+              <img class="topbar__account-photo" src="{{ route('admin.profile.photo') }}" alt="">
+            @else
+              {{ Str::upper(Str::substr($adminAccount->first_name, 0, 1).Str::substr($adminAccount->last_name, 0, 1)) }}
+            @endif
+          </div>
           <div class="user-chip__meta">
-            <span class="user-chip__name">{{ auth()->user()->name }}</span>
+            <span class="user-chip__name" title="{{ $adminAccount->name }}">{{ $adminAccount->name }}</span>
           </div>
         </div>
       </div>
